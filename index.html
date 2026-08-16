@@ -2,1178 +2,472 @@
 <html lang="es">
 
 <head>
-
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-<title>Fire Monitor Perú</title>
+<title>Monitoreo de Incendios - Perú</title>
 
 <link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
 <style>
 
-* {
-  box-sizing: border-box;
-}
-
 html,
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #111;
 }
 
 #map {
-  width: 100%;
-  height: 100vh;
+    width: 100%;
+    height: 100vh;
 }
 
+#panel {
+    position: absolute;
+    z-index: 1000;
+    top: 10px;
+    left: 10px;
 
-/* =====================================================
-   CABECERA
-   ===================================================== */
+    width: 330px;
 
-.header {
+    background: rgba(20,20,20,0.94);
+    color: white;
 
-  position: absolute;
+    padding: 14px;
 
-  z-index: 2000;
+    border-radius: 10px;
 
-  top: 0;
-  left: 0;
-  right: 0;
+    box-shadow:
+        0 4px 15px rgba(0,0,0,0.45);
 
-  height: 62px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  padding: 0 20px;
-
-  background: rgba(15,23,42,.97);
-
-  color: white;
-
-  border-bottom: 1px solid #374151;
-
+    max-height: calc(100vh - 30px);
+    overflow-y: auto;
 }
 
-.title {
-
-  font-size: 20px;
-
-  font-weight: bold;
-
+#panel h2 {
+    margin-top: 0;
+    font-size: 18px;
 }
 
-.title span {
-
-  color: #f97316;
-
+#panel label {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #ccc;
 }
 
-.subtitle {
+#mapKey {
+    width: 100%;
+    box-sizing: border-box;
 
-  font-size: 12px;
+    padding: 8px;
+    margin-top: 4px;
 
-  color: #9ca3af;
+    border-radius: 5px;
+    border: 1px solid #555;
 
+    background: #222;
+    color: white;
 }
-
-
-/* =====================================================
-   PANEL
-   ===================================================== */
-
-.panel {
-
-  position: absolute;
-
-  z-index: 2000;
-
-  top: 77px;
-
-  left: 15px;
-
-  width: 380px;
-
-  max-height: calc(100vh - 95px);
-
-  overflow-y: auto;
-
-  padding: 16px;
-
-  background: rgba(15,23,42,.97);
-
-  color: white;
-
-  border: 1px solid #374151;
-
-  border-radius: 12px;
-
-  box-shadow: 0 10px 35px rgba(0,0,0,.5);
-
-}
-
-.panel h2 {
-
-  margin: 0 0 12px;
-
-  font-size: 17px;
-
-}
-
-
-/* =====================================================
-   INPUT
-   ===================================================== */
-
-.input-label {
-
-  display: block;
-
-  margin-top: 10px;
-
-  margin-bottom: 5px;
-
-  font-size: 12px;
-
-  color: #d1d5db;
-
-}
-
-input[type="password"] {
-
-  width: 100%;
-
-  padding: 10px;
-
-  background: #1f2937;
-
-  color: white;
-
-  border: 1px solid #4b5563;
-
-  border-radius: 7px;
-
-}
-
-
-/* =====================================================
-   BOTONES
-   ===================================================== */
 
 button {
+    width: 100%;
 
-  width: 100%;
+    margin-top: 10px;
+    padding: 9px;
 
-  margin-top: 9px;
+    border: 0;
+    border-radius: 5px;
 
-  padding: 10px;
+    background: #e65100;
+    color: white;
 
-  border: none;
-
-  border-radius: 7px;
-
-  background: #ea580c;
-
-  color: white;
-
-  font-weight: bold;
-
-  cursor: pointer;
-
+    cursor: pointer;
+    font-weight: bold;
 }
 
 button:hover {
-
-  background: #f97316;
-
+    background: #ff6d00;
 }
 
+#estado {
+    margin-top: 10px;
+    padding: 8px;
 
-/* =====================================================
-   SECCIONES
-   ===================================================== */
+    border-radius: 5px;
 
-.section {
+    background: #222;
 
-  margin-top: 14px;
-
-  padding-top: 12px;
-
-  border-top: 1px solid #374151;
-
-}
-
-.section-title {
-
-  margin-bottom: 8px;
-
-  font-size: 13px;
-
-  font-weight: bold;
-
-}
-
-
-/* =====================================================
-   CHECKBOX
-   ===================================================== */
-
-.check {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  margin: 8px 0;
-
-  font-size: 12px;
-
-  cursor: pointer;
-
-}
-
-.check input {
-
-  width: auto;
-
-  margin: 0;
-
-  accent-color: #f97316;
-
-}
-
-
-/* =====================================================
-   SATÉLITES
-   ===================================================== */
-
-.dot {
-
-  display: inline-block;
-
-  width: 11px;
-
-  height: 11px;
-
-  border-radius: 50%;
-
-}
-
-.noaa20 {
-
-  background: #38bdf8;
-
-  box-shadow: 0 0 7px #38bdf8;
-
-}
-
-.noaa21 {
-
-  background: #c084fc;
-
-  box-shadow: 0 0 7px #c084fc;
-
-}
-
-.snpp {
-
-  background: #4ade80;
-
-  box-shadow: 0 0 7px #4ade80;
-
-}
-
-.orbit20 {
-
-  color: #38bdf8;
-
-}
-
-.orbit21 {
-
-  color: #c084fc;
-
-}
-
-.orbitSNPP {
-
-  color: #4ade80;
-
-}
-
-
-/* =====================================================
-   REGLA CLUSTER
-   ===================================================== */
-
-.cluster-config {
-
-  background: #1f2937;
-
-  border-radius: 8px;
-
-  padding: 10px;
-
-  margin-top: 8px;
-
-}
-
-.cluster-value {
-
-  color: #f87171;
-
-  font-size: 17px;
-
-  font-weight: bold;
-
-}
-
-
-/* =====================================================
-   ESTADÍSTICAS
-   ===================================================== */
-
-.stats {
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 7px;
-
-  margin-top: 10px;
-
+    font-size: 12px;
 }
 
 .stat {
+    display: flex;
+    justify-content: space-between;
 
-  background: #1f2937;
+    padding: 4px 0;
 
-  padding: 9px;
+    border-bottom: 1px solid #333;
 
-  border-radius: 7px;
-
-  text-align: center;
-
+    font-size: 12px;
 }
 
-.stat-number {
-
-  color: #fb923c;
-
-  font-size: 18px;
-
-  font-weight: bold;
-
+.valor {
+    font-weight: bold;
 }
 
-.stat-cluster {
-
-  color: #f87171;
-
-  font-size: 18px;
-
-  font-weight: bold;
-
+.alto {
+    color: #ff1744;
 }
 
-.stat-label {
-
-  color: #9ca3af;
-
-  font-size: 10px;
-
+.medio {
+    color: #ff9100;
 }
 
-
-/* =====================================================
-   LISTA CLUSTERS
-   ===================================================== */
-
-.cluster-list {
-
-  margin-top: 10px;
-
+.vigilancia {
+    color: #ffeb3b;
 }
 
-.cluster-item {
-
-  background: #1f2937;
-
-  border-left: 4px solid #ef4444;
-
-  padding: 9px;
-
-  margin-top: 7px;
-
-  border-radius: 5px;
-
-  font-size: 11px;
-
-  line-height: 1.5;
-
+.normal {
+    color: #00e676;
 }
 
-.cluster-item strong {
-
-  color: #f87171;
-
+.legend {
+    margin-top: 12px;
+    font-size: 12px;
 }
 
-
-/* =====================================================
-   ESTADO
-   ===================================================== */
-
-.status {
-
-  margin-top: 12px;
-
-  padding: 10px;
-
-  background: #1f2937;
-
-  border-radius: 7px;
-
-  font-size: 12px;
-
-  line-height: 1.6;
-
-  color: #d1d5db;
-
+.legend div {
+    margin: 5px 0;
 }
 
-.live {
+.color {
+    display: inline-block;
 
-  color: #4ade80;
+    width: 12px;
+    height: 12px;
 
-  font-weight: bold;
+    border-radius: 50%;
 
+    margin-right: 5px;
 }
 
-
-/* =====================================================
-   MÓVIL
-   ===================================================== */
-
-@media(max-width:700px) {
-
-  .subtitle {
-
-    display: none;
-
-  }
-
-  .panel {
-
-    left: 10px;
-
-    width: calc(100% - 20px);
-
-  }
-
+#ultimaActualizacion {
+    color: #90caf9;
+    font-size: 11px;
+    margin-top: 8px;
 }
 
 </style>
 
 </head>
 
-
 <body>
-
-
-<!-- =====================================================
-     CABECERA
-     ===================================================== -->
-
-<div class="header">
-
-  <div class="title">
-
-    🔥 <span>FIRE MONITOR</span> PERÚ
-
-  </div>
-
-  <div class="subtitle">
-
-    🇵🇪 NASA FIRMS • VIIRS • CLUSTERS
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     MAPA
-     ===================================================== -->
 
 <div id="map"></div>
 
+<div id="panel">
 
-<!-- =====================================================
-     PANEL
-     ===================================================== -->
+    <h2>🔥 Incendios - Perú</h2>
 
-<div class="panel">
+    <label>
+        FIRMS MAP_KEY
+    </label>
 
+    <input
+        id="mapKey"
+        type="password"
+        placeholder="Introducir MAP_KEY"
+    >
 
-<h2>
+    <button onclick="guardarYActualizar()">
+        ACTUALIZAR AHORA
+    </button>
 
-🇵🇪 Monitoreo de incendios
+    <div id="estado">
+        Esperando actualización...
+    </div>
 
-</h2>
+    <div id="estadisticas">
 
+        <div class="stat">
+            <span>VIIRS</span>
+            <span id="statVIIRS" class="valor">0</span>
+        </div>
 
-<label class="input-label">
+        <div class="stat">
+            <span>Clusters</span>
+            <span id="statClusters" class="valor">0</span>
+        </div>
 
-NASA FIRMS MAP_KEY
+        <div class="stat">
+            <span>Alto</span>
+            <span id="statAlto" class="valor alto">0</span>
+        </div>
 
-</label>
+        <div class="stat">
+            <span>Medio</span>
+            <span id="statMedio" class="valor medio">0</span>
+        </div>
 
+        <div class="stat">
+            <span>Vigilancia</span>
+            <span id="statVigilancia" class="valor vigilancia">0</span>
+        </div>
 
-<input
-id="mapKey"
-type="password"
-placeholder="Introduce tu MAP_KEY"
-/>
+        <div class="stat">
+            <span>MODIS</span>
+            <span id="statMODIS" class="valor">0</span>
+        </div>
 
+        <div class="stat">
+            <span>GOES</span>
+            <span id="statGOES" class="valor">0</span>
+        </div>
 
-<button onclick="cargarIncendios()">
+    </div>
 
-🔥 CARGAR INCENDIOS
+    <div id="ultimaActualizacion">
+        Sin actualización
+    </div>
 
-</button>
+    <div class="legend">
 
+        <strong>Niveles</strong>
 
-<button onclick="actualizarIncendios(true)">
+        <div>
+            <span
+                class="color"
+                style="background:#ff1744"
+            ></span>
+            ALTO
+        </div>
 
-🔄 ACTUALIZAR AHORA
+        <div>
+            <span
+                class="color"
+                style="background:#ff9100"
+            ></span>
+            MEDIO
+        </div>
 
-</button>
+        <div>
+            <span
+                class="color"
+                style="background:#ffeb3b"
+            ></span>
+            VIGILANCIA
+        </div>
 
-
-<!-- =====================================================
-     PERIODO
-     ===================================================== -->
-
-<div class="section">
-
-<div class="section-title">
-
-🕐 PERÍODO DE DATOS
-
-</div>
-
-
-<label class="check">
-
-<input
-type="radio"
-name="periodo"
-value="1"
-checked
->
-
-Últimas 24 horas
-
-</label>
-
-
-<label class="check">
-
-<input
-type="radio"
-name="periodo"
-value="2"
->
-
-Últimas 48 horas
-
-</label>
-
-
-<label class="check">
-
-<input
-type="radio"
-name="periodo"
-value="3"
->
-
-Últimas 72 horas
-
-</label>
-
-
-<label class="check">
-
-<input
-type="radio"
-name="periodo"
-value="5"
->
-
-Últimos 5 días
-
-</label>
+    </div>
 
 </div>
 
 
-<!-- =====================================================
-     SATÉLITES
-     ===================================================== -->
-
-<div class="section">
-
-<div class="section-title">
-
-🛰️ SATÉLITES VIIRS
-
-</div>
-
-
-<label class="check">
-
-<input
-type="checkbox"
-id="showNOAA20"
-checked
-onchange="actualizarVisibilidad()"
-/>
-
-<span class="dot noaa20"></span>
-
-NOAA-20
-
-</label>
-
-
-<label class="check">
-
-<input
-type="checkbox"
-id="showNOAA21"
-checked
-onchange="actualizarVisibilidad()"
-/>
-
-<span class="dot noaa21"></span>
-
-NOAA-21
-
-</label>
-
-
-<label class="check">
-
-<input
-type="checkbox"
-id="showSNPP"
-checked
-onchange="actualizarVisibilidad()"
-/>
-
-<span class="dot snpp"></span>
-
-Suomi-NPP
-
-</label>
-
-</div>
-
-
-<!-- =====================================================
-     CLUSTERS
-     ===================================================== -->
-
-<div class="section">
-
-<div class="section-title">
-
-🚨 REGLA DE CLÚSTER
-
-</div>
-
-
-<div class="cluster-config">
-
-<div>
-
-Mínimo:
-
-<span class="cluster-value">
-3 puntos
-</span>
-
-</div>
-
-<div>
-
-Distancia máxima:
-
-<span class="cluster-value">
-1.000 m
-</span>
-
-</div>
-
-</div>
-
-
-<label class="check">
-
-<input
-type="checkbox"
-id="showClusters"
-checked
-onchange="actualizarVisibilidadClusters()"
-/>
-
-🚨 Mostrar clústeres
-
-</label>
-
-</div>
-
-
-<!-- =====================================================
-     ÓRBITAS
-     ===================================================== -->
-
-<div class="section">
-
-<div class="section-title">
-
-🛰️ ÓRBITAS
-
-</div>
-
-
-<label class="check">
-
-<input
-type="checkbox"
-id="showOrbit20"
-checked
-onchange="actualizarVisibilidad()"
-/>
-
-<span class="orbit20">━━</span>
-
-NOAA-20
-
-</label>
-
-
-<label class="check">
-
-<input
-type="checkbox"
-id="showOrbit21"
-checked
-onchange="actualizarVisibilidad()"
-/>
-
-<span class="orbit21">━━</span>
-
-NOAA-21
-
-</label>
-
-
-<label class="check">
-
-<input
-type="checkbox"
-id="showOrbitSNPP"
-checked
-onchange="actualizarVisibilidad()"
-/>
-
-<span class="orbitSNPP">━━</span>
-
-Suomi-NPP
-
-</label>
-
-</div>
-
-
-<!-- =====================================================
-     ESTADÍSTICAS
-     ===================================================== -->
-
-<div class="stats">
-
-
-<div class="stat">
-
-<div
-class="stat-number"
-id="total">
-
-0
-
-</div>
-
-<div class="stat-label">
-
-DETECCIONES
-
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div
-class="stat-cluster"
-id="totalClusters">
-
-0
-
-</div>
-
-<div class="stat-label">
-
-CLÚSTERES
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =====================================================
-     LISTA CLUSTERS
-     ===================================================== -->
-
-<div
-class="cluster-list"
-id="clusterList">
-</div>
-
-
-<!-- =====================================================
-     ESTADO
-     ===================================================== -->
-
-<div
-class="status"
-id="status">
-
-<span class="live">
-
-● SISTEMA
-
-</span>
-
-<br>
-
-🇵🇪 Solo Perú
-
-<br>
-
-Esperando MAP_KEY...
-
-</div>
-
-
-</div>
-
-
-<script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-
-
-<script
-src="https://unpkg.com/satellite.js/dist/satellite.min.js">
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 
 <script>
+
+// =====================================================
+// CONFIGURACIÓN GENERAL
+// =====================================================
+
+const CONFIG = {
+
+    // -------------------------------------------------
+    // ÁMBITO PERÚ
+    // west, south, east, north
+    // -------------------------------------------------
+
+    PERU_BBOX:
+        "-81.5,-18.5,-68.5,0",
+
+    // -------------------------------------------------
+    // DISTANCIA PARA FORMAR CLUSTERS VIIRS
+    // -------------------------------------------------
+
+    MAX_CLUSTER_DISTANCE_M:
+        1000,
+
+    // -------------------------------------------------
+    // DISTANCIA PARA CORROBORACIÓN
+    // MODIS / GOES
+    // -------------------------------------------------
+
+    MAX_CONFIRMATION_DISTANCE_M:
+        3000,
+
+    // -------------------------------------------------
+    // DIFERENCIA TEMPORAL PARA CORROBORACIÓN
+    // -------------------------------------------------
+
+    MAX_CONFIRMATION_TIME_MIN:
+        180,
+
+    // -------------------------------------------------
+    // CLUSTER MÍNIMO
+    // -------------------------------------------------
+
+    MIN_CLUSTER_SIZE:
+        2,
+
+    // -------------------------------------------------
+    // FRP
+    // -------------------------------------------------
+
+    MIN_FRP:
+        10,
+
+    // -------------------------------------------------
+    // TEMPERATURA T4
+    // Kelvin
+    // -------------------------------------------------
+
+    MIN_T4:
+        320,
+
+    // -------------------------------------------------
+    // DIFERENCIA TÉRMICA
+    //
+    // ΔT = T4 - T5
+    // -------------------------------------------------
+
+    MIN_DELTA_T:
+        10,
+
+    STRONG_DELTA_T:
+        20,
+
+    // -------------------------------------------------
+    // ACTUALIZACIÓN
+    // 15 minutos
+    // -------------------------------------------------
+
+    INTERVALO:
+        15 * 60 * 1000
+
+};
 
 
 // =====================================================
 // MAPA
 // =====================================================
 
-const map =
+const map = L.map("map", {
 
-L.map("map")
-.setView(
-[-9.19,-75.015],
-5
-);
+    center: [
+        -9.19,
+        -75.015
+    ],
 
+    zoom: 5,
 
-L.tileLayer(
+    zoomControl: true
 
-"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
-{
-
-attribution:
-"&copy; OpenStreetMap contributors"
-
-}
-
-).addTo(map);
-
-
-L.control.scale()
-.addTo(map);
+});
 
 
 // =====================================================
-// ÁREA PERÚ
+// IMAGEN SATELITAL
 // =====================================================
 
-const PERU_BBOX = {
+const satelite = L.tileLayer(
 
-west:-81.5,
+    "https://server.arcgisonline.com/ArcGIS/rest/services/" +
+    "World_Imagery/MapServer/tile/{z}/{y}/{x}",
 
-south:-18.5,
+    {
 
-east:-68.5,
+        maxZoom: 19,
 
-north:0.5
+        attribution:
+            "© Esri, Maxar, Earthstar Geographics, GIS User Community"
 
-};
-
-
-// =====================================================
-// POLÍGONO SIMPLIFICADO PERÚ
-// =====================================================
-
-const PERU_POLYGON = [
-
-[-18.35,-70.37],
-
-[-17.55,-69.45],
-
-[-16.40,-69.00],
-
-[-15.10,-69.40],
-
-[-13.70,-68.90],
-
-[-12.50,-68.75],
-
-[-11.00,-69.00],
-
-[-9.50,-70.00],
-
-[-8.30,-70.50],
-
-[-7.20,-72.00],
-
-[-6.00,-73.50],
-
-[-4.50,-74.00],
-
-[-3.50,-75.00],
-
-[-2.50,-76.00],
-
-[-1.50,-77.00],
-
-[-0.10,-78.00],
-
-[-0.05,-79.50],
-
-[-1.50,-80.80],
-
-[-3.50,-80.90],
-
-[-5.00,-80.70],
-
-[-6.00,-80.90],
-
-[-8.00,-80.70],
-
-[-10.00,-79.80],
-
-[-12.00,-77.50],
-
-[-14.00,-76.00],
-
-[-15.50,-75.50],
-
-[-17.00,-74.00],
-
-[-18.35,-70.37]
-
-];
-
-
-L.polygon(
-
-PERU_POLYGON,
-
-{
-
-color:"#facc15",
-
-weight:2,
-
-fillColor:"#facc15",
-
-fillOpacity:.04
-
-}
-
-).addTo(map);
-
-
-// =====================================================
-// VARIABLES
-// =====================================================
-
-let currentKey = "";
-
-let fireLayers = [];
-
-let orbitLayers = [];
-
-let clusterLayers = [];
-
-let puntosDetectados = [];
-
-let actualizando = false;
-
-let proximaActualizacion = null;
-
-const INTERVALO = 15 * 60 * 1000;
-
-
-// =====================================================
-// SATÉLITES
-// =====================================================
-
-const SATELLITES = [
-
-{
-
-name:"NOAA-20",
-
-source:"VIIRS_NOAA20_NRT",
-
-norad:"43013",
-
-color:"#38bdf8"
-
-},
-
-{
-
-name:"NOAA-21",
-
-source:"VIIRS_NOAA21_NRT",
-
-norad:"54234",
-
-color:"#c084fc"
-
-},
-
-{
-
-name:"Suomi-NPP",
-
-source:"VIIRS_SNPP_NRT",
-
-norad:"37849",
-
-color:"#4ade80"
-
-}
-
-];
-
-
-// =====================================================
-// PUNTO DENTRO DE PERÚ
-// =====================================================
-
-function puntoDentroPeru(lat,lon) {
-
-let dentro = false;
-
-
-for(
-
-let i=0,
-j=PERU_POLYGON.length-1;
-
-i<PERU_POLYGON.length;
-
-j=i++
-
-) {
-
-const lati =
-PERU_POLYGON[i][0];
-
-const loni =
-PERU_POLYGON[i][1];
-
-const latj =
-PERU_POLYGON[j][0];
-
-const lonj =
-PERU_POLYGON[j][1];
-
-
-const intersect =
-
-((loni > lon) !==
-(lonj > lon))
-
-&&
-
-(
-
-lat <
-
-(latj-lati) *
-(lon-loni) /
-(lonj-loni)
-+
-lati
+    }
 
 );
 
 
-if(intersect) {
+// =====================================================
+// ETIQUETAS PARA EL MODO HÍBRIDO
+// =====================================================
 
-dentro = !dentro;
+const etiquetas = L.tileLayer(
 
-}
+    "https://server.arcgisonline.com/ArcGIS/rest/services/" +
+    "Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
 
-}
+    {
+
+        maxZoom: 19,
+
+        transparent: true,
+
+        attribution:
+            "© Esri"
+
+    }
+
+);
 
 
-return dentro;
+// =====================================================
+// SATÉLITE HÍBRIDO
+// =====================================================
+
+const mapaHibrido = L.layerGroup([
+    satelite,
+    etiquetas
+]);
+
+mapaHibrido.addTo(map);
+
+
+// =====================================================
+// CAPAS DE INCENDIOS
+// =====================================================
+
+let capaIncendios =
+    L.layerGroup().addTo(map);
+
+let capaClusters =
+    L.layerGroup().addTo(map);
+
+
+// =====================================================
+// FECHA ACTUAL EN PERÚ
+// =====================================================
+
+function obtenerFechaPeru() {
+
+    const ahora = new Date();
+
+    return new Intl.DateTimeFormat(
+        "en-CA",
+        {
+
+            timeZone:
+                "America/Lima",
+
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+
+        }
+
+    ).format(ahora);
 
 }
 
@@ -1183,505 +477,269 @@ return dentro;
 // =====================================================
 
 function distanciaMetros(
-
-lat1,
-lon1,
-lat2,
-lon2
-
+    lat1,
+    lon1,
+    lat2,
+    lon2
 ) {
 
+    const R = 6371000;
 
-const R = 6371000;
+    const rad =
+        Math.PI / 180;
 
-const rad =
-Math.PI / 180;
+    const dLat =
+        (lat2 - lat1) * rad;
 
+    const dLon =
+        (lon2 - lon1) * rad;
 
-const dLat =
-(lat2-lat1)*rad;
+    const a =
+        Math.sin(dLat / 2) ** 2 +
 
-const dLon =
-(lon2-lon1)*rad;
+        Math.cos(lat1 * rad) *
+        Math.cos(lat2 * rad) *
 
+        Math.sin(dLon / 2) ** 2;
 
-const a =
+    const c =
+        2 *
+        Math.atan2(
+            Math.sqrt(a),
+            Math.sqrt(1 - a)
+        );
 
-Math.sin(dLat/2) ** 2
-
-+
-
-Math.cos(lat1*rad)
-
-*
-
-Math.cos(lat2*rad)
-
-*
-
-Math.sin(dLon/2) ** 2;
-
-
-const c =
-
-2 *
-
-Math.atan2(
-
-Math.sqrt(a),
-
-Math.sqrt(1-a)
-
-);
-
-
-return R*c;
+    return R * c;
 
 }
 
 
 // =====================================================
-// DETECTAR CLÚSTERES
-//
-// Regla:
-//
-// >= 3 puntos
-// conectados por <= 1000 m
-//
+// TIEMPO DE ADQUISICIÓN
 // =====================================================
 
-function detectarClusters(
+function fechaDeteccion(d) {
 
-puntos,
+    if (!d.acq_date)
+        return null;
 
-distanciaMax=1000,
+    const fecha =
+        String(d.acq_date);
 
-minimoPuntos=3
+    let hora =
+        String(d.acq_time || "0000")
+        .padStart(4, "0");
 
-) {
+    hora =
+        hora.substring(0, 2) +
+        ":" +
+        hora.substring(2, 4);
 
-
-const visitado =
-new Set();
-
-
-const clusters = [];
-
-
-for(
-
-let i=0;
-
-i<puntos.length;
-
-i++
-
-) {
-
-
-if(
-visitado.has(i)
-) {
-
-continue;
-
-}
-
-
-const cluster = [];
-
-const cola = [i];
-
-
-visitado.add(i);
-
-
-while(
-cola.length > 0
-) {
-
-
-const actual =
-cola.shift();
-
-
-cluster.push(actual);
-
-
-for(
-
-let j=0;
-
-j<puntos.length;
-
-j++
-
-) {
-
-
-if(
-visitado.has(j)
-) {
-
-continue;
-
-}
-
-
-const distancia =
-
-distanciaMetros(
-
-puntos[actual].lat,
-
-puntos[actual].lon,
-
-puntos[j].lat,
-
-puntos[j].lon
-
-);
-
-
-if(
-distancia <=
-distanciaMax
-) {
-
-
-visitado.add(j);
-
-cola.push(j);
-
-}
-
-}
-
-}
-
-}
-
-
-if(
-cluster.length >=
-minimoPuntos
-) {
-
-clusters.push(
-cluster
-);
-
-}
-
-}
-
-
-return clusters;
+    return new Date(
+        `${fecha}T${hora}:00Z`
+    );
 
 }
 
 
 // =====================================================
-// CENTRO DEL CLÚSTER
+// NORMALIZAR DETECCIÓN
 // =====================================================
 
-function centroCluster(
-indices
+function normalizarDeteccion(
+    d,
+    sensor
 ) {
 
+    const latitude =
+        Number(d.latitude);
 
-let lat = 0;
+    const longitude =
+        Number(d.longitude);
 
-let lon = 0;
+    const t4 =
+        Number(
+            d.bright_ti4 ??
+            d.bright_ti ??
+            d.temperature ??
+            NaN
+        );
 
+    const t5 =
+        Number(
+            d.bright_ti5 ??
+            NaN
+        );
 
-indices.forEach(
-i => {
+    const frp =
+        Number(
+            d.frp ??
+            0
+        );
 
-lat +=
-puntosDetectados[i].lat;
+    let deltaT =
+        NaN;
 
-lon +=
-puntosDetectados[i].lon;
+    if (
+        Number.isFinite(t4) &&
+        Number.isFinite(t5)
+    ) {
 
-});
+        deltaT =
+            t4 - t5;
 
+    }
 
-return {
+    return {
 
-lat:
-lat / indices.length,
+        ...d,
 
-lon:
-lon / indices.length
+        sensor,
 
-};
+        latitude,
 
-}
+        longitude,
 
+        t4,
 
-// =====================================================
-// DIÁMETRO DEL CLÚSTER
-// =====================================================
+        t5,
 
-function diametroCluster(
-indices
-) {
+        deltaT,
 
+        frp,
 
-let maximo = 0;
+        acquisitionDate:
+            fechaDeteccion(d)
 
-
-for(
-let i=0;
-
-i<indices.length;
-
-i++
-
-) {
-
-
-for(
-let j=i+1;
-
-j<indices.length;
-
-j++
-
-) {
-
-
-const a =
-puntosDetectados[
-indices[i]
-];
-
-const b =
-puntosDetectados[
-indices[j]
-];
-
-
-const distancia =
-
-distanciaMetros(
-
-a.lat,
-a.lon,
-
-b.lat,
-b.lon
-
-);
-
-
-if(
-distancia > maximo
-) {
-
-maximo =
-distancia;
-
-}
-
-}
-
-}
-
-
-return maximo;
+    };
 
 }
 
 
 // =====================================================
-// ICONO
+// PARSER CSV
 // =====================================================
 
-function crearIcono(
-color
-) {
+function parseCSV(text) {
 
+    const filas = [];
+    let fila = [];
+    let campo = "";
+    let dentroComillas = false;
 
-return L.divIcon({
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
 
-className:"",
+        const c =
+            text[i];
 
-html:
+        const siguiente =
+            text[i + 1];
 
-`<div style="
-width:13px;
-height:13px;
-background:${color};
-border:2px solid white;
-border-radius:50%;
-box-shadow:0 0 8px ${color};
-"></div>`,
+        if (c === '"' && siguiente === '"') {
 
-iconSize:[13,13],
+            campo += '"';
 
-iconAnchor:[6,6]
+            i++;
 
-});
+            continue;
 
-}
+        }
 
+        if (c === '"') {
 
-// =====================================================
-// CSV
-// =====================================================
+            dentroComillas =
+                !dentroComillas;
 
-function csvToArray(text) {
+            continue;
 
+        }
 
-const limpio =
-text.trim();
+        if (c === "," && !dentroComillas) {
 
+            fila.push(campo);
 
-if(!limpio) {
+            campo = "";
 
-return [];
+            continue;
 
-}
+        }
 
+        if (
+            (c === "\n" || c === "\r") &&
+            !dentroComillas
+        ) {
 
-const lines =
-limpio.split(/\r?\n/);
+            if (
+                c === "\r" &&
+                siguiente === "\n"
+            ) {
 
+                i++;
 
-if(lines.length < 2) {
+            }
 
-return [];
+            fila.push(campo);
 
-}
+            campo = "";
 
+            if (fila.some(x => x !== "")) {
 
-const headers =
+                filas.push(fila);
 
-lines[0]
-.split(",")
-.map(x => x.trim());
+            }
 
+            fila = [];
 
-return lines
-.slice(1)
-.map(line => {
+            continue;
 
-const values =
-line.split(",");
+        }
 
-const obj = {};
+        campo += c;
 
-headers.forEach(
-(header,i) => {
+    }
 
-obj[header] =
-values[i] || "";
+    if (campo.length || fila.length) {
 
-});
+        fila.push(campo);
 
-return obj;
+        filas.push(fila);
 
-});
+    }
 
-}
+    if (filas.length < 2)
+        return [];
 
+    const encabezados =
+        filas[0].map(
+            x =>
+                x
+                .trim()
+                .replace(/^"|"$/g, "")
+        );
 
-// =====================================================
-// PERÍODO
-// =====================================================
+    return filas
+        .slice(1)
+        .map(fila => {
 
-function obtenerPeriodo() {
+            const objeto = {};
 
+            encabezados.forEach(
+                (h, i) => {
 
-const radio =
+                    objeto[h] =
+                        (fila[i] ?? "")
+                        .trim();
 
-document.querySelector(
+                }
+            );
 
-'input[name="periodo"]:checked'
+            return objeto;
 
-);
-
-
-return radio
-
-? parseInt(radio.value)
-
-: 1;
-
-}
-
-
-// =====================================================
-// HORA PERÚ
-// =====================================================
-
-function horaPeru(
-
-fecha,
-
-horaUTC
-
-) {
-
-
-if(
-!fecha ||
-!horaUTC
-) {
-
-return "--";
-
-}
-
-
-const h =
-
-String(horaUTC)
-.replace(/\D/g,"")
-.padStart(4,"0");
-
-
-const hh =
-h.substring(0,2);
-
-const mm =
-h.substring(2,4);
-
-
-const fechaUTC =
-
-new Date(
-
-`${fecha}T${hh}:${mm}:00Z`
-
-);
-
-
-return fechaUTC.toLocaleString(
-
-"es-PE",
-
-{
-
-timeZone:"America/Lima",
-
-day:"2-digit",
-
-month:"2-digit",
-
-year:"numeric",
-
-hour:"2-digit",
-
-minute:"2-digit",
-
-hour12:false
-
-}
-
-);
+        });
 
 }
 
@@ -1690,1734 +748,1654 @@ hour12:false
 // CONSULTAR FIRMS
 // =====================================================
 
-async function cargarSensor(
-sat
+async function consultarFIRMS(
+    mapKey,
+    source
 ) {
 
+    const fecha =
+        obtenerFechaPeru();
 
-const days =
-obtenerPeriodo();
+    const url =
+        "https://firms.modaps.eosdis.nasa.gov/" +
+        "api/area/csv/" +
 
+        encodeURIComponent(mapKey) +
+        "/" +
 
-const url =
+        encodeURIComponent(source) +
+        "/" +
 
-`https://firms.modaps.eosdis.nasa.gov/api/area/csv/` +
+        CONFIG.PERU_BBOX +
+        "/1/" +
 
-`${currentKey}/` +
+        fecha;
 
-`${sat.source}/` +
+    console.log(
+        "FIRMS:",
+        source,
+        fecha
+    );
 
-`${PERU_BBOX.west},${PERU_BBOX.south},${PERU_BBOX.east},${PERU_BBOX.north}/` +
+    const respuesta =
+        await fetch(
+            url,
+            {
 
-`${days}`;
+                cache:
+                    "no-store"
 
+            }
+        );
 
-const response =
-await fetch(url);
+    if (!respuesta.ok) {
 
+        throw new Error(
+            `${source}: HTTP ${respuesta.status}`
+        );
 
-if(!response.ok) {
+    }
 
-throw new Error(
+    const texto =
+        await respuesta.text();
 
-`${sat.name}: HTTP ${response.status}`
+    if (
+        !texto ||
+        texto.trim().length === 0
+    ) {
 
-);
+        return [];
 
-}
+    }
 
-
-const text =
-await response.text();
-
-
-return csvToArray(text);
+    return parseCSV(texto)
+        .map(
+            d =>
+                normalizarDeteccion(
+                    d,
+                    source
+                )
+        )
+        .filter(
+            d =>
+                Number.isFinite(
+                    d.latitude
+                ) &&
+                Number.isFinite(
+                    d.longitude
+                )
+        );
 
 }
 
 
 // =====================================================
-// LIMPIAR INCENDIOS
+// CONSULTAR TODOS LOS SENSORES
 // =====================================================
 
-function limpiarIncendios() {
+async function descargarDatos() {
+
+    const mapKey =
+        document
+        .getElementById("mapKey")
+        .value
+        .trim();
+
+    if (!mapKey) {
+
+        throw new Error(
+            "Debe introducir la FIRMS MAP_KEY."
+        );
+
+    }
+
+    const fecha =
+        obtenerFechaPeru();
+
+    actualizarEstado(
+        `Consultando FIRMS para Perú: ${fecha}...`
+    );
 
 
-fireLayers.forEach(
-item => {
+    // -------------------------------------------------
+    // VIIRS
+    // -------------------------------------------------
 
-if(
-map.hasLayer(item.marker)
-) {
+    const fuentesVIIRS = [
 
-map.removeLayer(
-item.marker
-);
+        "VIIRS_SNPP_NRT",
 
-}
+        "VIIRS_NOAA20_NRT",
 
-});
+        "VIIRS_NOAA21_NRT"
+
+    ];
 
 
-fireLayers = [];
+    const resultadosVIIRS =
+        await Promise.all(
+
+            fuentesVIIRS.map(
+                fuente =>
+                    consultarFIRMS(
+                        mapKey,
+                        fuente
+                    )
+                    .catch(error => {
+
+                        console.warn(
+                            fuente,
+                            error
+                        );
+
+                        return [];
+
+                    })
+            )
+
+        );
+
+
+    const viirs =
+        resultadosVIIRS
+        .flat();
+
+
+    // -------------------------------------------------
+    // MODIS
+    // -------------------------------------------------
+
+    let modis = [];
+
+    try {
+
+        modis =
+            await consultarFIRMS(
+                mapKey,
+                "MODIS_NRT"
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "MODIS no disponible:",
+            error
+        );
+
+    }
+
+
+    // -------------------------------------------------
+    // GOES
+    // -------------------------------------------------
+
+    let goes = [];
+
+    try {
+
+        goes =
+            await consultarFIRMS(
+                mapKey,
+                "GOES_NRT"
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "GOES no disponible:",
+            error
+        );
+
+    }
+
+
+    return {
+
+        fecha,
+
+        viirs,
+
+        modis,
+
+        goes
+
+    };
 
 }
 
 
 // =====================================================
-// LIMPIAR CLÚSTERES
+// CREAR CLUSTERS VIIRS
 // =====================================================
 
-function limpiarClusters() {
-
-
-clusterLayers.forEach(
-layer => {
-
-if(
-map.hasLayer(layer)
+function crearClusters(
+    detecciones
 ) {
 
-map.removeLayer(
-layer
-);
+    const n =
+        detecciones.length;
 
-}
+    const visitado =
+        new Array(n).fill(false);
 
-});
-
-
-clusterLayers = [];
+    const clusters = [];
 
 
-document
-.getElementById(
-"clusterList"
-)
-.innerHTML = "";
+    for (
+        let i = 0;
+        i < n;
+        i++
+    ) {
+
+        if (visitado[i])
+            continue;
+
+
+        const cluster = [];
+
+        const cola = [i];
+
+        visitado[i] = true;
+
+
+        while (cola.length) {
+
+            const actual =
+                cola.shift();
+
+            cluster.push(
+                detecciones[actual]
+            );
+
+
+            for (
+                let j = 0;
+                j < n;
+                j++
+            ) {
+
+                if (visitado[j])
+                    continue;
+
+
+                const distancia =
+                    distanciaMetros(
+
+                        detecciones[actual]
+                        .latitude,
+
+                        detecciones[actual]
+                        .longitude,
+
+                        detecciones[j]
+                        .latitude,
+
+                        detecciones[j]
+                        .longitude
+
+                    );
+
+
+                if (
+                    distancia <=
+                    CONFIG.MAX_CLUSTER_DISTANCE_M
+                ) {
+
+                    visitado[j] = true;
+
+                    cola.push(j);
+
+                }
+
+            }
+
+        }
+
+
+        if (
+            cluster.length >=
+            CONFIG.MIN_CLUSTER_SIZE
+        ) {
+
+            clusters.push(
+                cluster
+            );
+
+        }
+
+    }
+
+    return clusters;
 
 }
 
 
 // =====================================================
-// CARGAR MAP KEY
+// CENTRO DEL CLUSTER
 // =====================================================
 
-function cargarIncendios() {
+function centroCluster(
+    cluster
+) {
 
+    let lat = 0;
+    let lon = 0;
 
-const key =
+    cluster.forEach(d => {
 
-document
-.getElementById(
-"mapKey"
-)
-.value
-.trim();
+        lat += d.latitude;
+        lon += d.longitude;
 
+    });
 
-if(!key) {
+    return {
 
-document
-.getElementById(
-"status"
-)
-.innerHTML =
+        latitude:
+            lat / cluster.length,
 
-"⚠️ Introduce tu MAP_KEY de NASA FIRMS.";
+        longitude:
+            lon / cluster.length
 
-return;
-
-}
-
-
-currentKey =
-key;
-
-
-localStorage.setItem(
-"firms_map_key",
-key
-);
-
-
-actualizarIncendios(true);
+    };
 
 }
 
 
 // =====================================================
-// ACTUALIZAR INCENDIOS
+// ESTADÍSTICAS DEL CLUSTER
 // =====================================================
 
-async function actualizarIncendios(
-forzado=false
+function estadisticasCluster(
+    cluster
 ) {
 
+    const centro =
+        centroCluster(
+            cluster
+        );
 
-if(!currentKey) {
 
-return;
+    let frpTotal = 0;
+
+    let frpMax = 0;
+
+    let t4Max = -Infinity;
+
+    let deltaTMax = -Infinity;
+
+    let radioMax = 0;
+
+
+    cluster.forEach(d => {
+
+        frpTotal +=
+            Number(d.frp) || 0;
+
+
+        frpMax =
+            Math.max(
+                frpMax,
+                Number(d.frp) || 0
+            );
+
+
+        if (
+            Number.isFinite(d.t4)
+        ) {
+
+            t4Max =
+                Math.max(
+                    t4Max,
+                    d.t4
+                );
+
+        }
+
+
+        if (
+            Number.isFinite(
+                d.deltaT
+            )
+        ) {
+
+            deltaTMax =
+                Math.max(
+                    deltaTMax,
+                    d.deltaT
+                );
+
+        }
+
+
+        const distancia =
+            distanciaMetros(
+
+                centro.latitude,
+                centro.longitude,
+
+                d.latitude,
+                d.longitude
+
+            );
+
+
+        radioMax =
+            Math.max(
+                radioMax,
+                distancia
+            );
+
+    });
+
+
+    return {
+
+        ...centro,
+
+        size:
+            cluster.length,
+
+        frpTotal,
+
+        frpMax,
+
+        t4Max,
+
+        deltaTMax,
+
+        radioMax
+
+    };
 
 }
 
 
-if(actualizando) {
+// =====================================================
+// CORROBORACIÓN SENSOR
+// =====================================================
 
-return;
-
-}
-
-
-actualizando = true;
-
-
-const inicio =
-new Date();
-
-
-const periodo =
-obtenerPeriodo();
-
-
-document
-.getElementById(
-"status"
-)
-.innerHTML =
-
-"⏳ Consultando incendios de Perú...";
-
-
-try {
-
-
-limpiarIncendios();
-
-limpiarClusters();
-
-
-puntosDetectados = [];
-
-
-let total = 0;
-
-
-let conteos = {
-
-"NOAA-20":0,
-
-"NOAA-21":0,
-
-"Suomi-NPP":0
-
-};
-
-
-let ultimaFecha = null;
-
-
-// ===================================================
-// CONSULTAR LOS 3 SATÉLITES
-// ===================================================
-
-for(
-const sat of SATELLITES
+function buscarCorroboraciones(
+    centro,
+    fechaReferencia,
+    detecciones
 ) {
 
-
-try {
-
-
-const datos =
-await cargarSensor(
-sat
-);
+    const cercanas = [];
 
 
-datos.forEach(
-fire => {
+    detecciones.forEach(d => {
+
+        const distancia =
+            distanciaMetros(
+
+                centro.latitude,
+                centro.longitude,
+
+                d.latitude,
+                d.longitude
+
+            );
 
 
-const lat =
+        if (
+            distancia >
+            CONFIG.MAX_CONFIRMATION_DISTANCE_M
+        ) {
 
-parseFloat(
-fire.latitude
-);
+            return;
 
-
-const lon =
-
-parseFloat(
-fire.longitude
-);
+        }
 
 
-if(
-Number.isNaN(lat) ||
-Number.isNaN(lon)
+        let diferenciaMin = null;
+
+
+        if (
+            fechaReferencia &&
+            d.acquisitionDate
+        ) {
+
+            diferenciaMin =
+                Math.abs(
+
+                    fechaReferencia.getTime() -
+                    d.acquisitionDate.getTime()
+
+                ) / 60000;
+
+
+            if (
+                diferenciaMin >
+                CONFIG.MAX_CONFIRMATION_TIME_MIN
+            ) {
+
+                return;
+
+            }
+
+        }
+
+
+        cercanas.push({
+
+            deteccion: d,
+
+            distancia,
+
+            diferenciaMin
+
+        });
+
+    });
+
+
+    cercanas.sort(
+        (a, b) =>
+            a.distancia -
+            b.distancia
+    );
+
+
+    return cercanas;
+
+}
+
+
+// =====================================================
+// CONFIANZA VIIRS
+// =====================================================
+
+function puntuacionConfianza(
+    confianza
 ) {
 
-return;
+    const c =
+        String(
+            confianza || ""
+        )
+        .toLowerCase();
+
+
+    if (
+        c === "h" ||
+        c === "high"
+    ) {
+
+        return 2;
+
+    }
+
+
+    if (
+        c === "n" ||
+        c === "nominal"
+    ) {
+
+        return 1;
+
+    }
+
+
+    if (
+        c === "l" ||
+        c === "low"
+    ) {
+
+        return 0;
+
+    }
+
+
+    return 0;
 
 }
 
 
-// =================================================
-// SOLO PERÚ
-// =================================================
+// =====================================================
+// EVALUAR CLUSTER
+// =====================================================
 
-if(
-!puntoDentroPeru(
-lat,
-lon
-)
+function evaluarCluster(
+    cluster,
+    modis,
+    goes
 ) {
 
-return;
+    const stats =
+        estadisticasCluster(
+            cluster
+        );
+
+
+    const mejorDeteccion =
+        [...cluster]
+        .sort(
+            (a, b) =>
+                (b.frp || 0) -
+                (a.frp || 0)
+        )[0];
+
+
+    const fechaReferencia =
+        mejorDeteccion
+        .acquisitionDate;
+
+
+    const modisCercanos =
+        buscarCorroboraciones(
+
+            stats,
+
+            fechaReferencia,
+
+            modis
+
+        );
+
+
+    const goesCercanos =
+        buscarCorroboraciones(
+
+            stats,
+
+            fechaReferencia,
+
+            goes
+
+        );
+
+
+    let score = 0;
+
+
+    // -------------------------------------------------
+    // TAMAÑO DEL CLUSTER
+    // -------------------------------------------------
+
+    if (
+        stats.size >= 3
+    ) {
+
+        score += 2;
+
+    } else if (
+        stats.size >= 2
+    ) {
+
+        score += 1;
+
+    }
+
+
+    // -------------------------------------------------
+    // FRP
+    // -------------------------------------------------
+
+    if (
+        stats.frpMax >=
+        CONFIG.MIN_FRP
+    ) {
+
+        score += 2;
+
+    }
+
+
+    // -------------------------------------------------
+    // T4
+    // -------------------------------------------------
+
+    if (
+        stats.t4Max >=
+        CONFIG.MIN_T4
+    ) {
+
+        score += 1;
+
+    }
+
+
+    // -------------------------------------------------
+    // ΔT
+    // -------------------------------------------------
+
+    if (
+        stats.deltaTMax >=
+        CONFIG.STRONG_DELTA_T
+    ) {
+
+        score += 3;
+
+    } else if (
+        stats.deltaTMax >=
+        CONFIG.MIN_DELTA_T
+    ) {
+
+        score += 2;
+
+    }
+
+
+    // -------------------------------------------------
+    // CONFIANZA
+    // -------------------------------------------------
+
+    score +=
+        Math.max(
+            ...cluster.map(
+                d =>
+                    puntuacionConfianza(
+                        d.confidence
+                    )
+            )
+        );
+
+
+    // -------------------------------------------------
+    // MODIS
+    // -------------------------------------------------
+
+    if (
+        modisCercanos.length > 0
+    ) {
+
+        score += 2;
+
+    }
+
+
+    // -------------------------------------------------
+    // GOES
+    // -------------------------------------------------
+
+    if (
+        goesCercanos.length > 0
+    ) {
+
+        score += 2;
+
+    }
+
+
+    // -------------------------------------------------
+    // NIVEL
+    // -------------------------------------------------
+
+    let nivel;
+
+
+    if (
+        score >= 8
+    ) {
+
+        nivel = "ALTO";
+
+    } else if (
+        score >= 5
+    ) {
+
+        nivel = "MEDIO";
+
+    } else {
+
+        nivel = "VIGILANCIA";
+
+    }
+
+
+    return {
+
+        ...stats,
+
+        cluster,
+
+        score,
+
+        nivel,
+
+        modisCercanos,
+
+        goesCercanos,
+
+        confirmado:
+
+            modisCercanos.length > 0 ||
+            goesCercanos.length > 0
+
+    };
 
 }
 
 
-const fecha =
-fire.acq_date || "--";
-
-
-const horaUTC =
-fire.acq_time || "--";
-
-
-const horaLocal =
-
-horaPeru(
-fecha,
-horaUTC
-);
-
-
-const frp =
-fire.frp || "--";
-
-
-const confidence =
-fire.confidence || "--";
-
-
-const bright =
-fire.bright_ti4 || "--";
-
-
-const daynight =
-fire.daynight || "--";
-
-
-// =================================================
-// GUARDAR PARA CLUSTERS
-// =================================================
-
-puntosDetectados.push({
-
-lat:lat,
-
-lon:lon,
-
-satelite:sat.name,
-
-color:sat.color,
-
-fecha:fecha,
-
-horaUTC:horaUTC,
-
-horaLocal:horaLocal,
-
-frp:parseFloat(frp) || 0,
-
-confidence:confidence
-
-});
-
-
-conteos[sat.name]++;
-
-
-total++;
-
-
-// =================================================
-// MARCADOR
-// =================================================
-
-const marker =
-
-L.marker(
-
-[lat,lon],
-
-{
-
-icon:
-crearIcono(
-sat.color
-)
-
-}
-
-);
-
-
-marker.bindPopup(`
-
-<div style="
-color:#111;
-min-width:250px;
-">
-
-<h3 style="
-color:${sat.color};
-margin-top:0;
-">
-
-🔥 Incendio VIIRS
-
-</h3>
-
-
-<b>🇵🇪 País:</b>
-
-PERÚ
-
-<br><br>
-
-
-<b>🛰️ Satélite:</b>
-
-${sat.name}
-
-<br><br>
-
-
-<b>📍 Latitud:</b>
-
-${lat.toFixed(5)}°
-
-<br>
-
-
-<b>📍 Longitud:</b>
-
-${lon.toFixed(5)}°
-
-<br><br>
-
-
-<b>📅 Fecha:</b>
-
-${fecha}
-
-<br>
-
-
-<b>🕐 Hora Perú:</b>
-
-${horaLocal}
-
-<br>
-
-
-<small>
-Hora original:
-${horaUTC} UTC
-</small>
-
-<br><br>
-
-
-<b>🔥 FRP:</b>
-
-${frp} MW
-
-<br>
-
-
-<b>🎯 Confianza:</b>
-
-${confidence}
-
-<br>
-
-
-<b>🌡️ Brightness T4:</b>
-
-${bright}
-
-<br>
-
-
-<b>☀️ Día/Noche:</b>
-
-${daynight}
-
-<br><br>
-
-
-<small>
-NASA FIRMS / VIIRS NRT
-</small>
-
-</div>
-
-`);
-
-
-marker.addTo(map);
-
-
-fireLayers.push({
-
-marker:marker,
-
-satelite:sat.name
-
-});
-
-
-const fechaHora =
-`${fecha} ${horaUTC}`;
-
-
-if(
-!ultimaFecha ||
-fechaHora > ultimaFecha
+// =====================================================
+// COLOR
+// =====================================================
+
+function colorNivel(
+    nivel
 ) {
 
-ultimaFecha =
-fechaHora;
+    if (
+        nivel === "ALTO"
+    )
+        return "#ff1744";
 
-}
+    if (
+        nivel === "MEDIO"
+    )
+        return "#ff9100";
 
-});
-
-}
-catch(error) {
-
-console.error(
-sat.name,
-error
-);
-
-}
+    return "#ffeb3b";
 
 }
 
 
-// ===================================================
-// DETECTAR CLUSTERS
-// ===================================================
+// =====================================================
+// CREAR POPUP
+// =====================================================
 
-const clusters =
+function popupCluster(
+    c
+) {
 
-detectarClusters(
-
-puntosDetectados,
-
-1000,
-
-3
-
-);
-
-
-// ===================================================
-// ORDENAR POR CANTIDAD
-// ===================================================
-
-clusters.sort(
-
-(a,b) =>
-b.length - a.length
-
-);
+    const mejor =
+        c.cluster
+        .slice()
+        .sort(
+            (a, b) =>
+                (b.frp || 0) -
+                (a.frp || 0)
+        )[0];
 
 
-// ===================================================
-// DIBUJAR CLUSTERS
-// ===================================================
+    const modis =
+        c.modisCercanos.length;
 
-clusters.forEach(
-
-(indices,index) => {
+    const goes =
+        c.goesCercanos.length;
 
 
-const centro =
+    return `
 
-centroCluster(
-indices
-);
+        <div style="
+            min-width:280px;
+            font-family:Arial;
+        ">
 
+            <h3 style="
+                margin-top:0;
+                color:${colorNivel(c.nivel)};
+            ">
+                🔥 ${c.nivel}
+            </h3>
 
-const diametro =
+            <b>Score:</b>
+            ${c.score}
 
-diametroCluster(
-indices
-);
+            <hr>
 
+            <b>Detecciones VIIRS:</b>
+            ${c.size}
 
-// -----------------------------------------------
-// CÍRCULO
-// -----------------------------------------------
+            <br>
 
-const circle =
+            <b>FRP máximo:</b>
+            ${c.frpMax.toFixed(2)}
+            MW
 
-L.circle(
+            <br>
 
-[
-centro.lat,
-centro.lon
-],
+            <b>FRP total:</b>
+            ${c.frpTotal.toFixed(2)}
+            MW
 
-{
+            <br>
 
-radius:1000,
+            <b>T4 máxima:</b>
+            ${Number.isFinite(c.t4Max)
+                ? c.t4Max.toFixed(2) + " K"
+                : "N/D"
+            }
 
-color:"#ef4444",
+            <br>
 
-weight:3,
+            <b>ΔT máximo:</b>
+            ${Number.isFinite(c.deltaTMax)
+                ? c.deltaTMax.toFixed(2) + " K"
+                : "N/D"
+            }
 
-opacity:.9,
+            <br>
 
-fillColor:"#ef4444",
+            <b>Radio cluster:</b>
+            ${c.radioMax.toFixed(0)}
+            m
 
-fillOpacity:.12
+            <hr>
 
-}
+            <b>MODIS ≤ 3 km:</b>
+            ${modis}
 
-);
+            <br>
 
+            <b>GOES ≤ 3 km:</b>
+            ${goes}
 
-circle.addTo(map);
+            <br>
 
+            <b>Corroborado:</b>
+            ${
+                c.confirmado
+                ? "SÍ"
+                : "NO"
+            }
 
-clusterLayers.push(
-circle
-);
+            <hr>
 
+            <b>Latitud:</b>
+            ${c.latitude.toFixed(5)}
 
-// -----------------------------------------------
-// ETIQUETA
-// -----------------------------------------------
+            <br>
 
-const label =
+            <b>Longitud:</b>
+            ${c.longitude.toFixed(5)}
 
-L.marker(
+            <hr>
 
-[
-centro.lat,
-centro.lon
-],
+            <b>Satélite principal:</b>
+            ${mejor.satellite || "N/D"}
 
-{
+            <br>
 
-icon:
+            <b>Confianza:</b>
+            ${mejor.confidence || "N/D"}
 
-L.divIcon({
+            <br>
 
-className:"",
+            <b>Fecha:</b>
+            ${mejor.acq_date || "N/D"}
 
-html:
+            <br>
 
-`<div style="
-background:#dc2626;
-color:white;
-border:2px solid white;
-border-radius:50%;
-width:30px;
-height:30px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-font-size:12px;
-box-shadow:0 0 10px #dc2626;
-">
-${indices.length}
-</div>`,
+            <b>Hora UTC:</b>
+            ${mejor.acq_time || "N/D"}
 
-iconSize:[30,30],
+        </div>
 
-iconAnchor:[15,15]
-
-})
+    `;
 
 }
 
-);
 
+// =====================================================
+// MOSTRAR CLUSTERS
+// =====================================================
 
-label.addTo(map);
+function mostrarClusters(
+    clusters
+) {
 
+    capaClusters.clearLayers();
 
-clusterLayers.push(
-label
-);
 
+    clusters.forEach(
+        cluster => {
 
-// -----------------------------------------------
-// INFORMACIÓN POPUP
-// -----------------------------------------------
+            const color =
+                colorNivel(
+                    cluster.nivel
+                );
 
-const puntosCluster =
 
-indices.map(
-i =>
-puntosDetectados[i]
-);
+            // -----------------------------------------
+            // CÍRCULO DE CORROBORACIÓN
+            // -----------------------------------------
 
+            L.circle(
 
-const frpTotal =
+                [
+                    cluster.latitude,
+                    cluster.longitude
+                ],
 
-puntosCluster.reduce(
+                {
 
-(sum,p) =>
-sum + p.frp,
+                    radius:
+                        CONFIG.MAX_CONFIRMATION_DISTANCE_M,
 
-0
+                    color,
 
-);
+                    weight: 1,
 
+                    opacity: 0.35,
 
-const satelites =
+                    fillColor: color,
 
-[
+                    fillOpacity: 0.04
 
-...new Set(
+                }
 
-puntosCluster.map(
-p =>
-p.satelite
-)
+            )
+            .bindTooltip(
+                `${cluster.nivel} | Score ${cluster.score}`
+            )
+            .addTo(
+                capaClusters
+            );
 
-)
 
-].join(", ");
+            // -----------------------------------------
+            // MARCADOR PRINCIPAL
+            // -----------------------------------------
 
+            const radio =
+                Math.min(
+                    18,
+                    7 +
+                    cluster.size * 2
+                );
 
-circle.bindPopup(`
 
-<div style="
-color:#111;
-min-width:260px;
-">
+            L.circleMarker(
 
-<h3 style="
-color:#dc2626;
-margin-top:0;
-">
+                [
+                    cluster.latitude,
+                    cluster.longitude
+                ],
 
-🚨 CLÚSTER DE INCENDIOS
+                {
 
-</h3>
+                    radius,
 
+                    color: "#ffffff",
 
-<b>🇵🇪 País:</b>
+                    weight: 2,
 
-PERÚ
+                    fillColor: color,
 
-<br><br>
+                    fillOpacity: 0.9
 
+                }
 
-<b>🔥 Detecciones:</b>
+            )
 
-${indices.length}
+            .bindPopup(
+                popupCluster(
+                    cluster
+                )
+            )
 
-<br>
+            .addTo(
+                capaClusters
+            );
 
 
-<b>📏 Diámetro:</b>
+            // -----------------------------------------
+            // DETECCIONES INDIVIDUALES
+            // -----------------------------------------
 
-${Math.round(diametro)} m
+            cluster.cluster.forEach(
+                d => {
 
-<br>
+                    L.circleMarker(
 
+                        [
+                            d.latitude,
+                            d.longitude
+                        ],
 
-<b>📐 Regla:</b>
+                        {
 
-≤ 1.000 m
+                            radius: 3,
 
-<br><br>
+                            color: "#ffffff",
 
+                            weight: 1,
 
-<b>🛰️ Satélites:</b>
+                            fillColor: color,
 
-${satelites}
+                            fillOpacity: 0.65
 
-<br>
+                        }
 
+                    )
 
-<b>🔥 FRP total:</b>
+                    .bindTooltip(
+                        `${d.satellite || d.sensor} | FRP ${
+                            Number(d.frp || 0).toFixed(1)
+                        } MW`
+                    )
 
-${frpTotal.toFixed(1)} MW
+                    .addTo(
+                        capaIncendios
+                    );
 
-<br><br>
+                }
+            );
 
-
-<b>📍 Centro:</b>
-
-${centro.lat.toFixed(5)},
-${centro.lon.toFixed(5)}
-
-<br><br>
-
-
-<small>
-Clúster #${index+1}
-</small>
-
-</div>
-
-`);
-
-
-// -----------------------------------------------
-// LISTA
-// -----------------------------------------------
-
-const item =
-
-document.createElement(
-"div"
-);
-
-
-item.className =
-"cluster-item";
-
-
-item.innerHTML =
-
-`
-
-<strong>
-🚨 CLÚSTER #${index+1}
-</strong>
-
-<br>
-
-🔥 ${indices.length} detecciones
-
-<br>
-
-📏 Diámetro:
-${Math.round(diametro)} m
-
-<br>
-
-🔥 FRP:
-${frpTotal.toFixed(1)} MW
-
-<br>
-
-🛰️ ${satelites}
-
-<br>
-
-📍 ${centro.lat.toFixed(4)},
-${centro.lon.toFixed(4)}
-
-`;
-
-
-item.onclick = () => {
-
-map.setView(
-
-[
-centro.lat,
-centro.lon
-],
-
-12
-
-);
-
-
-circle.openPopup();
-
-};
-
-
-document
-.getElementById(
-"clusterList"
-)
-.appendChild(
-item
-);
-
-});
-
-
-// ===================================================
-// ESTADÍSTICAS
-// ===================================================
-
-document
-.getElementById(
-"total"
-)
-.textContent =
-total;
-
-
-document
-.getElementById(
-"totalClusters"
-)
-.textContent =
-clusters.length;
-
-
-// ===================================================
-// HORA ACTUAL PERÚ
-// ===================================================
-
-const horaActual =
-
-inicio.toLocaleTimeString(
-
-"es-PE",
-
-{
-
-timeZone:
-"America/Lima",
-
-hour:"2-digit",
-
-minute:"2-digit",
-
-second:"2-digit",
-
-hour12:false
+        }
+    );
 
 }
 
-);
+
+// =====================================================
+// MOSTRAR DETECCIONES INDIVIDUALES
+// =====================================================
+
+function mostrarTodasLasDetecciones(
+    datos
+) {
+
+    capaIncendios.clearLayers();
 
 
-// ===================================================
-// PRÓXIMA ACTUALIZACIÓN
-// ===================================================
+    datos.forEach(
+        d => {
 
-proximaActualizacion =
-
-Date.now() +
-INTERVALO;
+            const esVIIRS =
+                d.sensor
+                .startsWith("VIIRS");
 
 
-// ===================================================
+            if (!esVIIRS)
+                return;
+
+
+            L.circleMarker(
+
+                [
+                    d.latitude,
+                    d.longitude
+                ],
+
+                {
+
+                    radius: 3,
+
+                    color: "#ffffff",
+
+                    weight: 1,
+
+                    fillColor: "#00e5ff",
+
+                    fillOpacity: 0.55
+
+                }
+
+            )
+
+            .bindTooltip(
+
+                `${d.sensor}<br>` +
+
+                `FRP: ${
+                    Number(
+                        d.frp || 0
+                    ).toFixed(2)
+                } MW<br>` +
+
+                `T4: ${
+                    Number.isFinite(d.t4)
+                    ? d.t4.toFixed(2)
+                    : "N/D"
+                } K<br>` +
+
+                `T5: ${
+                    Number.isFinite(d.t5)
+                    ? d.t5.toFixed(2)
+                    : "N/D"
+                } K<br>` +
+
+                `ΔT: ${
+                    Number.isFinite(d.deltaT)
+                    ? d.deltaT.toFixed(2)
+                    : "N/D"
+                } K`
+
+            )
+
+            .addTo(
+                capaIncendios
+            );
+
+        }
+    );
+
+}
+
+
+// =====================================================
+// ACTUALIZAR ESTADÍSTICAS
+// =====================================================
+
+function actualizarEstadisticas(
+    datos,
+    clusters
+) {
+
+    const alto =
+        clusters.filter(
+            c =>
+                c.nivel === "ALTO"
+        ).length;
+
+
+    const medio =
+        clusters.filter(
+            c =>
+                c.nivel === "MEDIO"
+        ).length;
+
+
+    const vigilancia =
+        clusters.filter(
+            c =>
+                c.nivel === "VIGILANCIA"
+        ).length;
+
+
+    document
+        .getElementById(
+            "statVIIRS"
+        )
+        .textContent =
+            datos.viirs.length;
+
+
+    document
+        .getElementById(
+            "statClusters"
+        )
+        .textContent =
+            clusters.length;
+
+
+    document
+        .getElementById(
+            "statAlto"
+        )
+        .textContent =
+            alto;
+
+
+    document
+        .getElementById(
+            "statMedio"
+        )
+        .textContent =
+            medio;
+
+
+    document
+        .getElementById(
+            "statVigilancia"
+        )
+        .textContent =
+            vigilancia;
+
+
+    document
+        .getElementById(
+            "statMODIS"
+        )
+        .textContent =
+            datos.modis.length;
+
+
+    document
+        .getElementById(
+            "statGOES"
+        )
+        .textContent =
+            datos.goes.length;
+
+}
+
+
+// =====================================================
 // ESTADO
-// ===================================================
-
-document
-.getElementById(
-"status"
-)
-.innerHTML =
-
-`
-
-<span class="live">
-● SISTEMA ACTIVO
-</span>
-
-<br>
-
-🇵🇪 Solo Perú
-
-<br>
-
-🔥 Detecciones:
-${total}
-
-<br>
-
-🚨 Clústeres:
-${clusters.length}
-
-<br>
-
-🛰️ NOAA-20:
-${conteos["NOAA-20"]}
-
-<br>
-
-🛰️ NOAA-21:
-${conteos["NOAA-21"]}
-
-<br>
-
-🛰️ Suomi-NPP:
-${conteos["Suomi-NPP"]}
-
-<br>
-
-🕐 Actualizado:
-${horaActual} 🇵🇪
-
-<br>
-
-🔄 Próxima actualización:
-<span id="contador">
-15:00
-</span>
-
-`;
-
-
-// ===================================================
-// VISIBILIDAD
-// ===================================================
-
-actualizarVisibilidad();
-
-actualizarVisibilidadClusters();
-
-
-}
-catch(error) {
-
-
-console.error(error);
-
-
-document
-.getElementById(
-"status"
-)
-.innerHTML =
-
-`
-
-❌ Error consultando FIRMS
-
-<br>
-
-${error.message}
-
-`;
-
-}
-finally {
-
-actualizando =
-false;
-
-}
-
-}
-
-
-// =====================================================
-// VISIBILIDAD SATÉLITES
 // =====================================================
 
-function actualizarVisibilidad() {
-
-
-const mostrar20 =
-
-document
-.getElementById(
-"showNOAA20"
-)
-.checked;
-
-
-const mostrar21 =
-
-document
-.getElementById(
-"showNOAA21"
-)
-.checked;
-
-
-const mostrarSNPP =
-
-document
-.getElementById(
-"showSNPP"
-)
-.checked;
-
-
-fireLayers.forEach(
-
-item => {
-
-
-let mostrar = true;
-
-
-if(
-item.satelite ===
-"NOAA-20"
+function actualizarEstado(
+    texto
 ) {
 
-mostrar =
-mostrar20;
-
-}
-
-
-if(
-item.satelite ===
-"NOAA-21"
-) {
-
-mostrar =
-mostrar21;
-
-}
-
-
-if(
-item.satelite ===
-"Suomi-NPP"
-) {
-
-mostrar =
-mostrarSNPP;
-
-}
-
-
-if(mostrar) {
-
-item.marker.addTo(map);
-
-}
-else {
-
-map.removeLayer(
-item.marker
-);
-
-}
-
-});
-
-
-// =====================================================
-// ÓRBITAS
-// =====================================================
-
-const orbit20 =
-
-document
-.getElementById(
-"showOrbit20"
-)
-.checked;
-
-
-const orbit21 =
-
-document
-.getElementById(
-"showOrbit21"
-)
-.checked;
-
-
-const orbitSNPP =
-
-document
-.getElementById(
-"showOrbitSNPP"
-)
-.checked;
-
-
-orbitLayers.forEach(
-
-item => {
-
-
-let mostrar = true;
-
-
-if(
-item.satelite ===
-"NOAA-20"
-) {
-
-mostrar =
-orbit20;
-
-}
-
-
-if(
-item.satelite ===
-"NOAA-21"
-) {
-
-mostrar =
-orbit21;
-
-}
-
-
-if(
-item.satelite ===
-"Suomi-NPP"
-) {
-
-mostrar =
-orbitSNPP;
-
-}
-
-
-if(mostrar) {
-
-item.layer.addTo(map);
-
-}
-else {
-
-map.removeLayer(
-item.layer
-);
-
-}
-
-});
+    document
+        .getElementById(
+            "estado"
+        )
+        .textContent =
+            texto;
 
 }
 
 
 // =====================================================
-// VISIBILIDAD CLUSTERS
+// ACTUALIZACIÓN PRINCIPAL
 // =====================================================
 
-function actualizarVisibilidadClusters() {
+let actualizando = false;
 
 
-const mostrar =
+async function actualizarIncendios() {
 
-document
-.getElementById(
-"showClusters"
-)
-.checked;
+    if (actualizando) {
 
+        console.warn(
+            "Ya existe una actualización en curso."
+        );
 
-clusterLayers.forEach(
-layer => {
+        return;
 
+    }
 
-if(mostrar) {
 
-layer.addTo(map);
+    actualizando = true;
 
-}
-else {
 
-map.removeLayer(
-layer
-);
+    try {
 
-}
+        actualizarEstado(
+            "Consultando FIRMS..."
+        );
 
-});
 
-}
+        const datos =
+            await descargarDatos();
 
 
-// =====================================================
-// TLE
-// =====================================================
+        console.log(
+            "VIIRS:",
+            datos.viirs
+        );
 
-async function obtenerTLE(
-sat
-) {
 
+        console.log(
+            "MODIS:",
+            datos.modis
+        );
 
-const url =
 
-`https://celestrak.org/NORAD/elements/gp.php?CATNR=${sat.norad}&FORMAT=TLE`;
+        console.log(
+            "GOES:",
+            datos.goes
+        );
 
 
-const response =
-await fetch(url);
+        // ---------------------------------------------
+        // CREAR CLUSTERS
+        // ---------------------------------------------
 
+        const clustersBase =
+            crearClusters(
+                datos.viirs
+            );
 
-if(!response.ok) {
 
-throw new Error(
-"TLE no disponible"
-);
+        // ---------------------------------------------
+        // EVALUAR
+        // ---------------------------------------------
 
-}
+        const clusters =
+            clustersBase.map(
+                cluster =>
+                    evaluarCluster(
+                        cluster,
+                        datos.modis,
+                        datos.goes
+                    )
+            );
 
 
-const text =
-await response.text();
+        // ---------------------------------------------
+        // MOSTRAR
+        // ---------------------------------------------
 
+        mostrarTodasLasDetecciones(
+            datos
+        );
 
-const lines =
 
-text
-.trim()
-.split(/\r?\n/)
-.filter(Boolean);
+        mostrarClusters(
+            clusters
+        );
 
 
-if(lines.length >= 3) {
+        actualizarEstadisticas(
+            datos,
+            clusters
+        );
 
-return {
 
-line1:lines[1],
+        // ---------------------------------------------
+        // ESTADO
+        // ---------------------------------------------
 
-line2:lines[2]
+        const fecha =
+            obtenerFechaPeru();
 
-};
 
-}
+        const hora =
+            new Intl.DateTimeFormat(
+                "es-PE",
+                {
 
+                    timeZone:
+                        "America/Lima",
 
-throw new Error(
-"TLE inválido"
-);
+                    hour: "2-digit",
 
-}
+                    minute: "2-digit",
 
+                    second: "2-digit"
 
-// =====================================================
-// POSICIÓN SATÉLITE
-// =====================================================
+                }
 
-function posicionSatelite(
-satrec,
-date
-) {
+            ).format(
+                new Date()
+            );
 
 
-const pv =
+        actualizarEstado(
 
-satellite.propagate(
-satrec,
-date
-);
+            `Actualizado: ${fecha} ${hora} | ` +
+            `VIIRS: ${datos.viirs.length} | ` +
+            `Clusters: ${clusters.length}`
 
+        );
 
-if(!pv.position) {
 
-return null;
+        document
+            .getElementById(
+                "ultimaActualizacion"
+            )
+            .textContent =
+                `Última actualización: ${fecha} ${hora} hora Perú`;
 
-}
 
+        // ---------------------------------------------
+        // CONSOLA
+        // ---------------------------------------------
 
-const gmst =
+        console.log(
+            "===================================="
+        );
 
-satellite.gstime(
-date
-);
+        console.log(
+            "MONITOREO FIRMS - PERÚ"
+        );
 
+        console.log(
+            "Fecha:",
+            fecha
+        );
 
-const geo =
+        console.log(
+            "VIIRS:",
+            datos.viirs.length
+        );
 
-satellite.eciToGeodetic(
-pv.position,
-gmst
-);
+        console.log(
+            "MODIS:",
+            datos.modis.length
+        );
 
+        console.log(
+            "GOES:",
+            datos.goes.length
+        );
 
-return [
+        console.log(
+            "Clusters:",
+            clusters.length
+        );
 
-satellite.degreesLat(
-geo.latitude
-),
+        console.log(
+            "===================================="
+        );
 
-satellite.degreesLong(
-geo.longitude
-)
 
-];
+        // ---------------------------------------------
+        // GUARDAR PARA DEBUG
+        // ---------------------------------------------
 
-}
+        window.ultimosDatos = datos;
 
+        window.ultimosClusters =
+            clusters;
 
-// =====================================================
-// DIBUJAR ÓRBITA
-// =====================================================
 
-async function dibujarOrbita(
-sat
-) {
+    } catch (error) {
 
+        console.error(
+            "ERROR FIRMS:",
+            error
+        );
 
-try {
 
+        actualizarEstado(
+            "❌ Error: " +
+            error.message
+        );
 
-const tle =
-await obtenerTLE(
-sat
-);
+    } finally {
 
+        actualizando =
+            false;
 
-const satrec =
-
-satellite.twoline2satrec(
-
-tle.line1,
-
-tle.line2
-
-);
-
-
-const puntos = [];
-
-const ahora =
-new Date();
-
-
-for(
-let minuto=-60;
-
-minuto<=60;
-
-minuto++
-
-) {
-
-
-const fecha =
-
-new Date(
-
-ahora.getTime()
-+
-minuto*60000
-
-);
-
-
-const pos =
-
-posicionSatelite(
-satrec,
-fecha
-);
-
-
-if(pos) {
-
-puntos.push(pos);
-
-}
-
-}
-
-
-const linea =
-
-L.polyline(
-
-puntos,
-
-{
-
-color:sat.color,
-
-weight:2,
-
-opacity:.8,
-
-dashArray:"7,5"
-
-}
-
-);
-
-
-linea.addTo(map);
-
-
-orbitLayers.push({
-
-layer:linea,
-
-satelite:sat.name
-
-});
-
-
-const actual =
-
-posicionSatelite(
-satrec,
-ahora
-);
-
-
-if(actual) {
-
-
-const marcador =
-
-L.circleMarker(
-
-actual,
-
-{
-
-radius:6,
-
-color:"white",
-
-weight:2,
-
-fillColor:sat.color,
-
-fillOpacity:1
-
-}
-
-);
-
-
-marcador.addTo(map);
-
-
-marcador.bindPopup(`
-
-<b>🛰️ ${sat.name}</b>
-
-<br><br>
-
-🇵🇪 Fire Monitor Perú
-
-<br><br>
-
-Latitud:
-${actual[0].toFixed(3)}°
-
-<br>
-
-Longitud:
-${actual[1].toFixed(3)}°
-
-`);
-
-
-orbitLayers.push({
-
-layer:marcador,
-
-satelite:sat.name
-
-});
-
-}
-
-
-}
-catch(error) {
-
-console.warn(
-sat.name,
-error
-);
-
-}
+    }
 
 }
 
 
 // =====================================================
-// CARGAR ÓRBITAS
+// GUARDAR MAP KEY
 // =====================================================
 
-async function cargarOrbitas() {
+function guardarYActualizar() {
+
+    const key =
+        document
+        .getElementById(
+            "mapKey"
+        )
+        .value
+        .trim();
 
 
-orbitLayers.forEach(
-item => {
+    if (!key) {
 
-if(
-map.hasLayer(
-item.layer
-)
-) {
+        alert(
+            "Introduce tu FIRMS MAP_KEY."
+        );
 
-map.removeLayer(
-item.layer
-);
+        return;
 
-}
-
-});
+    }
 
 
-orbitLayers = [];
+    localStorage.setItem(
+        "firms_map_key",
+        key
+    );
 
 
-for(
-const sat of SATELLITES
-) {
-
-await dibujarOrbita(
-sat
-);
-
-}
-
-
-actualizarVisibilidad();
+    actualizarIncendios();
 
 }
 
 
 // =====================================================
-// CONTADOR 15 MINUTOS
-// =====================================================
-
-setInterval(
-
-() => {
-
-
-if(!proximaActualizacion) {
-
-return;
-
-}
-
-
-const restante =
-
-Math.max(
-
-0,
-
-proximaActualizacion -
-Date.now()
-
-);
-
-
-const minutos =
-
-Math.floor(
-restante / 60000
-);
-
-
-const segundos =
-
-Math.floor(
-
-(restante % 60000) /
-1000
-
-);
-
-
-const reloj =
-
-`${String(minutos).padStart(2,"0")}:` +
-
-`${String(segundos).padStart(2,"0")}`;
-
-
-const contador =
-
-document.getElementById(
-"contador"
-);
-
-
-if(contador) {
-
-contador.textContent =
-reloj;
-
-}
-
-},
-
-1000
-
-);
-
-
-// =====================================================
-// ACTUALIZACIÓN AUTOMÁTICA CADA 15 MIN
-// =====================================================
-
-setInterval(
-
-async () => {
-
-
-if(!currentKey) {
-
-return;
-
-}
-
-
-if(actualizando) {
-
-return;
-
-}
-
-
-await actualizarIncendios();
-
-
-},
-
-INTERVALO
-
-);
-
-
-// =====================================================
-// MAP KEY GUARDADA
+// RECUPERAR MAP KEY
 // =====================================================
 
 const savedKey =
+    localStorage.getItem(
+        "firms_map_key"
+    );
 
-localStorage.getItem(
-"firms_map_key"
-);
 
+if (savedKey) {
 
-if(savedKey) {
-
-document
-.getElementById(
-"mapKey"
-)
-.value =
-savedKey;
+    document
+        .getElementById(
+            "mapKey"
+        )
+        .value =
+            savedKey;
 
 }
 
 
 // =====================================================
-// INICIAR ÓRBITAS
+// ACTUALIZACIÓN AUTOMÁTICA
 // =====================================================
 
-cargarOrbitas();
+setInterval(
 
+    async () => {
+
+        await actualizarIncendios();
+
+    },
+
+    CONFIG.INTERVALO
+
+);
+
+
+// =====================================================
+// INICIO
+// =====================================================
+
+window.addEventListener(
+    "load",
+    () => {
+
+        const key =
+            document
+            .getElementById(
+                "mapKey"
+            )
+            .value
+            .trim();
+
+
+        if (key) {
+
+            actualizarIncendios();
+
+        } else {
+
+            actualizarEstado(
+                "Introduzca su FIRMS MAP_KEY."
+            );
+
+        }
+
+    }
+);
 
 </script>
 

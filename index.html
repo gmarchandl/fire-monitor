@@ -1,367 +1,437 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Fire Monitor Perú</title>
+<meta charset="UTF-8">
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-  <style>
+<title>Fire Monitor Perú</title>
 
-    * {
-      box-sizing: border-box;
-    }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: #111827;
-      color: white;
-    }
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
-    #map {
-      width: 100%;
-      height: 100vh;
-    }
 
-    /* =========================
-       ENCABEZADO
-       ========================= */
+<style>
 
-    .header {
-      position: absolute;
-      z-index: 2000;
-      top: 0;
-      left: 0;
-      right: 0;
+* {
+  box-sizing: border-box;
+}
 
-      height: 64px;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+#map {
+  width: 100%;
+  height: 100vh;
+}
 
-      padding: 0 20px;
 
-      background: rgba(15, 23, 42, 0.96);
+/* ===============================
+   ENCABEZADO
+   =============================== */
 
-      border-bottom: 1px solid #374151;
-    }
+.header {
 
-    .title {
-      font-size: 20px;
-      font-weight: bold;
-    }
+  position: absolute;
 
-    .title span {
-      color: #f97316;
-    }
+  z-index: 2000;
 
-    .subtitle {
-      font-size: 12px;
-      color: #9ca3af;
-    }
+  top: 0;
+  left: 0;
+  right: 0;
 
-    /* =========================
-       PANEL
-       ========================= */
+  height: 62px;
 
-    .panel {
-      position: absolute;
-      z-index: 2000;
+  display: flex;
 
-      top: 82px;
-      left: 18px;
+  align-items: center;
 
-      width: 340px;
+  justify-content: space-between;
 
-      padding: 17px;
+  padding: 0 20px;
 
-      background: rgba(15, 23, 42, 0.97);
+  background:
+    rgba(15,23,42,.96);
 
-      border: 1px solid #374151;
+  color: white;
 
-      border-radius: 12px;
+  border-bottom:
+    1px solid #374151;
 
-      box-shadow: 0 10px 35px rgba(0,0,0,.45);
+}
 
-      max-height: calc(100vh - 100px);
+.title {
 
-      overflow-y: auto;
-    }
+  font-size: 20px;
 
-    .panel h2 {
-      margin: 0 0 12px 0;
-      font-size: 17px;
-    }
+  font-weight: bold;
 
-    /* =========================
-       INPUT
-       ========================= */
+}
 
-    label.input-label {
-      display: block;
+.title span {
 
-      margin-top: 10px;
-      margin-bottom: 5px;
+  color: #f97316;
 
-      font-size: 12px;
+}
 
-      color: #d1d5db;
-    }
+.subtitle {
 
-    input[type="password"] {
-      width: 100%;
+  font-size: 12px;
 
-      padding: 10px;
+  color: #9ca3af;
 
-      background: #1f2937;
+}
 
-      color: white;
 
-      border: 1px solid #4b5563;
+/* ===============================
+   PANEL
+   =============================== */
 
-      border-radius: 7px;
+.panel {
 
-      outline: none;
-    }
+  position: absolute;
 
-    input[type="password"]:focus {
-      border-color: #f97316;
-    }
+  z-index: 2000;
 
-    /* =========================
-       BOTONES
-       ========================= */
+  top: 78px;
 
-    button {
-      width: 100%;
+  left: 15px;
 
-      margin-top: 10px;
+  width: 350px;
 
-      padding: 10px;
+  max-height:
+    calc(100vh - 95px);
 
-      border: none;
+  overflow-y: auto;
 
-      border-radius: 7px;
+  padding: 16px;
 
-      background: #ea580c;
+  background:
+    rgba(15,23,42,.97);
 
-      color: white;
+  color: white;
 
-      font-weight: bold;
+  border:
+    1px solid #374151;
 
-      cursor: pointer;
-    }
+  border-radius: 12px;
 
-    button:hover {
-      background: #f97316;
-    }
+  box-shadow:
+    0 10px 35px rgba(0,0,0,.5);
 
-    /* =========================
-       ESTADO
-       ========================= */
+}
 
-    .status {
-      margin-top: 12px;
+.panel h2 {
 
-      padding: 9px;
+  margin: 0 0 12px;
 
-      border-radius: 7px;
+  font-size: 17px;
 
-      background: #1f2937;
+}
 
-      font-size: 12px;
 
-      color: #d1d5db;
-    }
+/* ===============================
+   CAMPOS
+   =============================== */
 
-    /* =========================
-       ESTADÍSTICAS
-       ========================= */
+.input-label {
 
-    .stats {
-      display: grid;
+  display: block;
 
-      grid-template-columns: 1fr 1fr;
+  margin-top: 10px;
 
-      gap: 7px;
+  margin-bottom: 5px;
 
-      margin-top: 12px;
-    }
+  font-size: 12px;
 
-    .stat {
-      padding: 9px;
+  color: #d1d5db;
 
-      background: #1f2937;
+}
 
-      border-radius: 7px;
+input[type="password"] {
 
-      text-align: center;
-    }
+  width: 100%;
 
-    .stat-number {
-      font-size: 18px;
+  padding: 10px;
 
-      font-weight: bold;
+  background: #1f2937;
 
-      color: #fb923c;
-    }
+  color: white;
 
-    .stat-label {
-      font-size: 10px;
+  border: 1px solid #4b5563;
 
-      color: #9ca3af;
-    }
+  border-radius: 7px;
 
-    /* =========================
-       CAPAS
-       ========================= */
+}
 
-    .layers {
-      margin-top: 15px;
 
-      padding-top: 12px;
+/* ===============================
+   BOTONES
+   =============================== */
 
-      border-top: 1px solid #374151;
+button {
 
-      font-size: 12px;
-    }
+  width: 100%;
 
-    .layers-title {
-      margin-bottom: 8px;
+  margin-top: 9px;
 
-      font-size: 13px;
+  padding: 10px;
 
-      font-weight: bold;
+  border: none;
 
-      color: #f3f4f6;
-    }
+  border-radius: 7px;
 
-    .check {
-      display: flex;
+  background: #ea580c;
 
-      align-items: center;
+  color: white;
 
-      gap: 8px;
+  font-weight: bold;
 
-      margin: 8px 0;
+  cursor: pointer;
 
-      cursor: pointer;
+}
 
-      color: #d1d5db;
-    }
+button:hover {
 
-    .check:hover {
-      color: #fb923c;
-    }
+  background: #f97316;
 
-    .check input[type="checkbox"] {
-      width: auto;
+}
 
-      margin: 0;
 
-      cursor: pointer;
+/* ===============================
+   PERÍODO
+   =============================== */
 
-      accent-color: #f97316;
-    }
+.section {
 
-    /* =========================
-       COLORES SATÉLITES
-       ========================= */
+  margin-top: 14px;
 
-    .dot {
-      display: inline-block;
+  padding-top: 12px;
 
-      width: 11px;
-      height: 11px;
+  border-top:
+    1px solid #374151;
 
-      border-radius: 50%;
+}
 
-      flex-shrink: 0;
-    }
+.section-title {
 
-    .noaa20 {
-      background: #38bdf8;
+  margin-bottom: 8px;
 
-      box-shadow: 0 0 6px #38bdf8;
-    }
+  font-size: 13px;
 
-    .noaa21 {
-      background: #c084fc;
+  font-weight: bold;
 
-      box-shadow: 0 0 6px #c084fc;
-    }
+}
 
-    .snpp {
-      background: #4ade80;
 
-      box-shadow: 0 0 6px #4ade80;
-    }
+/* ===============================
+   CHECKBOX
+   =============================== */
 
-    .orbit20 {
-      color: #38bdf8;
+.check {
 
-      font-size: 16px;
-    }
+  display: flex;
 
-    .orbit21 {
-      color: #c084fc;
+  align-items: center;
 
-      font-size: 16px;
-    }
+  gap: 8px;
 
-    .orbitSNPP {
-      color: #4ade80;
+  margin: 8px 0;
 
-      font-size: 16px;
-    }
+  font-size: 12px;
 
-    /* =========================
-       LEAFLET
-       ========================= */
+  cursor: pointer;
 
-    .leaflet-control-layers {
-      background: rgba(15,23,42,.95) !important;
+}
 
-      color: white;
-    }
+.check input {
 
-    /* =========================
-       MÓVIL
-       ========================= */
+  width: auto;
 
-    @media(max-width:700px) {
+  margin: 0;
 
-      .header {
-        height: 55px;
-      }
+  accent-color: #f97316;
 
-      .subtitle {
-        display: none;
-      }
+}
 
-      .panel {
-        top: 68px;
 
-        left: 10px;
+/* ===============================
+   COLORES
+   =============================== */
 
-        width: calc(100% - 20px);
+.dot {
 
-        max-height: 60vh;
-      }
+  width: 11px;
 
-    }
+  height: 11px;
 
-  </style>
+  border-radius: 50%;
+
+  display: inline-block;
+
+  flex-shrink: 0;
+
+}
+
+.noaa20 {
+
+  background: #38bdf8;
+
+  box-shadow:
+    0 0 7px #38bdf8;
+
+}
+
+.noaa21 {
+
+  background: #c084fc;
+
+  box-shadow:
+    0 0 7px #c084fc;
+
+}
+
+.snpp {
+
+  background: #4ade80;
+
+  box-shadow:
+    0 0 7px #4ade80;
+
+}
+
+
+/* ===============================
+   ESTADO
+   =============================== */
+
+.status {
+
+  margin-top: 12px;
+
+  padding: 9px;
+
+  background: #1f2937;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+
+  color: #d1d5db;
+
+}
+
+
+/* ===============================
+   ESTADÍSTICAS
+   =============================== */
+
+.stats {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 7px;
+
+  margin-top: 10px;
+
+}
+
+.stat {
+
+  background: #1f2937;
+
+  padding: 9px;
+
+  border-radius: 7px;
+
+  text-align: center;
+
+}
+
+.stat-number {
+
+  color: #fb923c;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+}
+
+.stat-label {
+
+  color: #9ca3af;
+
+  font-size: 10px;
+
+}
+
+
+/* ===============================
+   ÓRBITAS
+   =============================== */
+
+.orbit20 {
+
+  color: #38bdf8;
+
+  font-weight: bold;
+
+}
+
+.orbit21 {
+
+  color: #c084fc;
+
+  font-weight: bold;
+
+}
+
+.orbitSNPP {
+
+  color: #4ade80;
+
+  font-weight: bold;
+
+}
+
+
+/* ===============================
+   MÓVIL
+   =============================== */
+
+@media(max-width:700px) {
+
+  .subtitle {
+    display: none;
+  }
+
+  .panel {
+
+    left: 10px;
+
+    width:
+      calc(100% - 20px);
+
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -369,1533 +439,1663 @@
 <body>
 
 
-<!-- ======================================================
+<!-- =========================================
      ENCABEZADO
-     ====================================================== -->
+     ========================================= -->
 
 <div class="header">
 
   <div class="title">
+
     🔥 <span>FIRE MONITOR</span> PERÚ
+
   </div>
 
   <div class="subtitle">
+
     NASA FIRMS • VIIRS • NOAA
+
   </div>
 
 </div>
 
 
-<!-- ======================================================
+<!-- =========================================
      MAPA
-     ====================================================== -->
+     ========================================= -->
 
 <div id="map"></div>
 
 
-<!-- ======================================================
+<!-- =========================================
      PANEL
-     ====================================================== -->
+     ========================================= -->
 
 <div class="panel">
 
-  <h2>🇵🇪 Monitoreo de incendios</h2>
 
+<h2>
+🇵🇪 Monitoreo de incendios
+</h2>
 
-  <label class="input-label">
-    NASA FIRMS MAP_KEY
-  </label>
 
-  <input
-    id="mapKey"
-    type="password"
-    placeholder="Introduce tu MAP_KEY"
-  >
+<label class="input-label">
 
+NASA FIRMS MAP_KEY
 
-  <button onclick="cargarIncendios()">
-    🔥 CARGAR INCENDIOS
-  </button>
+</label>
 
 
-  <button onclick="actualizarIncendios()">
-    🔄 ACTUALIZAR
-  </button>
+<input
+id="mapKey"
+type="password"
+placeholder="Introduce tu MAP_KEY"
+/>
 
 
-  <div
-    class="status"
-    id="status"
-  >
-    Esperando MAP_KEY...
-  </div>
+<button onclick="cargarIncendios()">
 
+🔥 CARGAR INCENDIOS
 
-  <!-- ==================================================
-       ESTADÍSTICAS
-       ================================================== -->
+</button>
 
-  <div class="stats">
 
-    <div class="stat">
+<button onclick="actualizarIncendios()">
 
-      <div
-        class="stat-number"
-        id="total"
-      >
-        0
-      </div>
+🔄 ACTUALIZAR AHORA
 
-      <div class="stat-label">
-        INCENDIOS
-      </div>
+</button>
 
-    </div>
 
+<!-- =========================================
+     PERÍODO
+     ========================================= -->
 
-    <div class="stat">
+<div class="section">
 
-      <div
-        class="stat-number"
-        id="ultima"
-      >
-        --
-      </div>
+<div class="section-title">
 
-      <div class="stat-label">
-        ÚLTIMA HORA
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- ==================================================
-       CASILLAS DE INCENDIOS
-       ================================================== -->
-
-  <div class="layers">
-
-    <div class="layers-title">
-      🔥 INCENDIOS POR SATÉLITE
-    </div>
-
-
-    <label class="check">
-
-      <input
-        type="checkbox"
-        id="showNOAA20"
-        checked
-        onchange="actualizarVisibilidad()"
-      >
-
-      <span class="dot noaa20"></span>
-
-      🛰️ NOAA-20
-
-    </label>
-
-
-    <label class="check">
-
-      <input
-        type="checkbox"
-        id="showNOAA21"
-        checked
-        onchange="actualizarVisibilidad()"
-      >
-
-      <span class="dot noaa21"></span>
-
-      🛰️ NOAA-21
-
-    </label>
-
-
-    <label class="check">
-
-      <input
-        type="checkbox"
-        id="showSNPP"
-        checked
-        onchange="actualizarVisibilidad()"
-      >
-
-      <span class="dot snpp"></span>
-
-      🛰️ Suomi-NPP
-
-    </label>
-
-
-    <!-- ================================================
-         ÓRBITAS
-         ================================================ -->
-
-    <div
-      class="layers-title"
-      style="margin-top:15px;"
-    >
-      🛰️ ÓRBITAS DE SATÉLITES
-    </div>
-
-
-    <label class="check">
-
-      <input
-        type="checkbox"
-        id="showOrbit20"
-        checked
-        onchange="actualizarVisibilidad()"
-      >
-
-      <span class="orbit20">
-        ━━
-      </span>
-
-      Órbita NOAA-20
-
-    </label>
-
-
-    <label class="check">
-
-      <input
-        type="checkbox"
-        id="showOrbit21"
-        checked
-        onchange="actualizarVisibilidad()"
-      >
-
-      <span class="orbit21">
-        ━━
-      </span>
-
-      Órbita NOAA-21
-
-    </label>
-
-
-    <label class="check">
-
-      <input
-        type="checkbox"
-        id="showOrbitSNPP"
-        checked
-        onchange="actualizarVisibilidad()"
-      >
-
-      <span class="orbitSNPP">
-        ━━
-      </span>
-
-      Órbita Suomi-NPP
-
-    </label>
-
-  </div>
+🕐 PERÍODO DE CONSULTA
 
 </div>
 
 
-<!-- ======================================================
-     LEAFLET
-     ====================================================== -->
+<label class="check">
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<input
+type="radio"
+name="periodo"
+value="1"
+checked
+>
+
+🔥 Últimas 24 horas
+
+</label>
 
 
-<!-- ======================================================
-     SATELLITE.JS
-     ====================================================== -->
+<label class="check">
 
-<script src="https://unpkg.com/satellite.js/dist/satellite.min.js"></script>
+<input
+type="radio"
+name="periodo"
+value="2"
+>
+
+🔥 Últimas 48 horas
+
+</label>
+
+
+<label class="check">
+
+<input
+type="radio"
+name="periodo"
+value="3"
+>
+
+🔥 Últimas 72 horas
+
+</label>
+
+
+<label class="check">
+
+<input
+type="radio"
+name="periodo"
+value="5"
+>
+
+🔥 Últimos 5 días
+
+</label>
+
+</div>
+
+
+<!-- =========================================
+     SATÉLITES
+     ========================================= -->
+
+<div class="section">
+
+<div class="section-title">
+
+🛰️ SATÉLITES VIIRS
+
+</div>
+
+
+<label class="check">
+
+<input
+type="checkbox"
+id="showNOAA20"
+checked
+onchange="actualizarVisibilidad()"
+/>
+
+<span class="dot noaa20"></span>
+
+NOAA-20
+
+</label>
+
+
+<label class="check">
+
+<input
+type="checkbox"
+id="showNOAA21"
+checked
+onchange="actualizarVisibilidad()"
+/>
+
+<span class="dot noaa21"></span>
+
+NOAA-21
+
+</label>
+
+
+<label class="check">
+
+<input
+type="checkbox"
+id="showSNPP"
+checked
+onchange="actualizarVisibilidad()"
+/>
+
+<span class="dot snpp"></span>
+
+Suomi-NPP
+
+</label>
+
+</div>
+
+
+<!-- =========================================
+     ÓRBITAS
+     ========================================= -->
+
+<div class="section">
+
+<div class="section-title">
+
+🛰️ ÓRBITAS
+
+</div>
+
+
+<label class="check">
+
+<input
+type="checkbox"
+id="showOrbit20"
+checked
+onchange="actualizarVisibilidad()"
+/>
+
+<span class="orbit20">
+
+━━
+
+</span>
+
+Órbita NOAA-20
+
+</label>
+
+
+<label class="check">
+
+<input
+type="checkbox"
+id="showOrbit21"
+checked
+onchange="actualizarVisibilidad()"
+/>
+
+<span class="orbit21">
+
+━━
+
+</span>
+
+Órbita NOAA-21
+
+</label>
+
+
+<label class="check">
+
+<input
+type="checkbox"
+id="showOrbitSNPP"
+checked
+onchange="actualizarVisibilidad()"
+/>
+
+<span class="orbitSNPP">
+
+━━
+
+</span>
+
+Órbita Suomi-NPP
+
+</label>
+
+</div>
+
+
+<!-- =========================================
+     ESTADÍSTICAS
+     ========================================= -->
+
+<div class="stats">
+
+
+<div class="stat">
+
+<div
+class="stat-number"
+id="total"
+>
+0
+</div>
+
+<div class="stat-label">
+DETECCIONES
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div
+class="stat-number"
+id="ultima"
+>
+--
+</div>
+
+<div class="stat-label">
+ÚLTIMA HORA UTC
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- =========================================
+     ESTADO
+     ========================================= -->
+
+<div
+class="status"
+id="status"
+>
+
+Esperando MAP_KEY...
+
+</div>
+
+
+</div>
+
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script
+src="https://unpkg.com/satellite.js/dist/satellite.min.js">
+</script>
 
 
 <script>
 
 
-// ==========================================================
+// ======================================================
 // MAPA
-// ==========================================================
+// ======================================================
 
-const map = L.map("map").setView(
-  [-9.19, -75.015],
+const map =
+L.map("map")
+.setView(
+  [-9.19,-75.015],
   5
 );
 
 
-const osm = L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-    attribution:
-      "&copy; OpenStreetMap contributors"
-  }
-).addTo(map);
+L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+
+attribution:
+"&copy; OpenStreetMap contributors"
+
+}
+)
+.addTo(map);
 
 
-L.control.scale().addTo(map);
+L.control.scale()
+.addTo(map);
 
 
-// ==========================================================
-// EXTENSIÓN DE PERÚ
-// ==========================================================
+// ======================================================
+// ÁREA PERÚ
+// ======================================================
 
 const PERU = {
 
-  west: -81.5,
+west: -81.5,
 
-  south: -18.5,
+south: -18.5,
 
-  east: -68.5,
+east: -68.5,
 
-  north: 0.5
+north: 0.5
 
 };
 
 
-// ==========================================================
+// ======================================================
 // VARIABLES
-// ==========================================================
+// ======================================================
+
+let currentKey = "";
 
 let fireLayers = [];
 
 let orbitLayers = [];
 
-let currentKey = "";
 
-
-// ==========================================================
-// COLORES
-// ==========================================================
-
-const COLORS = {
-
-  "NOAA-20": "#38bdf8",
-
-  "NOAA-21": "#c084fc",
-
-  "Suomi-NPP": "#4ade80"
-
-};
-
-
-// ==========================================================
-// ICONO DE INCENDIO
-// ==========================================================
-
-function crearIcono(color) {
-
-  return L.divIcon({
-
-    className: "",
-
-    html: `
-
-      <div style="
-
-        width:13px;
-
-        height:13px;
-
-        background:${color};
-
-        border:2px solid white;
-
-        border-radius:50%;
-
-        box-shadow:0 0 8px ${color};
-
-      "></div>
-
-    `,
-
-    iconSize: [13,13],
-
-    iconAnchor: [6,6]
-
-  });
-
-}
-
-
-// ==========================================================
-// CSV
-// ==========================================================
-
-function csvToArray(text) {
-
-  const lines =
-    text.trim().split(/\r?\n/);
-
-
-  if (lines.length < 2) {
-
-    return [];
-
-  }
-
-
-  const headers =
-    lines[0]
-      .split(",")
-      .map(x => x.trim());
-
-
-  return lines
-    .slice(1)
-    .map(line => {
-
-      const values =
-        line.split(",");
-
-
-      const obj = {};
-
-
-      headers.forEach(
-        (header, i) => {
-
-          obj[header] =
-            values[i] !== undefined
-              ? values[i].trim()
-              : "";
-
-        }
-      );
-
-
-      return obj;
-
-    });
-
-}
-
-
-// ==========================================================
-// LIMPIAR INCENDIOS
-// ==========================================================
-
-function limpiarIncendios() {
-
-  fireLayers.forEach(
-    item => {
-
-      if (
-        item.marker &&
-        map.hasLayer(item.marker)
-      ) {
-
-        map.removeLayer(
-          item.marker
-        );
-
-      }
-
-    }
-  );
-
-
-  fireLayers = [];
-
-}
-
-
-// ==========================================================
-// CARGAR SATÉLITE
-// ==========================================================
-
-async function cargarSensor(
-  sensor,
-  nombre
-) {
-
-  const url =
-
-    `https://firms.modaps.eosdis.nasa.gov/api/area/csv/` +
-
-    `${currentKey}/` +
-
-    `${sensor}/` +
-
-    `${PERU.west},${PERU.south},${PERU.east},${PERU.north}/1`;
-
-
-  const response =
-    await fetch(url);
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      `${nombre}: HTTP ${response.status}`
-    );
-
-  }
-
-
-  const text =
-    await response.text();
-
-
-  return csvToArray(text);
-
-}
-
-
-// ==========================================================
-// CARGAR INCENDIOS
-// ==========================================================
-
-async function cargarIncendios() {
-
-  const key =
-    document
-      .getElementById("mapKey")
-      .value
-      .trim();
-
-
-  if (!key) {
-
-    document.getElementById(
-      "status"
-    ).innerHTML =
-      "⚠️ Introduce tu MAP_KEY de NASA FIRMS.";
-
-    return;
-
-  }
-
-
-  currentKey = key;
-
-
-  localStorage.setItem(
-    "firms_map_key",
-    key
-  );
-
-
-  await actualizarIncendios();
-
-}
-
-
-// ==========================================================
-// ACTUALIZAR INCENDIOS
-// ==========================================================
-
-async function actualizarIncendios() {
-
-  if (!currentKey) {
-
-    document.getElementById(
-      "status"
-    ).innerHTML =
-      "⚠️ Primero introduce tu MAP_KEY.";
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "status"
-  ).innerHTML =
-    "⏳ Consultando NASA FIRMS...";
-
-
-  limpiarIncendios();
-
-
-  try {
-
-    const resultados =
-      await Promise.all([
-
-        cargarSensor(
-          "VIIRS_NOAA20_NRT",
-          "NOAA-20"
-        ),
-
-        cargarSensor(
-          "VIIRS_NOAA21_NRT",
-          "NOAA-21"
-        ),
-
-        cargarSensor(
-          "VIIRS_SNPP_NRT",
-          "Suomi-NPP"
-        )
-
-      ]);
-
-
-    let total = 0;
-
-    let fechas = [];
-
-
-    resultados.forEach(
-      (datos, indice) => {
-
-
-        let nombreSat = "";
-
-
-        if (indice === 0) {
-
-          nombreSat =
-            "NOAA-20";
-
-        }
-
-
-        if (indice === 1) {
-
-          nombreSat =
-            "NOAA-21";
-
-        }
-
-
-        if (indice === 2) {
-
-          nombreSat =
-            "Suomi-NPP";
-
-        }
-
-
-        const color =
-          COLORS[nombreSat];
-
-
-        datos.forEach(
-          fire => {
-
-
-            const lat =
-              parseFloat(
-                fire.latitude
-              );
-
-
-            const lon =
-              parseFloat(
-                fire.longitude
-              );
-
-
-            if (
-              Number.isNaN(lat) ||
-              Number.isNaN(lon)
-            ) {
-
-              return;
-
-            }
-
-
-            const marker =
-              L.marker(
-                [lat, lon],
-                {
-                  icon:
-                    crearIcono(color)
-                }
-              );
-
-
-            // =========================================
-            // INFORMACIÓN DEL INCENDIO
-            // =========================================
-
-            const fecha =
-              fire.acq_date || "--";
-
-
-            const hora =
-              fire.acq_time || "--";
-
-
-            const frp =
-              fire.frp || "--";
-
-
-            const confidence =
-              fire.confidence || "--";
-
-
-            const daynight =
-              fire.daynight || "--";
-
-
-            marker.bindPopup(`
-
-              <div style="
-                color:#111;
-                min-width:220px;
-              ">
-
-                <h3 style="
-                  margin-top:0;
-                  color:${color};
-                ">
-                  🔥 Incendio detectado
-                </h3>
-
-
-                <b>🛰️ Satélite:</b>
-
-                ${nombreSat}
-
-                <br><br>
-
-
-                <b>📍 Latitud:</b>
-
-                ${lat.toFixed(5)}
-
-                <br>
-
-
-                <b>📍 Longitud:</b>
-
-                ${lon.toFixed(5)}
-
-                <br><br>
-
-
-                <b>📅 Fecha:</b>
-
-                ${fecha}
-
-                <br>
-
-
-                <b>🕐 Hora UTC:</b>
-
-                ${hora}
-
-                <br><br>
-
-
-                <b>🔥 FRP:</b>
-
-                ${frp} MW
-
-                <br>
-
-
-                <b>🎯 Confianza:</b>
-
-                ${confidence}
-
-                <br>
-
-
-                <b>☀️ Día/Noche:</b>
-
-                ${daynight}
-
-                <br><br>
-
-
-                <small>
-                  NASA FIRMS / VIIRS NRT
-                </small>
-
-              </div>
-
-            `);
-
-
-            // =========================================
-            // AGREGAR AL MAPA
-            // =========================================
-
-            marker.addTo(map);
-
-
-            // =========================================
-            // GUARDAR CON SATÉLITE
-            // =========================================
-
-            fireLayers.push({
-
-              marker: marker,
-
-              satelite: nombreSat
-
-            });
-
-
-            total++;
-
-
-            if (fecha) {
-
-              fechas.push(
-                `${fecha} ${hora}`
-              );
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-
-    // =====================================================
-    // ESTADÍSTICAS
-    // =====================================================
-
-    document.getElementById(
-      "total"
-    ).textContent = total;
-
-
-    if (fechas.length > 0) {
-
-      fechas.sort();
-
-
-      document.getElementById(
-        "ultima"
-      ).textContent =
-        fechas[
-          fechas.length - 1
-        ].split(" ")[1] || "--";
-
-    }
-
-
-    const ahora =
-      new Date()
-        .toLocaleTimeString(
-          "es-PE",
-          {
-            hour: "2-digit",
-
-            minute: "2-digit"
-          }
-        );
-
-
-    document.getElementById(
-      "status"
-    ).innerHTML =
-
-      `✅ ${total} detecciones cargadas.<br>
-       Actualizado: ${ahora}`;
-
-    
-    // Aplicar casillas
-    actualizarVisibilidad();
-
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-
-    document.getElementById(
-      "status"
-    ).innerHTML =
-
-      `❌ Error consultando FIRMS.<br>
-       ${error.message}`;
-
-  }
-
-}
-
-
-// ==========================================================
-// CONTROL DE VISIBILIDAD
-// ==========================================================
-
-function actualizarVisibilidad() {
-
-
-  // ========================================================
-  // INCENDIOS NOAA-20
-  // ========================================================
-
-  const mostrar20 =
-    document.getElementById(
-      "showNOAA20"
-    ).checked;
-
-
-  // ========================================================
-  // INCENDIOS NOAA-21
-  // ========================================================
-
-  const mostrar21 =
-    document.getElementById(
-      "showNOAA21"
-    ).checked;
-
-
-  // ========================================================
-  // INCENDIOS SUOMI
-  // ========================================================
-
-  const mostrarSNPP =
-    document.getElementById(
-      "showSNPP"
-    ).checked;
-
-
-  // ========================================================
-  // MOSTRAR / OCULTAR INCENDIOS
-  // ========================================================
-
-  fireLayers.forEach(
-    item => {
-
-      let mostrar = true;
-
-
-      if (
-        item.satelite === "NOAA-20"
-      ) {
-
-        mostrar = mostrar20;
-
-      }
-
-
-      if (
-        item.satelite === "NOAA-21"
-      ) {
-
-        mostrar = mostrar21;
-
-      }
-
-
-      if (
-        item.satelite === "Suomi-NPP"
-      ) {
-
-        mostrar = mostrarSNPP;
-
-      }
-
-
-      if (mostrar) {
-
-        if (
-          !map.hasLayer(
-            item.marker
-          )
-        ) {
-
-          item.marker.addTo(map);
-
-        }
-
-      }
-
-      else {
-
-        if (
-          map.hasLayer(
-            item.marker
-          )
-        ) {
-
-          map.removeLayer(
-            item.marker
-          );
-
-        }
-
-      }
-
-    }
-  );
-
-
-  // ========================================================
-  // ÓRBITAS
-  // ========================================================
-
-  const mostrarOrbit20 =
-    document.getElementById(
-      "showOrbit20"
-    ).checked;
-
-
-  const mostrarOrbit21 =
-    document.getElementById(
-      "showOrbit21"
-    ).checked;
-
-
-  const mostrarOrbitSNPP =
-    document.getElementById(
-      "showOrbitSNPP"
-    ).checked;
-
-
-  orbitLayers.forEach(
-    item => {
-
-      let mostrar = true;
-
-
-      if (
-        item.satelite === "NOAA-20"
-      ) {
-
-        mostrar =
-          mostrarOrbit20;
-
-      }
-
-
-      if (
-        item.satelite === "NOAA-21"
-      ) {
-
-        mostrar =
-          mostrarOrbit21;
-
-      }
-
-
-      if (
-        item.satelite === "Suomi-NPP"
-      ) {
-
-        mostrar =
-          mostrarOrbitSNPP;
-
-      }
-
-
-      if (mostrar) {
-
-        if (
-          !map.hasLayer(
-            item.layer
-          )
-        ) {
-
-          item.layer.addTo(map);
-
-        }
-
-      }
-
-      else {
-
-        if (
-          map.hasLayer(
-            item.layer
-          )
-        ) {
-
-          map.removeLayer(
-            item.layer
-          );
-
-        }
-
-      }
-
-    }
-  );
-
-}
-
-
-// ==========================================================
+// ======================================================
 // SATÉLITES
-// ==========================================================
+// ======================================================
 
 const SATELLITES = [
 
-  {
-    name: "NOAA-20",
+{
 
-    search: "NOAA 20",
+name:
+"NOAA-20",
 
-    color: "#38bdf8"
-  },
+source:
+"VIIRS_NOAA20_NRT",
 
-  {
-    name: "NOAA-21",
+norad:
+"43013",
 
-    search: "NOAA 21",
+color:
+"#38bdf8"
 
-    color: "#c084fc"
-  },
+},
 
-  {
-    name: "Suomi-NPP",
+{
 
-    search: "SUOMI NPP",
+name:
+"NOAA-21",
 
-    color: "#4ade80"
-  }
+source:
+"VIIRS_NOAA21_NRT",
+
+norad:
+"54234",
+
+color:
+"#c084fc"
+
+},
+
+{
+
+name:
+"Suomi-NPP",
+
+source:
+"VIIRS_SNPP_NRT",
+
+norad:
+"37849",
+
+color:
+"#4ade80"
+
+}
 
 ];
 
 
-// ==========================================================
-// OBTENER TLE
-// ==========================================================
+// ======================================================
+// ICONO
+// ======================================================
 
-async function obtenerTLE(nombre) {
+function crearIcono(color) {
 
-  const url =
-    "https://celestrak.org/NORAD/elements/gp.php" +
+return L.divIcon({
 
-    "?NAME=" +
+className:"",
 
-    encodeURIComponent(nombre) +
+html:
 
-    "&FORMAT=TLE";
+`<div style="
+width:13px;
+height:13px;
+background:${color};
+border:2px solid white;
+border-radius:50%;
+box-shadow:0 0 8px ${color};
+"></div>`,
 
+iconSize:[13,13],
 
-  const response =
-    await fetch(url);
+iconAnchor:[6,6]
 
-
-  if (!response.ok) {
-
-    throw new Error(
-      "No se pudo obtener TLE"
-    );
-
-  }
-
-
-  const text =
-    await response.text();
-
-
-  const lines =
-    text.trim()
-      .split(/\r?\n/)
-      .map(x => x.trim())
-      .filter(Boolean);
-
-
-  for (
-    let i = 0;
-    i < lines.length - 2;
-    i++
-  ) {
-
-    if (
-
-      lines[i + 1].startsWith("1 ") &&
-
-      lines[i + 2].startsWith("2 ")
-
-    ) {
-
-      return {
-
-        name: lines[i],
-
-        line1: lines[i + 1],
-
-        line2: lines[i + 2]
-
-      };
-
-    }
-
-  }
-
-
-  throw new Error(
-    "TLE no encontrado"
-  );
+});
 
 }
 
 
-// ==========================================================
-// POSICIÓN SATELITAL
-// ==========================================================
+// ======================================================
+// CSV
+// ======================================================
+
+function csvToArray(text) {
+
+const lines =
+text
+.trim()
+.split(/\r?\n/);
+
+
+if(lines.length < 2) {
+
+return [];
+
+}
+
+
+const headers =
+lines[0]
+.split(",")
+.map(x => x.trim());
+
+
+return lines
+.slice(1)
+.map(line => {
+
+const values =
+line.split(",");
+
+const obj = {};
+
+headers.forEach(
+(header,i) => {
+
+obj[header] =
+values[i] !== undefined
+? values[i].trim()
+: "";
+
+});
+
+return obj;
+
+});
+
+}
+
+
+// ======================================================
+// PERÍODO
+// ======================================================
+
+function obtenerPeriodo() {
+
+const seleccionado =
+document.querySelector(
+'input[name="periodo"]:checked'
+);
+
+return seleccionado
+? parseInt(seleccionado.value)
+: 1;
+
+}
+
+
+// ======================================================
+// CARGAR SENSOR
+// ======================================================
+
+async function cargarSensor(sat) {
+
+
+const days =
+obtenerPeriodo();
+
+
+const url =
+
+`https://firms.modaps.eosdis.nasa.gov/api/area/csv/` +
+
+`${currentKey}/` +
+
+`${sat.source}/` +
+
+`${PERU.west},${PERU.south},${PERU.east},${PERU.north}/` +
+
+`${days}`;
+
+
+console.log(
+"FIRMS:",
+url
+);
+
+
+const response =
+await fetch(url);
+
+
+if(!response.ok) {
+
+throw new Error(
+`${sat.name}: HTTP ${response.status}`
+);
+
+}
+
+
+const text =
+await response.text();
+
+
+return csvToArray(text);
+
+}
+
+
+// ======================================================
+// LIMPIAR PUNTOS
+// ======================================================
+
+function limpiarIncendios() {
+
+
+fireLayers.forEach(
+item => {
+
+if(
+map.hasLayer(item.marker)
+) {
+
+map.removeLayer(
+item.marker
+);
+
+}
+
+}
+);
+
+
+fireLayers = [];
+
+}
+
+
+// ======================================================
+// CARGAR INCENDIOS
+// ======================================================
+
+async function cargarIncendios() {
+
+
+const key =
+document
+.getElementById("mapKey")
+.value
+.trim();
+
+
+if(!key) {
+
+document
+.getElementById("status")
+.innerHTML =
+"⚠️ Introduce tu MAP_KEY.";
+
+return;
+
+}
+
+
+currentKey = key;
+
+
+localStorage.setItem(
+"firms_map_key",
+key
+);
+
+
+await actualizarIncendios();
+
+}
+
+
+// ======================================================
+// ACTUALIZAR
+// ======================================================
+
+async function actualizarIncendios() {
+
+
+if(!currentKey) {
+
+document
+.getElementById("status")
+.innerHTML =
+"⚠️ Primero introduce tu MAP_KEY.";
+
+return;
+
+}
+
+
+document
+.getElementById("status")
+.innerHTML =
+"⏳ Consultando NASA FIRMS...";
+
+
+limpiarIncendios();
+
+
+const periodo =
+obtenerPeriodo();
+
+
+try {
+
+
+let total = 0;
+
+let fechas = [];
+
+let mensajes = [];
+
+
+for(
+const sat of SATELLITES
+) {
+
+
+try {
+
+
+const datos =
+await cargarSensor(sat);
+
+
+if(datos.length === 0) {
+
+mensajes.push(
+`${sat.name}: 0`
+);
+
+continue;
+
+}
+
+
+mensajes.push(
+`${sat.name}: ${datos.length}`
+);
+
+
+datos.forEach(
+fire => {
+
+
+const lat =
+parseFloat(
+fire.latitude
+);
+
+
+const lon =
+parseFloat(
+fire.longitude
+);
+
+
+if(
+Number.isNaN(lat) ||
+Number.isNaN(lon)
+) {
+
+return;
+
+}
+
+
+// ============================================
+// MARCADOR
+// ============================================
+
+const marker =
+L.marker(
+[lat,lon],
+{
+icon:
+crearIcono(
+sat.color
+)
+}
+);
+
+
+// ============================================
+// DATOS
+// ============================================
+
+const fecha =
+fire.acq_date || "--";
+
+
+const hora =
+fire.acq_time || "--";
+
+
+const frp =
+fire.frp || "--";
+
+
+const confidence =
+fire.confidence || "--";
+
+
+const bright =
+fire.bright_ti4 || "--";
+
+
+const daynight =
+fire.daynight || "--";
+
+
+const scan =
+fire.scan || "--";
+
+
+const track =
+fire.track || "--";
+
+
+// ============================================
+// POPUP
+// ============================================
+
+marker.bindPopup(`
+
+<div style="
+color:#111;
+min-width:230px;
+">
+
+<h3 style="
+color:${sat.color};
+margin-top:0;
+">
+
+🔥 Incendio VIIRS
+
+</h3>
+
+
+<b>🛰️ Satélite:</b>
+
+${sat.name}
+
+<br><br>
+
+
+<b>📍 Latitud:</b>
+
+${lat.toFixed(5)}°
+
+<br>
+
+
+<b>📍 Longitud:</b>
+
+${lon.toFixed(5)}°
+
+<br><br>
+
+
+<b>📅 Fecha:</b>
+
+${fecha}
+
+<br>
+
+
+<b>🕐 Hora UTC:</b>
+
+${hora}
+
+<br><br>
+
+
+<b>🔥 FRP:</b>
+
+${frp} MW
+
+<br>
+
+
+<b>🎯 Confianza:</b>
+
+${confidence}
+
+<br>
+
+
+<b>🌡️ Brightness T4:</b>
+
+${bright}
+
+<br>
+
+
+<b>☀️ Día/Noche:</b>
+
+${daynight}
+
+<br><br>
+
+
+<b>Scan:</b>
+${scan}
+
+<br>
+
+<b>Track:</b>
+${track}
+
+<br><br>
+
+
+<small>
+
+NASA FIRMS / VIIRS NRT
+
+</small>
+
+</div>
+
+`);
+
+
+marker.addTo(map);
+
+
+fireLayers.push({
+
+marker:
+
+marker,
+
+satelite:
+
+sat.name
+
+});
+
+
+total++;
+
+
+if(fecha && hora) {
+
+fechas.push(
+`${fecha} ${hora}`
+);
+
+}
+
+});
+
+}
+catch(error) {
+
+console.error(
+sat.name,
+error
+);
+
+mensajes.push(
+`${sat.name}: ERROR`
+);
+
+}
+
+}
+
+
+// ==================================================
+// ESTADÍSTICAS
+// ==================================================
+
+document
+.getElementById("total")
+.textContent =
+total;
+
+
+let ultima = "--";
+
+
+if(fechas.length > 0) {
+
+fechas.sort();
+
+
+ultima =
+fechas[
+fechas.length - 1
+]
+.split(" ")[1]
+.substring(0,4);
+
+}
+
+
+document
+.getElementById("ultima")
+.textContent =
+ultima;
+
+
+// ==================================================
+// MENSAJE
+// ==================================================
+
+const ahora =
+new Date()
+.toLocaleTimeString(
+"es-PE",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+
+document
+.getElementById("status")
+.innerHTML =
+
+`✅ ${total} detecciones encontradas.<br>
+📅 Período: ${periodo} día(s)<br>
+🛰️ ${mensajes.join(" • ")}<br>
+🔄 Actualizado: ${ahora} hora local`;
+
+
+actualizarVisibilidad();
+
+
+}
+catch(error) {
+
+
+console.error(error);
+
+
+document
+.getElementById("status")
+.innerHTML =
+
+`❌ Error FIRMS:<br>
+${error.message}`;
+
+}
+
+}
+
+
+// ======================================================
+// VISIBILIDAD
+// ======================================================
+
+function actualizarVisibilidad() {
+
+
+const mostrar20 =
+document
+.getElementById("showNOAA20")
+.checked;
+
+
+const mostrar21 =
+document
+.getElementById("showNOAA21")
+.checked;
+
+
+const mostrarSNPP =
+document
+.getElementById("showSNPP")
+.checked;
+
+
+fireLayers.forEach(
+item => {
+
+
+let mostrar = true;
+
+
+if(
+item.satelite ===
+"NOAA-20"
+) {
+
+mostrar =
+mostrar20;
+
+}
+
+
+if(
+item.satelite ===
+"NOAA-21"
+) {
+
+mostrar =
+mostrar21;
+
+}
+
+
+if(
+item.satelite ===
+"Suomi-NPP"
+) {
+
+mostrar =
+mostrarSNPP;
+
+}
+
+
+if(mostrar) {
+
+if(
+!map.hasLayer(
+item.marker
+)
+) {
+
+item.marker
+.addTo(map);
+
+}
+
+}
+else {
+
+if(
+map.hasLayer(
+item.marker
+)
+) {
+
+map.removeLayer(
+item.marker
+);
+
+}
+
+}
+
+});
+
+
+// ======================================================
+// ÓRBITAS
+// ======================================================
+
+const orbit20 =
+document
+.getElementById("showOrbit20")
+.checked;
+
+
+const orbit21 =
+document
+.getElementById("showOrbit21")
+.checked;
+
+
+const orbitSNPP =
+document
+.getElementById("showOrbitSNPP")
+.checked;
+
+
+orbitLayers.forEach(
+item => {
+
+
+let mostrar = true;
+
+
+if(
+item.satelite ===
+"NOAA-20"
+) {
+
+mostrar =
+orbit20;
+
+}
+
+
+if(
+item.satelite ===
+"NOAA-21"
+) {
+
+mostrar =
+orbit21;
+
+}
+
+
+if(
+item.satelite ===
+"Suomi-NPP"
+) {
+
+mostrar =
+orbitSNPP;
+
+}
+
+
+if(mostrar) {
+
+if(
+!map.hasLayer(
+item.layer
+)
+) {
+
+item.layer
+.addTo(map);
+
+}
+
+}
+else {
+
+if(
+map.hasLayer(
+item.layer
+)
+) {
+
+map.removeLayer(
+item.layer
+);
+
+}
+
+}
+
+});
+
+}
+
+
+// ======================================================
+// OBTENER TLE
+// ======================================================
+
+async function obtenerTLE(sat) {
+
+
+const url =
+
+`https://celestrak.org/NORAD/elements/gp.php?CATNR=${sat.norad}&FORMAT=TLE`;
+
+
+const response =
+await fetch(url);
+
+
+if(!response.ok) {
+
+throw new Error(
+`TLE ${sat.name}: HTTP ${response.status}`
+);
+
+}
+
+
+const text =
+await response.text();
+
+
+const lines =
+text
+.trim()
+.split(/\r?\n/)
+.map(x => x.trim())
+.filter(Boolean);
+
+
+if(lines.length >= 3) {
+
+return {
+
+line1:
+lines[1],
+
+line2:
+lines[2]
+
+};
+
+}
+
+
+throw new Error(
+`TLE no encontrado: ${sat.name}`
+);
+
+}
+
+
+// ======================================================
+// POSICIÓN
+// ======================================================
 
 function posicionSatelite(
-  satrec,
-  date
+satrec,
+date
 ) {
 
-  const positionAndVelocity =
-    satellite.propagate(
-      satrec,
-      date
-    );
+
+const pv =
+satellite.propagate(
+satrec,
+date
+);
 
 
-  if (
-    !positionAndVelocity.position
-  ) {
+if(!pv.position) {
 
-    return null;
-
-  }
-
-
-  const gmst =
-    satellite.gstime(date);
-
-
-  const geodetic =
-    satellite.eciToGeodetic(
-      positionAndVelocity.position,
-
-      gmst
-    );
-
-
-  const longitude =
-    satellite.degreesLong(
-      geodetic.longitude
-    );
-
-
-  const latitude =
-    satellite.degreesLat(
-      geodetic.latitude
-    );
-
-
-  return [
-
-    latitude,
-
-    longitude
-
-  ];
+return null;
 
 }
 
 
-// ==========================================================
+const gmst =
+satellite.gstime(
+date
+);
+
+
+const geo =
+satellite.eciToGeodetic(
+pv.position,
+gmst
+);
+
+
+return [
+
+satellite.degreesLat(
+geo.latitude
+),
+
+satellite.degreesLong(
+geo.longitude
+)
+
+];
+
+}
+
+
+// ======================================================
 // DIBUJAR ÓRBITA
-// ==========================================================
+// ======================================================
 
-async function dibujarOrbita(
-  satInfo
+async function dibujarOrbita(sat) {
+
+
+try {
+
+
+const tle =
+await obtenerTLE(sat);
+
+
+const satrec =
+satellite.twoline2satrec(
+tle.line1,
+tle.line2
+);
+
+
+const puntos = [];
+
+
+const ahora =
+new Date();
+
+
+// ==================================================
+// ±60 MINUTOS
+// ==================================================
+
+for(
+let minuto=-60;
+
+minuto<=60;
+
+minuto++
 ) {
 
-  try {
 
-    const tle =
-      await obtenerTLE(
-        satInfo.search
-      );
+const fecha =
+new Date(
 
-
-    const satrec =
-      satellite.twoline2satrec(
-        tle.line1,
-
-        tle.line2
-      );
-
-
-    const puntos = [];
-
-
-    const ahora =
-      new Date();
-
-
-    // ±50 minutos
-
-    for (
-      let minuto = -50;
-
-      minuto <= 50;
-
-      minuto += 1
-
-    ) {
-
-      const fecha =
-        new Date(
-
-          ahora.getTime() +
-
-          minuto * 60000
-
-        );
-
-
-      const pos =
-        posicionSatelite(
-          satrec,
-
-          fecha
-        );
-
-
-      if (pos) {
-
-        puntos.push(pos);
-
-      }
-
-    }
-
-
-    const linea =
-      L.polyline(
-
-        puntos,
-
-        {
-
-          color:
-            satInfo.color,
-
-          weight: 2,
-
-          opacity: .85,
-
-          dashArray: "7,5"
-
-        }
-
-      );
-
-
-    linea.addTo(map);
-
-
-    orbitLayers.push({
-
-      layer: linea,
-
-      satelite:
-        satInfo.name
-
-    });
-
-
-    // ======================================================
-    // POSICIÓN ACTUAL
-    // ======================================================
-
-    const actual =
-      posicionSatelite(
-        satrec,
-
-        ahora
-      );
-
-
-    if (actual) {
-
-
-      const marker =
-        L.circleMarker(
-
-          actual,
-
-          {
-
-            radius: 6,
-
-            color: "white",
-
-            weight: 2,
-
-            fillColor:
-              satInfo.color,
-
-            fillOpacity: 1
-
-          }
-
-        );
-
-
-      marker.addTo(map);
-
-
-      marker.bindPopup(`
-
-        <div style="
-          color:#111;
-        ">
-
-          <b>🛰️ ${satInfo.name}</b>
-
-          <br><br>
-
-          Posición orbital estimada
-
-          <br><br>
-
-          Latitud:
-
-          ${actual[0].toFixed(3)}°
-
-          <br>
-
-          Longitud:
-
-          ${actual[1].toFixed(3)}°
-
-        </div>
-
-      `);
-
-
-      orbitLayers.push({
-
-        layer: marker,
-
-        satelite:
-          satInfo.name
-
-      });
-
-    }
-
-
-  }
-
-  catch (error) {
-
-    console.warn(
-
-      "Órbita no disponible:",
-
-      satInfo.name,
-
-      error
-
-    );
-
-  }
-
-}
-
-
-// ==========================================================
-// CARGAR TODAS LAS ÓRBITAS
-// ==========================================================
-
-async function cargarOrbitas() {
-
-
-  // eliminar anteriores
-
-  orbitLayers.forEach(
-    item => {
-
-      if (
-        map.hasLayer(
-          item.layer
-        )
-      ) {
-
-        map.removeLayer(
-          item.layer
-        );
-
-      }
-
-    }
-  );
-
-
-  orbitLayers = [];
-
-
-  for (
-    const sat of SATELLITES
-  ) {
-
-    await dibujarOrbita(
-      sat
-    );
-
-  }
-
-
-  // aplicar casillas
-
-  actualizarVisibilidad();
-
-}
-
-
-// ==========================================================
-// CARGAR ÓRBITAS INICIALES
-// ==========================================================
-
-cargarOrbitas();
-
-
-// ==========================================================
-// ACTUALIZACIÓN AUTOMÁTICA
-// ==========================================================
-
-setInterval(
-
-  () => {
-
-
-    if (currentKey) {
-
-      actualizarIncendios();
-
-    }
-
-
-    cargarOrbitas();
-
-
-  },
-
-  15 * 60 * 1000
+ahora.getTime()
++
+minuto*60000
 
 );
 
 
-// ==========================================================
-// RECUPERAR MAP_KEY
-// ==========================================================
-
-const savedKey =
-  localStorage.getItem(
-    "firms_map_key"
-  );
+const pos =
+posicionSatelite(
+satrec,
+fecha
+);
 
 
-if (savedKey) {
+if(pos) {
 
-  document.getElementById(
-    "mapKey"
-  ).value =
-    savedKey;
+puntos.push(pos);
 
 }
+
+}
+
+
+// ==================================================
+// LÍNEA
+// ==================================================
+
+const linea =
+L.polyline(
+puntos,
+{
+
+color:
+sat.color,
+
+weight:2,
+
+opacity:.85,
+
+dashArray:
+"7,5"
+
+}
+);
+
+
+linea.addTo(map);
+
+
+orbitLayers.push({
+
+layer:
+linea,
+
+satelite:
+sat.name
+
+});
+
+
+// ==================================================
+// POSICIÓN ACTUAL
+// ==================================================
+
+const actual =
+posicionSatelite(
+satrec,
+ahora
+);
+
+
+if(actual) {
+
+
+const marker =
+L.circleMarker(
+actual,
+{
+
+radius:6,
+
+color:"white",
+
+weight:2,
+
+fillColor:
+sat.color,
+
+fillOpacity:1
+
+}
+);
+
+
+marker.addTo(map);
+
+
+marker.bindPopup(`
+
+<div style="
+color:#111;
+">
+
+<b>🛰️ ${sat.name}</b>
+
+<br><br>
+
+Posición orbital estimada
+
+<br><br>
+
+Latitud:
+${actual[0].toFixed(3)}°
+
+<br>
+
+Longitud:
+${actual[1].toFixed(3)}°
+
+<br><br>
+
+NORAD:
+${sat.norad}
+
+</div>
+
+`);
+
+
+orbitLayers.push({
+
+layer:
+marker,
+
+satelite:
+sat.name
+
+});
+
+}
+
+
+}
+catch(error) {
+
+console.warn(
+error
+);
+
+}
+
+}
+
+
+// ======================================================
+// CARGAR ÓRBITAS
+// ======================================================
+
+async function cargarOrbitas() {
+
+
+orbitLayers.forEach(
+item => {
+
+if(
+map.hasLayer(
+item.layer
+)
+) {
+
+map.removeLayer(
+item.layer
+);
+
+}
+
+});
+
+
+orbitLayers = [];
+
+
+for(
+const sat of SATELLITES
+) {
+
+await dibujarOrbita(
+sat
+);
+
+}
+
+
+actualizarVisibilidad();
+
+}
+
+
+// ======================================================
+// MAPA INICIAL
+// ======================================================
+
+cargarOrbitas();
+
+
+// ======================================================
+// MAP_KEY GUARDADA
+// ======================================================
+
+const savedKey =
+localStorage.getItem(
+"firms_map_key"
+);
+
+
+if(savedKey) {
+
+document
+.getElementById("mapKey")
+.value =
+savedKey;
+
+}
+
+
+// ======================================================
+// ACTUALIZACIÓN AUTOMÁTICA
+// ======================================================
+
+setInterval(
+() => {
+
+if(currentKey) {
+
+actualizarIncendios();
+
+}
+
+cargarOrbitas();
+
+},
+15*60*1000
+);
+
 
 </script>
 
 </body>
+
 </html>

@@ -10,12 +10,10 @@
 
 <title>Fire Monitor Perú</title>
 
-
 <link
 rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
-
 
 <style>
 
@@ -23,7 +21,8 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -36,383 +35,191 @@ html, body {
   height: 100vh;
 }
 
-
-/* ===============================
-   ENCABEZADO
-   =============================== */
-
 .header {
-
   position: absolute;
-
   z-index: 2000;
-
   top: 0;
   left: 0;
   right: 0;
-
   height: 62px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   padding: 0 20px;
-
-  background:
-    rgba(15,23,42,.96);
-
+  background: rgba(15,23,42,.97);
   color: white;
-
-  border-bottom:
-    1px solid #374151;
-
+  border-bottom: 1px solid #374151;
 }
 
 .title {
-
   font-size: 20px;
-
   font-weight: bold;
-
 }
 
 .title span {
-
   color: #f97316;
-
 }
 
 .subtitle {
-
   font-size: 12px;
-
   color: #9ca3af;
-
 }
 
-
-/* ===============================
-   PANEL
-   =============================== */
-
 .panel {
-
   position: absolute;
-
   z-index: 2000;
-
-  top: 78px;
-
+  top: 77px;
   left: 15px;
-
-  width: 350px;
-
-  max-height:
-    calc(100vh - 95px);
-
+  width: 360px;
+  max-height: calc(100vh - 95px);
   overflow-y: auto;
-
   padding: 16px;
-
-  background:
-    rgba(15,23,42,.97);
-
+  background: rgba(15,23,42,.97);
   color: white;
-
-  border:
-    1px solid #374151;
-
+  border: 1px solid #374151;
   border-radius: 12px;
-
-  box-shadow:
-    0 10px 35px rgba(0,0,0,.5);
-
+  box-shadow: 0 10px 35px rgba(0,0,0,.5);
 }
 
 .panel h2 {
-
   margin: 0 0 12px;
-
   font-size: 17px;
-
 }
 
-
-/* ===============================
-   CAMPOS
-   =============================== */
-
 .input-label {
-
   display: block;
-
   margin-top: 10px;
-
   margin-bottom: 5px;
-
   font-size: 12px;
-
   color: #d1d5db;
-
 }
 
 input[type="password"] {
-
   width: 100%;
-
   padding: 10px;
-
   background: #1f2937;
-
   color: white;
-
   border: 1px solid #4b5563;
-
   border-radius: 7px;
-
 }
 
-
-/* ===============================
-   BOTONES
-   =============================== */
-
 button {
-
   width: 100%;
-
   margin-top: 9px;
-
   padding: 10px;
-
   border: none;
-
   border-radius: 7px;
-
   background: #ea580c;
-
   color: white;
-
   font-weight: bold;
-
   cursor: pointer;
-
 }
 
 button:hover {
-
   background: #f97316;
-
 }
 
-
-/* ===============================
-   PERÍODO
-   =============================== */
-
 .section {
-
   margin-top: 14px;
-
   padding-top: 12px;
-
-  border-top:
-    1px solid #374151;
-
+  border-top: 1px solid #374151;
 }
 
 .section-title {
-
   margin-bottom: 8px;
-
   font-size: 13px;
-
   font-weight: bold;
-
 }
 
-
-/* ===============================
-   CHECKBOX
-   =============================== */
-
 .check {
-
   display: flex;
-
   align-items: center;
-
   gap: 8px;
-
   margin: 8px 0;
-
   font-size: 12px;
-
   cursor: pointer;
-
 }
 
 .check input {
-
   width: auto;
-
   margin: 0;
-
   accent-color: #f97316;
-
 }
 
-
-/* ===============================
-   COLORES
-   =============================== */
-
 .dot {
-
-  width: 11px;
-
-  height: 11px;
-
-  border-radius: 50%;
-
   display: inline-block;
-
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
   flex-shrink: 0;
-
 }
 
 .noaa20 {
-
   background: #38bdf8;
-
-  box-shadow:
-    0 0 7px #38bdf8;
-
+  box-shadow: 0 0 7px #38bdf8;
 }
 
 .noaa21 {
-
   background: #c084fc;
-
-  box-shadow:
-    0 0 7px #c084fc;
-
+  box-shadow: 0 0 7px #c084fc;
 }
 
 .snpp {
-
   background: #4ade80;
-
-  box-shadow:
-    0 0 7px #4ade80;
-
+  box-shadow: 0 0 7px #4ade80;
 }
-
-
-/* ===============================
-   ESTADO
-   =============================== */
-
-.status {
-
-  margin-top: 12px;
-
-  padding: 9px;
-
-  background: #1f2937;
-
-  border-radius: 7px;
-
-  font-size: 12px;
-
-  color: #d1d5db;
-
-}
-
-
-/* ===============================
-   ESTADÍSTICAS
-   =============================== */
-
-.stats {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 7px;
-
-  margin-top: 10px;
-
-}
-
-.stat {
-
-  background: #1f2937;
-
-  padding: 9px;
-
-  border-radius: 7px;
-
-  text-align: center;
-
-}
-
-.stat-number {
-
-  color: #fb923c;
-
-  font-size: 18px;
-
-  font-weight: bold;
-
-}
-
-.stat-label {
-
-  color: #9ca3af;
-
-  font-size: 10px;
-
-}
-
-
-/* ===============================
-   ÓRBITAS
-   =============================== */
 
 .orbit20 {
-
   color: #38bdf8;
-
-  font-weight: bold;
-
 }
 
 .orbit21 {
-
   color: #c084fc;
-
-  font-weight: bold;
-
 }
 
 .orbitSNPP {
-
   color: #4ade80;
-
-  font-weight: bold;
-
 }
 
+.status {
+  margin-top: 12px;
+  padding: 10px;
+  background: #1f2937;
+  border-radius: 7px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #d1d5db;
+}
 
-/* ===============================
-   MÓVIL
-   =============================== */
+.live {
+  color: #4ade80;
+  font-weight: bold;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.stat {
+  background: #1f2937;
+  padding: 9px;
+  border-radius: 7px;
+  text-align: center;
+}
+
+.stat-number {
+  color: #fb923c;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.stat-label {
+  color: #9ca3af;
+  font-size: 10px;
+}
 
 @media(max-width:700px) {
 
@@ -421,12 +228,8 @@ button:hover {
   }
 
   .panel {
-
     left: 10px;
-
-    width:
-      calc(100% - 20px);
-
+    width: calc(100% - 20px);
   }
 
 }
@@ -435,13 +238,8 @@ button:hover {
 
 </head>
 
-
 <body>
 
-
-<!-- =========================================
-     ENCABEZADO
-     ========================================= -->
 
 <div class="header">
 
@@ -453,29 +251,22 @@ button:hover {
 
   <div class="subtitle">
 
-    NASA FIRMS • VIIRS • NOAA
+    🇵🇪 SOLO PERÚ • NASA FIRMS • VIIRS
 
   </div>
 
 </div>
 
 
-<!-- =========================================
-     MAPA
-     ========================================= -->
-
 <div id="map"></div>
 
 
-<!-- =========================================
-     PANEL
-     ========================================= -->
-
 <div class="panel">
 
-
 <h2>
-🇵🇪 Monitoreo de incendios
+
+🇵🇪 Incendios en Perú
+
 </h2>
 
 
@@ -500,22 +291,18 @@ placeholder="Introduce tu MAP_KEY"
 </button>
 
 
-<button onclick="actualizarIncendios()">
+<button onclick="actualizarIncendios(true)">
 
 🔄 ACTUALIZAR AHORA
 
 </button>
 
 
-<!-- =========================================
-     PERÍODO
-     ========================================= -->
-
 <div class="section">
 
 <div class="section-title">
 
-🕐 PERÍODO DE CONSULTA
+🕐 PERÍODO
 
 </div>
 
@@ -529,7 +316,7 @@ value="1"
 checked
 >
 
-🔥 Últimas 24 horas
+Últimas 24 horas
 
 </label>
 
@@ -542,7 +329,7 @@ name="periodo"
 value="2"
 >
 
-🔥 Últimas 48 horas
+Últimas 48 horas
 
 </label>
 
@@ -555,7 +342,7 @@ name="periodo"
 value="3"
 >
 
-🔥 Últimas 72 horas
+Últimas 72 horas
 
 </label>
 
@@ -568,22 +355,18 @@ name="periodo"
 value="5"
 >
 
-🔥 Últimos 5 días
+Últimos 5 días
 
 </label>
 
 </div>
 
 
-<!-- =========================================
-     SATÉLITES
-     ========================================= -->
-
 <div class="section">
 
 <div class="section-title">
 
-🛰️ SATÉLITES VIIRS
+🛰️ SATÉLITES
 
 </div>
 
@@ -638,10 +421,6 @@ Suomi-NPP
 </div>
 
 
-<!-- =========================================
-     ÓRBITAS
-     ========================================= -->
-
 <div class="section">
 
 <div class="section-title">
@@ -660,13 +439,9 @@ checked
 onchange="actualizarVisibilidad()"
 />
 
-<span class="orbit20">
+<span class="orbit20">━━</span>
 
-━━
-
-</span>
-
-Órbita NOAA-20
+NOAA-20
 
 </label>
 
@@ -680,13 +455,9 @@ checked
 onchange="actualizarVisibilidad()"
 />
 
-<span class="orbit21">
+<span class="orbit21">━━</span>
 
-━━
-
-</span>
-
-Órbita NOAA-21
+NOAA-21
 
 </label>
 
@@ -700,37 +471,27 @@ checked
 onchange="actualizarVisibilidad()"
 />
 
-<span class="orbitSNPP">
+<span class="orbitSNPP">━━</span>
 
-━━
-
-</span>
-
-Órbita Suomi-NPP
+Suomi-NPP
 
 </label>
 
 </div>
 
 
-<!-- =========================================
-     ESTADÍSTICAS
-     ========================================= -->
-
 <div class="stats">
-
 
 <div class="stat">
 
 <div
 class="stat-number"
-id="total"
->
+id="total">
 0
 </div>
 
 <div class="stat-label">
-DETECCIONES
+INCENDIOS
 </div>
 
 </div>
@@ -740,29 +501,32 @@ DETECCIONES
 
 <div
 class="stat-number"
-id="ultima"
->
+id="ultima">
 --
 </div>
 
 <div class="stat-label">
-ÚLTIMA HORA UTC
+ÚLTIMA HORA
 </div>
 
 </div>
 
-
 </div>
 
-
-<!-- =========================================
-     ESTADO
-     ========================================= -->
 
 <div
 class="status"
-id="status"
->
+id="status">
+
+<span class="live">
+● SISTEMA
+</span>
+
+<br>
+
+🇵🇪 Área: Perú
+
+<br>
 
 Esperando MAP_KEY...
 
@@ -776,7 +540,6 @@ Esperando MAP_KEY...
 src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
-
 <script
 src="https://unpkg.com/satellite.js/dist/satellite.min.js">
 </script>
@@ -785,39 +548,35 @@ src="https://unpkg.com/satellite.js/dist/satellite.min.js">
 <script>
 
 
-// ======================================================
+// =====================================================
 // MAPA
-// ======================================================
+// =====================================================
 
 const map =
 L.map("map")
 .setView(
-  [-9.19,-75.015],
-  5
+[-9.19, -75.015],
+5
 );
 
 
 L.tileLayer(
 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 {
-
 attribution:
 "&copy; OpenStreetMap contributors"
-
 }
-)
-.addTo(map);
+).addTo(map);
 
 
-L.control.scale()
-.addTo(map);
+L.control.scale().addTo(map);
 
 
-// ======================================================
-// ÁREA PERÚ
-// ======================================================
+// =====================================================
+// ÁREA DE CONSULTA
+// =====================================================
 
-const PERU = {
+const PERU_BBOX = {
 
 west: -81.5,
 
@@ -830,9 +589,89 @@ north: 0.5
 };
 
 
-// ======================================================
+// =====================================================
+// POLÍGONO SIMPLIFICADO DEL PERÚ
+// =====================================================
+
+const PERU_POLYGON = [
+
+[-18.35,-70.37],
+
+[-17.55,-69.45],
+
+[-16.40,-69.00],
+
+[-15.10,-69.40],
+
+[-13.70,-68.90],
+
+[-12.50,-68.75],
+
+[-11.00,-69.00],
+
+[-9.50,-70.00],
+
+[-8.30,-70.50],
+
+[-7.20,-72.00],
+
+[-6.00,-73.50],
+
+[-4.50,-74.00],
+
+[-3.50,-75.00],
+
+[-2.50,-76.00],
+
+[-1.50,-77.00],
+
+[-0.10,-78.00],
+
+[-0.05,-79.50],
+
+[-1.50,-80.80],
+
+[-3.50,-80.90],
+
+[-5.00,-80.70],
+
+[-6.00,-80.90],
+
+[-8.00,-80.70],
+
+[-10.00,-79.80],
+
+[-12.00,-77.50],
+
+[-14.00,-76.00],
+
+[-15.50,-75.50],
+
+[-17.00,-74.00],
+
+[-18.35,-70.37]
+
+];
+
+
+// Dibujar límite
+
+const peruBoundary =
+
+L.polygon(
+PERU_POLYGON,
+{
+color:"#facc15",
+weight:2,
+fillColor:"#facc15",
+fillOpacity:0.04
+}
+).addTo(map);
+
+
+// =====================================================
 // VARIABLES
-// ======================================================
+// =====================================================
 
 let currentKey = "";
 
@@ -840,67 +679,111 @@ let fireLayers = [];
 
 let orbitLayers = [];
 
+let actualizando = false;
 
-// ======================================================
+let proximaActualizacion = null;
+
+const INTERVALO = 15 * 60 * 1000;
+
+
+// =====================================================
 // SATÉLITES
-// ======================================================
+// =====================================================
 
 const SATELLITES = [
 
 {
-
-name:
-"NOAA-20",
-
-source:
-"VIIRS_NOAA20_NRT",
-
-norad:
-"43013",
-
-color:
-"#38bdf8"
-
+name:"NOAA-20",
+source:"VIIRS_NOAA20_NRT",
+norad:"43013",
+color:"#38bdf8"
 },
 
 {
-
-name:
-"NOAA-21",
-
-source:
-"VIIRS_NOAA21_NRT",
-
-norad:
-"54234",
-
-color:
-"#c084fc"
-
+name:"NOAA-21",
+source:"VIIRS_NOAA21_NRT",
+norad:"54234",
+color:"#c084fc"
 },
 
 {
-
-name:
-"Suomi-NPP",
-
-source:
-"VIIRS_SNPP_NRT",
-
-norad:
-"37849",
-
-color:
-"#4ade80"
-
+name:"Suomi-NPP",
+source:"VIIRS_SNPP_NRT",
+norad:"37849",
+color:"#4ade80"
 }
 
 ];
 
 
-// ======================================================
+// =====================================================
+// ¿PUNTO DENTRO DE PERÚ?
+// =====================================================
+
+function puntoDentroPeru(
+lat,
+lon
+) {
+
+let dentro = false;
+
+
+for(
+let i = 0,
+j = PERU_POLYGON.length - 1;
+
+i < PERU_POLYGON.length;
+
+j = i++
+) {
+
+const lati =
+PERU_POLYGON[i][0];
+
+const loni =
+PERU_POLYGON[i][1];
+
+const latj =
+PERU_POLYGON[j][0];
+
+const lonj =
+PERU_POLYGON[j][1];
+
+
+const intersect =
+
+((loni > lon) !==
+ (lonj > lon))
+
+&&
+
+(
+lat <
+(latj - lati) *
+(lon - loni) /
+(lonj - loni)
++
+lati
+);
+
+
+if(intersect) {
+
+dentro = !dentro;
+
+}
+
+}
+
+
+return dentro;
+
+}
+
+
+// =====================================================
 // ICONO
-// ======================================================
+// =====================================================
 
 function crearIcono(color) {
 
@@ -928,16 +811,25 @@ iconAnchor:[6,6]
 }
 
 
-// ======================================================
+// =====================================================
 // CSV
-// ======================================================
+// =====================================================
 
 function csvToArray(text) {
 
+const limpio =
+text.trim();
+
+
+if(!limpio) {
+
+return [];
+
+}
+
+
 const lines =
-text
-.trim()
-.split(/\r?\n/);
+limpio.split(/\r?\n/);
 
 
 if(lines.length < 2) {
@@ -966,9 +858,7 @@ headers.forEach(
 (header,i) => {
 
 obj[header] =
-values[i] !== undefined
-? values[i].trim()
-: "";
+values[i] || "";
 
 });
 
@@ -979,30 +869,88 @@ return obj;
 }
 
 
-// ======================================================
+// =====================================================
 // PERÍODO
-// ======================================================
+// =====================================================
 
 function obtenerPeriodo() {
 
-const seleccionado =
+const radio =
+
 document.querySelector(
 'input[name="periodo"]:checked'
 );
 
-return seleccionado
-? parseInt(seleccionado.value)
+return radio
+? parseInt(radio.value)
 : 1;
 
 }
 
 
-// ======================================================
-// CARGAR SENSOR
-// ======================================================
+// =====================================================
+// HORA PERÚ
+// =====================================================
+
+function horaPeru(
+fecha,
+horaUTC
+) {
+
+if(
+!fecha ||
+!horaUTC
+) {
+
+return "--";
+
+}
+
+
+const h =
+
+String(horaUTC)
+.replace(/\D/g,"")
+.padStart(4,"0");
+
+
+const hh =
+h.substring(0,2);
+
+const mm =
+h.substring(2,4);
+
+
+const fechaUTC =
+
+new Date(
+
+`${fecha}T${hh}:${mm}:00Z`
+
+);
+
+
+return fechaUTC.toLocaleString(
+"es-PE",
+{
+timeZone:"America/Lima",
+day:"2-digit",
+month:"2-digit",
+year:"numeric",
+hour:"2-digit",
+minute:"2-digit",
+hour12:false
+}
+);
+
+}
+
+
+// =====================================================
+// CONSULTAR FIRMS
+// =====================================================
 
 async function cargarSensor(sat) {
-
 
 const days =
 obtenerPeriodo();
@@ -1016,15 +964,9 @@ const url =
 
 `${sat.source}/` +
 
-`${PERU.west},${PERU.south},${PERU.east},${PERU.north}/` +
+`${PERU_BBOX.west},${PERU_BBOX.south},${PERU_BBOX.east},${PERU_BBOX.north}/` +
 
 `${days}`;
-
-
-console.log(
-"FIRMS:",
-url
-);
 
 
 const response =
@@ -1049,12 +991,11 @@ return csvToArray(text);
 }
 
 
-// ======================================================
-// LIMPIAR PUNTOS
-// ======================================================
+// =====================================================
+// LIMPIAR
+// =====================================================
 
 function limpiarIncendios() {
-
 
 fireLayers.forEach(
 item => {
@@ -1069,23 +1010,21 @@ item.marker
 
 }
 
-}
-);
-
+});
 
 fireLayers = [];
 
 }
 
 
-// ======================================================
-// CARGAR INCENDIOS
-// ======================================================
+// =====================================================
+// CARGAR MAP KEY
+// =====================================================
 
-async function cargarIncendios() {
-
+function cargarIncendios() {
 
 const key =
+
 document
 .getElementById("mapKey")
 .value
@@ -1104,7 +1043,8 @@ return;
 }
 
 
-currentKey = key;
+currentKey =
+key;
 
 
 localStorage.setItem(
@@ -1113,51 +1053,71 @@ key
 );
 
 
-await actualizarIncendios();
+actualizarIncendios(true);
 
 }
 
 
-// ======================================================
+// =====================================================
 // ACTUALIZAR
-// ======================================================
+// =====================================================
 
-async function actualizarIncendios() {
+async function actualizarIncendios(
+forzado=false
+) {
 
 
 if(!currentKey) {
-
-document
-.getElementById("status")
-.innerHTML =
-"⚠️ Primero introduce tu MAP_KEY.";
 
 return;
 
 }
 
 
-document
-.getElementById("status")
-.innerHTML =
-"⏳ Consultando NASA FIRMS...";
+if(actualizando) {
+
+return;
+
+}
 
 
-limpiarIncendios();
+actualizando = true;
+
+
+const inicio =
+new Date();
 
 
 const periodo =
 obtenerPeriodo();
 
 
+document
+.getElementById("status")
+.innerHTML =
+
+"⏳ Consultando NASA FIRMS para Perú...";
+
+
 try {
+
+
+limpiarIncendios();
 
 
 let total = 0;
 
-let fechas = [];
+let ultimaFecha = null;
 
-let mensajes = [];
+let conteos = {
+
+"NOAA-20":0,
+
+"NOAA-21":0,
+
+"Suomi-NPP":0
+
+};
 
 
 for(
@@ -1170,22 +1130,6 @@ try {
 
 const datos =
 await cargarSensor(sat);
-
-
-if(datos.length === 0) {
-
-mensajes.push(
-`${sat.name}: 0`
-);
-
-continue;
-
-}
-
-
-mensajes.push(
-`${sat.name}: ${datos.length}`
-);
 
 
 datos.forEach(
@@ -1214,11 +1158,27 @@ return;
 }
 
 
-// ============================================
-// MARCADOR
-// ============================================
+// =================================================
+// FILTRO REAL DE PERÚ
+// =================================================
+
+if(
+!puntoDentroPeru(
+lat,
+lon
+)
+) {
+
+return;
+
+}
+
+
+conteos[sat.name]++;
+
 
 const marker =
+
 L.marker(
 [lat,lon],
 {
@@ -1230,16 +1190,20 @@ sat.color
 );
 
 
-// ============================================
-// DATOS
-// ============================================
-
 const fecha =
 fire.acq_date || "--";
 
 
-const hora =
+const horaUTC =
 fire.acq_time || "--";
+
+
+const horaLocal =
+
+horaPeru(
+fecha,
+horaUTC
+);
 
 
 const frp =
@@ -1258,23 +1222,11 @@ const daynight =
 fire.daynight || "--";
 
 
-const scan =
-fire.scan || "--";
-
-
-const track =
-fire.track || "--";
-
-
-// ============================================
-// POPUP
-// ============================================
-
 marker.bindPopup(`
 
 <div style="
 color:#111;
-min-width:230px;
+min-width:240px;
 ">
 
 <h3 style="
@@ -1282,9 +1234,16 @@ color:${sat.color};
 margin-top:0;
 ">
 
-🔥 Incendio VIIRS
+🔥 Incendio detectado
 
 </h3>
+
+
+<b>🇵🇪 País:</b>
+
+PERÚ
+
+<br><br>
 
 
 <b>🛰️ Satélite:</b>
@@ -1315,9 +1274,19 @@ ${fecha}
 <br>
 
 
-<b>🕐 Hora UTC:</b>
+<b>🕐 Hora Perú:</b>
 
-${hora}
+${horaLocal}
+
+<br>
+
+
+<small>
+
+Hora original:
+${horaUTC} UTC
+
+</small>
 
 <br><br>
 
@@ -1350,17 +1319,6 @@ ${daynight}
 <br><br>
 
 
-<b>Scan:</b>
-${scan}
-
-<br>
-
-<b>Track:</b>
-${track}
-
-<br><br>
-
-
 <small>
 
 NASA FIRMS / VIIRS NRT
@@ -1377,13 +1335,9 @@ marker.addTo(map);
 
 fireLayers.push({
 
-marker:
+marker:marker,
 
-marker,
-
-satelite:
-
-sat.name
+satelite:sat.name
 
 });
 
@@ -1391,11 +1345,20 @@ sat.name
 total++;
 
 
-if(fecha && hora) {
+if(fecha !== "--") {
 
-fechas.push(
-`${fecha} ${hora}`
-);
+const fechaHora =
+`${fecha} ${horaUTC}`;
+
+if(
+!ultimaFecha ||
+fechaHora > ultimaFecha
+) {
+
+ultimaFecha =
+fechaHora;
+
+}
 
 }
 
@@ -1409,18 +1372,17 @@ sat.name,
 error
 );
 
-mensajes.push(
-`${sat.name}: ERROR`
-);
+conteos[sat.name] =
+"ERROR";
 
 }
 
 }
 
 
-// ==================================================
+// =====================================================
 // ESTADÍSTICAS
-// ==================================================
+// =====================================================
 
 document
 .getElementById("total")
@@ -1428,20 +1390,20 @@ document
 total;
 
 
-let ultima = "--";
+let ultimaHora =
+"--";
 
 
-if(fechas.length > 0) {
+if(ultimaFecha) {
 
-fechas.sort();
+const partes =
+ultimaFecha.split(" ");
 
-
-ultima =
-fechas[
-fechas.length - 1
-]
-.split(" ")[1]
-.substring(0,4);
+ultimaHora =
+horaPeru(
+partes[0],
+partes[1]
+);
 
 }
 
@@ -1449,20 +1411,32 @@ fechas.length - 1
 document
 .getElementById("ultima")
 .textContent =
-ultima;
+ultimaHora === "--"
+? "--"
+: ultimaHora.substring(
+12,
+17
+);
 
 
-// ==================================================
-// MENSAJE
-// ==================================================
+// =====================================================
+// PRÓXIMA ACTUALIZACIÓN
+// =====================================================
 
-const ahora =
-new Date()
-.toLocaleTimeString(
+proximaActualizacion =
+Date.now() + INTERVALO;
+
+
+const horaActual =
+
+inicio.toLocaleTimeString(
 "es-PE",
 {
+timeZone:"America/Lima",
 hour:"2-digit",
-minute:"2-digit"
+minute:"2-digit",
+second:"2-digit",
+hour12:false
 }
 );
 
@@ -1471,10 +1445,49 @@ document
 .getElementById("status")
 .innerHTML =
 
-`✅ ${total} detecciones encontradas.<br>
-📅 Período: ${periodo} día(s)<br>
-🛰️ ${mensajes.join(" • ")}<br>
-🔄 Actualizado: ${ahora} hora local`;
+`
+
+<span class="live">
+● SISTEMA ACTIVO
+</span>
+
+<br>
+
+🇵🇪 Solo incendios dentro del Perú
+
+<br>
+
+🔥 Total:
+${total}
+
+<br>
+
+🛰️ NOAA-20:
+${conteos["NOAA-20"]}
+
+<br>
+
+🛰️ NOAA-21:
+${conteos["NOAA-21"]}
+
+<br>
+
+🛰️ Suomi-NPP:
+${conteos["Suomi-NPP"]}
+
+<br>
+
+🕐 Actualizado:
+${horaActual} 🇵🇪
+
+<br>
+
+🔄 Próxima actualización:
+<span id="contador">
+15:00
+</span>
+
+`;
 
 
 actualizarVisibilidad();
@@ -1483,7 +1496,6 @@ actualizarVisibilidad();
 }
 catch(error) {
 
-
 console.error(error);
 
 
@@ -1491,17 +1503,30 @@ document
 .getElementById("status")
 .innerHTML =
 
-`❌ Error FIRMS:<br>
-${error.message}`;
+`
+
+❌ Error FIRMS
+
+<br>
+
+${error.message}
+
+`;
+
+}
+finally {
+
+actualizando =
+false;
 
 }
 
 }
 
 
-// ======================================================
+// =====================================================
 // VISIBILIDAD
-// ======================================================
+// =====================================================
 
 function actualizarVisibilidad() {
 
@@ -1532,8 +1557,7 @@ let mostrar = true;
 
 
 if(
-item.satelite ===
-"NOAA-20"
+item.satelite === "NOAA-20"
 ) {
 
 mostrar =
@@ -1543,8 +1567,7 @@ mostrar20;
 
 
 if(
-item.satelite ===
-"NOAA-21"
+item.satelite === "NOAA-21"
 ) {
 
 mostrar =
@@ -1554,8 +1577,7 @@ mostrar21;
 
 
 if(
-item.satelite ===
-"Suomi-NPP"
+item.satelite === "Suomi-NPP"
 ) {
 
 mostrar =
@@ -1566,25 +1588,10 @@ mostrarSNPP;
 
 if(mostrar) {
 
-if(
-!map.hasLayer(
-item.marker
-)
-) {
-
-item.marker
-.addTo(map);
-
-}
+item.marker.addTo(map);
 
 }
 else {
-
-if(
-map.hasLayer(
-item.marker
-)
-) {
 
 map.removeLayer(
 item.marker
@@ -1592,28 +1599,26 @@ item.marker
 
 }
 
-}
-
 });
 
 
-// ======================================================
+// =====================================================
 // ÓRBITAS
-// ======================================================
+// =====================================================
 
-const orbit20 =
+const o20 =
 document
 .getElementById("showOrbit20")
 .checked;
 
 
-const orbit21 =
+const o21 =
 document
 .getElementById("showOrbit21")
 .checked;
 
 
-const orbitSNPP =
+const osnpp =
 document
 .getElementById("showOrbitSNPP")
 .checked;
@@ -1627,65 +1632,42 @@ let mostrar = true;
 
 
 if(
-item.satelite ===
-"NOAA-20"
+item.satelite === "NOAA-20"
 ) {
 
-mostrar =
-orbit20;
+mostrar = o20;
 
 }
 
 
 if(
-item.satelite ===
-"NOAA-21"
+item.satelite === "NOAA-21"
 ) {
 
-mostrar =
-orbit21;
+mostrar = o21;
 
 }
 
 
 if(
-item.satelite ===
-"Suomi-NPP"
+item.satelite === "Suomi-NPP"
 ) {
 
-mostrar =
-orbitSNPP;
+mostrar = osnpp;
 
 }
 
 
 if(mostrar) {
 
-if(
-!map.hasLayer(
-item.layer
-)
-) {
-
-item.layer
-.addTo(map);
-
-}
+item.layer.addTo(map);
 
 }
 else {
 
-if(
-map.hasLayer(
-item.layer
-)
-) {
-
 map.removeLayer(
 item.layer
 );
-
-}
 
 }
 
@@ -1694,9 +1676,9 @@ item.layer
 }
 
 
-// ======================================================
-// OBTENER TLE
-// ======================================================
+// =====================================================
+// TLE
+// =====================================================
 
 async function obtenerTLE(sat) {
 
@@ -1713,7 +1695,7 @@ await fetch(url);
 if(!response.ok) {
 
 throw new Error(
-`TLE ${sat.name}: HTTP ${response.status}`
+"TLE no disponible"
 );
 
 }
@@ -1727,7 +1709,6 @@ const lines =
 text
 .trim()
 .split(/\r?\n/)
-.map(x => x.trim())
 .filter(Boolean);
 
 
@@ -1735,11 +1716,9 @@ if(lines.length >= 3) {
 
 return {
 
-line1:
-lines[1],
+line1:lines[1],
 
-line2:
-lines[2]
+line2:lines[2]
 
 };
 
@@ -1747,15 +1726,15 @@ lines[2]
 
 
 throw new Error(
-`TLE no encontrado: ${sat.name}`
+"TLE inválido"
 );
 
 }
 
 
-// ======================================================
+// =====================================================
 // POSICIÓN
-// ======================================================
+// =====================================================
 
 function posicionSatelite(
 satrec,
@@ -1805,9 +1784,9 @@ geo.longitude
 }
 
 
-// ======================================================
-// DIBUJAR ÓRBITA
-// ======================================================
+// =====================================================
+// ÓRBITA
+// =====================================================
 
 async function dibujarOrbita(sat) {
 
@@ -1828,31 +1807,21 @@ tle.line2
 
 const puntos = [];
 
-
 const ahora =
 new Date();
 
 
-// ==================================================
-// ±60 MINUTOS
-// ==================================================
-
 for(
-let minuto=-60;
-
-minuto<=60;
-
-minuto++
+let m=-60;
+m<=60;
+m++
 ) {
 
 
 const fecha =
 new Date(
-
-ahora.getTime()
-+
-minuto*60000
-
+ahora.getTime() +
+m*60000
 );
 
 
@@ -1872,25 +1841,15 @@ puntos.push(pos);
 }
 
 
-// ==================================================
-// LÍNEA
-// ==================================================
-
 const linea =
+
 L.polyline(
 puntos,
 {
-
-color:
-sat.color,
-
+color:sat.color,
 weight:2,
-
-opacity:.85,
-
-dashArray:
-"7,5"
-
+opacity:.8,
+dashArray:"7,5"
 }
 );
 
@@ -1900,18 +1859,12 @@ linea.addTo(map);
 
 orbitLayers.push({
 
-layer:
-linea,
+layer:linea,
 
-satelite:
-sat.name
+satelite:sat.name
 
 });
 
-
-// ==================================================
-// POSICIÓN ACTUAL
-// ==================================================
 
 const actual =
 posicionSatelite(
@@ -1923,40 +1876,30 @@ ahora
 if(actual) {
 
 
-const marker =
+const marcador =
+
 L.circleMarker(
 actual,
 {
-
 radius:6,
-
 color:"white",
-
 weight:2,
-
-fillColor:
-sat.color,
-
+fillColor:sat.color,
 fillOpacity:1
-
 }
 );
 
 
-marker.addTo(map);
+marcador.addTo(map);
 
 
-marker.bindPopup(`
-
-<div style="
-color:#111;
-">
+marcador.bindPopup(`
 
 <b>🛰️ ${sat.name}</b>
 
 <br><br>
 
-Posición orbital estimada
+🇵🇪 Fire Monitor Perú
 
 <br><br>
 
@@ -1968,23 +1911,14 @@ ${actual[0].toFixed(3)}°
 Longitud:
 ${actual[1].toFixed(3)}°
 
-<br><br>
-
-NORAD:
-${sat.norad}
-
-</div>
-
 `);
 
 
 orbitLayers.push({
 
-layer:
-marker,
+layer:marcador,
 
-satelite:
-sat.name
+satelite:sat.name
 
 });
 
@@ -1995,6 +1929,7 @@ sat.name
 catch(error) {
 
 console.warn(
+sat.name,
 error
 );
 
@@ -2003,9 +1938,9 @@ error
 }
 
 
-// ======================================================
+// =====================================================
 // CARGAR ÓRBITAS
-// ======================================================
+// =====================================================
 
 async function cargarOrbitas() {
 
@@ -2013,17 +1948,9 @@ async function cargarOrbitas() {
 orbitLayers.forEach(
 item => {
 
-if(
-map.hasLayer(
-item.layer
-)
-) {
-
 map.removeLayer(
 item.layer
 );
-
-}
 
 });
 
@@ -2047,16 +1974,101 @@ actualizarVisibilidad();
 }
 
 
-// ======================================================
-// MAPA INICIAL
-// ======================================================
+// =====================================================
+// CONTADOR 15 MINUTOS
+// =====================================================
 
-cargarOrbitas();
+setInterval(
+() => {
 
 
-// ======================================================
-// MAP_KEY GUARDADA
-// ======================================================
+if(!proximaActualizacion) {
+
+return;
+
+}
+
+
+const restante =
+
+Math.max(
+0,
+proximaActualizacion -
+Date.now()
+);
+
+
+const minutos =
+
+Math.floor(
+restante / 60000
+);
+
+
+const segundos =
+
+Math.floor(
+(restante % 60000) /
+1000
+);
+
+
+const reloj =
+
+`${String(minutos).padStart(2,"0")}:` +
+`${String(segundos).padStart(2,"0")}`;
+
+
+const contador =
+document.getElementById(
+"contador"
+);
+
+
+if(contador) {
+
+contador.textContent =
+reloj;
+
+}
+
+},
+1000
+);
+
+
+// =====================================================
+// ACTUALIZACIÓN AUTOMÁTICA
+// =====================================================
+
+setInterval(
+async () => {
+
+
+if(!currentKey) {
+
+return;
+
+}
+
+
+if(actualizando) {
+
+return;
+
+}
+
+
+await actualizarIncendios();
+
+},
+INTERVALO
+);
+
+
+// =====================================================
+// MAP KEY GUARDADA
+// =====================================================
 
 const savedKey =
 localStorage.getItem(
@@ -2074,24 +2086,11 @@ savedKey;
 }
 
 
-// ======================================================
-// ACTUALIZACIÓN AUTOMÁTICA
-// ======================================================
-
-setInterval(
-() => {
-
-if(currentKey) {
-
-actualizarIncendios();
-
-}
+// =====================================================
+// INICIAR ÓRBITAS
+// =====================================================
 
 cargarOrbitas();
-
-},
-15*60*1000
-);
 
 
 </script>

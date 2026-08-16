@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Fire Satellite Monitor</title>
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: white;
+    }
+
+    header {
+      height: 70px;
+      background: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #374151;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    header span {
+      color: #f97316;
+    }
+
+    #map {
+      height: calc(100vh - 70px);
+      width: 100%;
+    }
+
+    .panel {
+      position: absolute;
+      z-index: 1000;
+      top: 90px;
+      left: 20px;
+      width: 300px;
+      background: rgba(17, 24, 39, 0.96);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.4);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-size: 17px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 7px;
+      border: 1px solid #4b5563;
+      background: #1f2937;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: 0;
+      border-radius: 7px;
+      background: #f97316;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ea580c;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .legend {
+      margin-top: 15px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .fire {
+      color: #ff3b30;
+    }
+
+    .sat {
+      color: #38bdf8;
+    }
+
+    .info {
+      position: absolute;
+      z-index: 1000;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(17,24,39,.92);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    @media(max-width:600px) {
+      .panel {
+        width: calc(100% - 40px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🔥 <span>FIRE</span> SATELLITE MONITOR</h1>
+  <div>VIIRS • NOAA • NASA FIRMS</div>
+</header>
+
+<div id="map"></div>
+
+<div class="panel">
+
+  <h2>🛰️ Control de satélites</h2>
+
+  <label>NASA FIRMS MAP_KEY</label>
+
+  <input
+    id="mapKey"
+    type="password"
+    placeholder="Introduce tu MAP_KEY"
+  >
+
+  <button onclick="cargarFIRMS()">
+    🔥 Cargar incendios
+  </button>
+
+  <div class="status" id="status">
+    Introduce tu MAP_KEY para comenzar.
+  </div>
+
+  <div class="legend">
+
+    <strong>Capas disponibles</strong><br>
+
+    <span class="fire">●</span>
+    Incendios VIIRS<br>
+
+    🛰️ NOAA-20<br>
+    🛰️ NOAA-21<br>
+    🛰️ Suomi-NPP
+
+  </div>
+
+</div>
+
+<div class="info">
+  Datos: NASA FIRMS • VIIRS NRT
+</div>
+
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+  // =========================================================
+  // MAPA
+  // =========================================================
+
+  const map = L.map('map').setView([-9.19, -75.01], 5);
+
+  // OpenStreetMap
+  const osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution:
+        '&copy; OpenStreetMap contributors'
+    }
+  ).addTo(map);
+
+
+  // =========================================================
+  // VARIABLES FIRMS
+  // =========================================================
+
+  let layersFIRMS = [];
+
+
+  // =========================================================
+  // CARGAR FIRMS
+  // =========================================================
+
+  function cargarFIRMS() {
+
+    const key = document.getElementById("mapKey").value.trim();
+
+    if (!key) {
+
+      document.getElementById("status").innerHTML =
+        "⚠️ Introduce tu MAP_KEY.";
+
+      return;
+    }
+
+
+    // Guardar la clave SOLO en este navegador
+    localStorage.setItem("firms_map_key", key);
+
+
+    // Eliminar capas anteriores
+
+    layersFIRMS.forEach(layer => {
+      map.removeLayer(layer);
+    });
+
+    layersFIRMS = [];
+
+
+    // =====================================================
+    // VIIRS GENERAL
+    // =====================================================
+
+    const viirs = L.tileLayer.wms(
+
+      `https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/${key}/`,
+
+      {
+        layers: 'fires_viirs_24',
+
+        format: 'image/png',
+
+        transparent: true,
+
+        version: '1.1.1',
+
+        opacity: 0.9,
+
+        attribution:
+          'NASA FIRMS / VIIRS'
+      }
+
+    ).addTo(map);
+
+
+    layersFIRMS.push(viirs);
+
+
+    // =====================================================
+    // NOAA-20
+    // =====================================================
+
+    const noaa20 = L.tileLayer.wms(
+
+      `https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/${key}/`,
+
+      {
+        layers: 'fires_viirs_noaa20_24',
+
+        format: 'image/png',
+
+        transparent: true,
+
+        version: '1.1.1',
+
+        opacity: 0.9,
+
+        attribution:
+          'NASA FIRMS / NOAA-20'
+      }
+
+    );
+
+
+    // =====================================================
+    // NOAA-21
+    // =====================================================
+
+    const noaa21 = L.tileLayer.wms(
+
+      `https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/${key}/`,
+
+      {
+        layers: 'fires_viirs_noaa21_24',
+
+        format: 'image/png',
+
+        transparent: true,
+
+        version: '1.1.1',
+
+        opacity: 0.9,
+
+        attribution:
+          'NASA FIRMS / NOAA-21'
+      }
+
+    );
+
+
+    // =====================================================
+    // SUOMI NPP
+    // =====================================================
+
+    const snpp = L.tileLayer.wms(
+
+      `https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/${key}/`,
+
+      {
+        layers: 'fires_viirs_snpp_24',
+
+        format: 'image/png',
+
+        transparent: true,
+
+        version: '1.1.1',
+
+        opacity: 0.9,
+
+        attribution:
+          'NASA FIRMS / Suomi-NPP'
+      }
+
+    );
+
+
+    layersFIRMS.push(noaa20);
+    layersFIRMS.push(noaa21);
+    layersFIRMS.push(snpp);
+
+
+    // =====================================================
+    // CONTROL DE CAPAS
+    // =====================================================
+
+    L.control.layers(
+
+      {
+        "🌎 OpenStreetMap": osm
+      },
+
+      {
+        "🔥 VIIRS — todos": viirs,
+        "🛰️ NOAA-20": noaa20,
+        "🛰️ NOAA-21": noaa21,
+        "🛰️ Suomi-NPP": snpp
+      },
+
+      {
+        collapsed: false
+      }
+
+    ).addTo(map);
+
+
+    document.getElementById("status").innerHTML =
+      "✅ FIRMS conectado. Datos VIIRS de las últimas 24 h.";
+
+  }
+
+
+  // =========================================================
+  // RECUPERAR CLAVE GUARDADA
+  // =========================================================
+
+  const savedKey =
+    localStorage.getItem("firms_map_key");
+
+  if (savedKey) {
+
+    document.getElementById("mapKey").value =
+      savedKey;
+
+  }
+
+
+  // =========================================================
+  // ESCALA
+  // =========================================================
+
+  L.control.scale().addTo(map);
+
+</script>
+
+</body>
+</html>

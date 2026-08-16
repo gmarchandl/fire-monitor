@@ -35,201 +35,456 @@ body {
   height: 100vh;
 }
 
+
+/* =====================================================
+   CABECERA
+   ===================================================== */
+
 .header {
+
   position: absolute;
+
   z-index: 2000;
+
   top: 0;
   left: 0;
   right: 0;
+
   height: 62px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   padding: 0 20px;
+
   background: rgba(15,23,42,.97);
+
   color: white;
+
   border-bottom: 1px solid #374151;
+
 }
 
 .title {
+
   font-size: 20px;
+
   font-weight: bold;
+
 }
 
 .title span {
+
   color: #f97316;
+
 }
 
 .subtitle {
+
   font-size: 12px;
+
   color: #9ca3af;
+
 }
 
+
+/* =====================================================
+   PANEL
+   ===================================================== */
+
 .panel {
+
   position: absolute;
+
   z-index: 2000;
+
   top: 77px;
+
   left: 15px;
-  width: 360px;
+
+  width: 380px;
+
   max-height: calc(100vh - 95px);
+
   overflow-y: auto;
+
   padding: 16px;
+
   background: rgba(15,23,42,.97);
+
   color: white;
+
   border: 1px solid #374151;
+
   border-radius: 12px;
+
   box-shadow: 0 10px 35px rgba(0,0,0,.5);
+
 }
 
 .panel h2 {
+
   margin: 0 0 12px;
+
   font-size: 17px;
+
 }
 
+
+/* =====================================================
+   INPUT
+   ===================================================== */
+
 .input-label {
+
   display: block;
+
   margin-top: 10px;
+
   margin-bottom: 5px;
+
   font-size: 12px;
+
   color: #d1d5db;
+
 }
 
 input[type="password"] {
+
   width: 100%;
+
   padding: 10px;
+
   background: #1f2937;
+
   color: white;
+
   border: 1px solid #4b5563;
+
   border-radius: 7px;
+
 }
 
+
+/* =====================================================
+   BOTONES
+   ===================================================== */
+
 button {
+
   width: 100%;
+
   margin-top: 9px;
+
   padding: 10px;
+
   border: none;
+
   border-radius: 7px;
+
   background: #ea580c;
+
   color: white;
+
   font-weight: bold;
+
   cursor: pointer;
+
 }
 
 button:hover {
+
   background: #f97316;
+
 }
 
+
+/* =====================================================
+   SECCIONES
+   ===================================================== */
+
 .section {
+
   margin-top: 14px;
+
   padding-top: 12px;
+
   border-top: 1px solid #374151;
+
 }
 
 .section-title {
+
   margin-bottom: 8px;
+
   font-size: 13px;
+
   font-weight: bold;
+
 }
 
+
+/* =====================================================
+   CHECKBOX
+   ===================================================== */
+
 .check {
+
   display: flex;
+
   align-items: center;
+
   gap: 8px;
+
   margin: 8px 0;
+
   font-size: 12px;
+
   cursor: pointer;
+
 }
 
 .check input {
+
   width: auto;
+
   margin: 0;
+
   accent-color: #f97316;
+
 }
 
+
+/* =====================================================
+   SATÉLITES
+   ===================================================== */
+
 .dot {
+
   display: inline-block;
+
   width: 11px;
+
   height: 11px;
+
   border-radius: 50%;
-  flex-shrink: 0;
+
 }
 
 .noaa20 {
+
   background: #38bdf8;
+
   box-shadow: 0 0 7px #38bdf8;
+
 }
 
 .noaa21 {
+
   background: #c084fc;
+
   box-shadow: 0 0 7px #c084fc;
+
 }
 
 .snpp {
+
   background: #4ade80;
+
   box-shadow: 0 0 7px #4ade80;
+
 }
 
 .orbit20 {
+
   color: #38bdf8;
+
 }
 
 .orbit21 {
+
   color: #c084fc;
+
 }
 
 .orbitSNPP {
+
   color: #4ade80;
+
 }
 
-.status {
-  margin-top: 12px;
-  padding: 10px;
+
+/* =====================================================
+   REGLA CLUSTER
+   ===================================================== */
+
+.cluster-config {
+
   background: #1f2937;
-  border-radius: 7px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #d1d5db;
+
+  border-radius: 8px;
+
+  padding: 10px;
+
+  margin-top: 8px;
+
 }
 
-.live {
-  color: #4ade80;
+.cluster-value {
+
+  color: #f87171;
+
+  font-size: 17px;
+
   font-weight: bold;
+
 }
+
+
+/* =====================================================
+   ESTADÍSTICAS
+   ===================================================== */
 
 .stats {
+
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 7px;
+
   margin-top: 10px;
+
 }
 
 .stat {
+
   background: #1f2937;
+
   padding: 9px;
+
   border-radius: 7px;
+
   text-align: center;
+
 }
 
 .stat-number {
+
   color: #fb923c;
+
   font-size: 18px;
+
   font-weight: bold;
+
+}
+
+.stat-cluster {
+
+  color: #f87171;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
 }
 
 .stat-label {
+
   color: #9ca3af;
+
   font-size: 10px;
+
 }
+
+
+/* =====================================================
+   LISTA CLUSTERS
+   ===================================================== */
+
+.cluster-list {
+
+  margin-top: 10px;
+
+}
+
+.cluster-item {
+
+  background: #1f2937;
+
+  border-left: 4px solid #ef4444;
+
+  padding: 9px;
+
+  margin-top: 7px;
+
+  border-radius: 5px;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+}
+
+.cluster-item strong {
+
+  color: #f87171;
+
+}
+
+
+/* =====================================================
+   ESTADO
+   ===================================================== */
+
+.status {
+
+  margin-top: 12px;
+
+  padding: 10px;
+
+  background: #1f2937;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+
+  color: #d1d5db;
+
+}
+
+.live {
+
+  color: #4ade80;
+
+  font-weight: bold;
+
+}
+
+
+/* =====================================================
+   MÓVIL
+   ===================================================== */
 
 @media(max-width:700px) {
 
   .subtitle {
+
     display: none;
+
   }
 
   .panel {
+
     left: 10px;
+
     width: calc(100% - 20px);
+
   }
 
 }
@@ -238,8 +493,13 @@ button:hover {
 
 </head>
 
+
 <body>
 
+
+<!-- =====================================================
+     CABECERA
+     ===================================================== -->
 
 <div class="header">
 
@@ -251,21 +511,30 @@ button:hover {
 
   <div class="subtitle">
 
-    🇵🇪 SOLO PERÚ • NASA FIRMS • VIIRS
+    🇵🇪 NASA FIRMS • VIIRS • CLUSTERS
 
   </div>
 
 </div>
 
 
+<!-- =====================================================
+     MAPA
+     ===================================================== -->
+
 <div id="map"></div>
 
 
+<!-- =====================================================
+     PANEL
+     ===================================================== -->
+
 <div class="panel">
+
 
 <h2>
 
-🇵🇪 Incendios en Perú
+🇵🇪 Monitoreo de incendios
 
 </h2>
 
@@ -298,11 +567,15 @@ placeholder="Introduce tu MAP_KEY"
 </button>
 
 
+<!-- =====================================================
+     PERIODO
+     ===================================================== -->
+
 <div class="section">
 
 <div class="section-title">
 
-🕐 PERÍODO
+🕐 PERÍODO DE DATOS
 
 </div>
 
@@ -362,11 +635,15 @@ value="5"
 </div>
 
 
+<!-- =====================================================
+     SATÉLITES
+     ===================================================== -->
+
 <div class="section">
 
 <div class="section-title">
 
-🛰️ SATÉLITES
+🛰️ SATÉLITES VIIRS
 
 </div>
 
@@ -420,6 +697,64 @@ Suomi-NPP
 
 </div>
 
+
+<!-- =====================================================
+     CLUSTERS
+     ===================================================== -->
+
+<div class="section">
+
+<div class="section-title">
+
+🚨 REGLA DE CLÚSTER
+
+</div>
+
+
+<div class="cluster-config">
+
+<div>
+
+Mínimo:
+
+<span class="cluster-value">
+3 puntos
+</span>
+
+</div>
+
+<div>
+
+Distancia máxima:
+
+<span class="cluster-value">
+1.000 m
+</span>
+
+</div>
+
+</div>
+
+
+<label class="check">
+
+<input
+type="checkbox"
+id="showClusters"
+checked
+onchange="actualizarVisibilidadClusters()"
+/>
+
+🚨 Mostrar clústeres
+
+</label>
+
+</div>
+
+
+<!-- =====================================================
+     ÓRBITAS
+     ===================================================== -->
 
 <div class="section">
 
@@ -480,18 +815,27 @@ Suomi-NPP
 </div>
 
 
+<!-- =====================================================
+     ESTADÍSTICAS
+     ===================================================== -->
+
 <div class="stats">
+
 
 <div class="stat">
 
 <div
 class="stat-number"
 id="total">
+
 0
+
 </div>
 
 <div class="stat-label">
-INCENDIOS
+
+DETECCIONES
+
 </div>
 
 </div>
@@ -500,31 +844,51 @@ INCENDIOS
 <div class="stat">
 
 <div
-class="stat-number"
-id="ultima">
---
+class="stat-cluster"
+id="totalClusters">
+
+0
+
 </div>
 
 <div class="stat-label">
-ÚLTIMA HORA
-</div>
+
+CLÚSTERES
 
 </div>
 
 </div>
 
+</div>
+
+
+<!-- =====================================================
+     LISTA CLUSTERS
+     ===================================================== -->
+
+<div
+class="cluster-list"
+id="clusterList">
+</div>
+
+
+<!-- =====================================================
+     ESTADO
+     ===================================================== -->
 
 <div
 class="status"
 id="status">
 
 <span class="live">
+
 ● SISTEMA
+
 </span>
 
 <br>
 
-🇵🇪 Área: Perú
+🇵🇪 Solo Perú
 
 <br>
 
@@ -540,6 +904,7 @@ Esperando MAP_KEY...
 src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
+
 <script
 src="https://unpkg.com/satellite.js/dist/satellite.min.js">
 </script>
@@ -553,44 +918,51 @@ src="https://unpkg.com/satellite.js/dist/satellite.min.js">
 // =====================================================
 
 const map =
+
 L.map("map")
 .setView(
-[-9.19, -75.015],
+[-9.19,-75.015],
 5
 );
 
 
 L.tileLayer(
+
 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
 {
+
 attribution:
 "&copy; OpenStreetMap contributors"
+
 }
+
 ).addTo(map);
 
 
-L.control.scale().addTo(map);
+L.control.scale()
+.addTo(map);
 
 
 // =====================================================
-// ÁREA DE CONSULTA
+// ÁREA PERÚ
 // =====================================================
 
 const PERU_BBOX = {
 
-west: -81.5,
+west:-81.5,
 
-south: -18.5,
+south:-18.5,
 
-east: -68.5,
+east:-68.5,
 
-north: 0.5
+north:0.5
 
 };
 
 
 // =====================================================
-// POLÍGONO SIMPLIFICADO DEL PERÚ
+// POLÍGONO SIMPLIFICADO PERÚ
 // =====================================================
 
 const PERU_POLYGON = [
@@ -654,18 +1026,22 @@ const PERU_POLYGON = [
 ];
 
 
-// Dibujar límite
-
-const peruBoundary =
-
 L.polygon(
+
 PERU_POLYGON,
+
 {
+
 color:"#facc15",
+
 weight:2,
+
 fillColor:"#facc15",
-fillOpacity:0.04
+
+fillOpacity:.04
+
 }
+
 ).addTo(map);
 
 
@@ -678,6 +1054,10 @@ let currentKey = "";
 let fireLayers = [];
 
 let orbitLayers = [];
+
+let clusterLayers = [];
+
+let puntosDetectados = [];
 
 let actualizando = false;
 
@@ -693,48 +1073,62 @@ const INTERVALO = 15 * 60 * 1000;
 const SATELLITES = [
 
 {
+
 name:"NOAA-20",
+
 source:"VIIRS_NOAA20_NRT",
+
 norad:"43013",
+
 color:"#38bdf8"
+
 },
 
 {
+
 name:"NOAA-21",
+
 source:"VIIRS_NOAA21_NRT",
+
 norad:"54234",
+
 color:"#c084fc"
+
 },
 
 {
+
 name:"Suomi-NPP",
+
 source:"VIIRS_SNPP_NRT",
+
 norad:"37849",
+
 color:"#4ade80"
+
 }
 
 ];
 
 
 // =====================================================
-// ¿PUNTO DENTRO DE PERÚ?
+// PUNTO DENTRO DE PERÚ
 // =====================================================
 
-function puntoDentroPeru(
-lat,
-lon
-) {
+function puntoDentroPeru(lat,lon) {
 
 let dentro = false;
 
 
 for(
-let i = 0,
-j = PERU_POLYGON.length - 1;
 
-i < PERU_POLYGON.length;
+let i=0,
+j=PERU_POLYGON.length-1;
 
-j = i++
+i<PERU_POLYGON.length;
+
+j=i++
+
 ) {
 
 const lati =
@@ -753,17 +1147,20 @@ PERU_POLYGON[j][1];
 const intersect =
 
 ((loni > lon) !==
- (lonj > lon))
+(lonj > lon))
 
 &&
 
 (
+
 lat <
-(latj - lati) *
-(lon - loni) /
-(lonj - loni)
+
+(latj-lati) *
+(lon-loni) /
+(lonj-loni)
 +
 lati
+
 );
 
 
@@ -782,10 +1179,330 @@ return dentro;
 
 
 // =====================================================
+// DISTANCIA HAVERSINE
+// =====================================================
+
+function distanciaMetros(
+
+lat1,
+lon1,
+lat2,
+lon2
+
+) {
+
+
+const R = 6371000;
+
+const rad =
+Math.PI / 180;
+
+
+const dLat =
+(lat2-lat1)*rad;
+
+const dLon =
+(lon2-lon1)*rad;
+
+
+const a =
+
+Math.sin(dLat/2) ** 2
+
++
+
+Math.cos(lat1*rad)
+
+*
+
+Math.cos(lat2*rad)
+
+*
+
+Math.sin(dLon/2) ** 2;
+
+
+const c =
+
+2 *
+
+Math.atan2(
+
+Math.sqrt(a),
+
+Math.sqrt(1-a)
+
+);
+
+
+return R*c;
+
+}
+
+
+// =====================================================
+// DETECTAR CLÚSTERES
+//
+// Regla:
+//
+// >= 3 puntos
+// conectados por <= 1000 m
+//
+// =====================================================
+
+function detectarClusters(
+
+puntos,
+
+distanciaMax=1000,
+
+minimoPuntos=3
+
+) {
+
+
+const visitado =
+new Set();
+
+
+const clusters = [];
+
+
+for(
+
+let i=0;
+
+i<puntos.length;
+
+i++
+
+) {
+
+
+if(
+visitado.has(i)
+) {
+
+continue;
+
+}
+
+
+const cluster = [];
+
+const cola = [i];
+
+
+visitado.add(i);
+
+
+while(
+cola.length > 0
+) {
+
+
+const actual =
+cola.shift();
+
+
+cluster.push(actual);
+
+
+for(
+
+let j=0;
+
+j<puntos.length;
+
+j++
+
+) {
+
+
+if(
+visitado.has(j)
+) {
+
+continue;
+
+}
+
+
+const distancia =
+
+distanciaMetros(
+
+puntos[actual].lat,
+
+puntos[actual].lon,
+
+puntos[j].lat,
+
+puntos[j].lon
+
+);
+
+
+if(
+distancia <=
+distanciaMax
+) {
+
+
+visitado.add(j);
+
+cola.push(j);
+
+}
+
+}
+
+}
+
+}
+
+
+if(
+cluster.length >=
+minimoPuntos
+) {
+
+clusters.push(
+cluster
+);
+
+}
+
+}
+
+
+return clusters;
+
+}
+
+
+// =====================================================
+// CENTRO DEL CLÚSTER
+// =====================================================
+
+function centroCluster(
+indices
+) {
+
+
+let lat = 0;
+
+let lon = 0;
+
+
+indices.forEach(
+i => {
+
+lat +=
+puntosDetectados[i].lat;
+
+lon +=
+puntosDetectados[i].lon;
+
+});
+
+
+return {
+
+lat:
+lat / indices.length,
+
+lon:
+lon / indices.length
+
+};
+
+}
+
+
+// =====================================================
+// DIÁMETRO DEL CLÚSTER
+// =====================================================
+
+function diametroCluster(
+indices
+) {
+
+
+let maximo = 0;
+
+
+for(
+let i=0;
+
+i<indices.length;
+
+i++
+
+) {
+
+
+for(
+let j=i+1;
+
+j<indices.length;
+
+j++
+
+) {
+
+
+const a =
+puntosDetectados[
+indices[i]
+];
+
+const b =
+puntosDetectados[
+indices[j]
+];
+
+
+const distancia =
+
+distanciaMetros(
+
+a.lat,
+a.lon,
+
+b.lat,
+b.lon
+
+);
+
+
+if(
+distancia > maximo
+) {
+
+maximo =
+distancia;
+
+}
+
+}
+
+}
+
+
+return maximo;
+
+}
+
+
+// =====================================================
 // ICONO
 // =====================================================
 
-function crearIcono(color) {
+function crearIcono(
+color
+) {
+
 
 return L.divIcon({
 
@@ -817,6 +1534,7 @@ iconAnchor:[6,6]
 
 function csvToArray(text) {
 
+
 const limpio =
 text.trim();
 
@@ -840,6 +1558,7 @@ return [];
 
 
 const headers =
+
 lines[0]
 .split(",")
 .map(x => x.trim());
@@ -875,14 +1594,20 @@ return obj;
 
 function obtenerPeriodo() {
 
+
 const radio =
 
 document.querySelector(
+
 'input[name="periodo"]:checked'
+
 );
 
+
 return radio
+
 ? parseInt(radio.value)
+
 : 1;
 
 }
@@ -893,9 +1618,13 @@ return radio
 // =====================================================
 
 function horaPeru(
+
 fecha,
+
 horaUTC
+
 ) {
+
 
 if(
 !fecha ||
@@ -931,16 +1660,27 @@ new Date(
 
 
 return fechaUTC.toLocaleString(
+
 "es-PE",
+
 {
+
 timeZone:"America/Lima",
+
 day:"2-digit",
+
 month:"2-digit",
+
 year:"numeric",
+
 hour:"2-digit",
+
 minute:"2-digit",
+
 hour12:false
+
 }
+
 );
 
 }
@@ -950,7 +1690,10 @@ hour12:false
 // CONSULTAR FIRMS
 // =====================================================
 
-async function cargarSensor(sat) {
+async function cargarSensor(
+sat
+) {
+
 
 const days =
 obtenerPeriodo();
@@ -976,7 +1719,9 @@ await fetch(url);
 if(!response.ok) {
 
 throw new Error(
+
 `${sat.name}: HTTP ${response.status}`
+
 );
 
 }
@@ -992,10 +1737,11 @@ return csvToArray(text);
 
 
 // =====================================================
-// LIMPIAR
+// LIMPIAR INCENDIOS
 // =====================================================
 
 function limpiarIncendios() {
+
 
 fireLayers.forEach(
 item => {
@@ -1012,7 +1758,43 @@ item.marker
 
 });
 
+
 fireLayers = [];
+
+}
+
+
+// =====================================================
+// LIMPIAR CLÚSTERES
+// =====================================================
+
+function limpiarClusters() {
+
+
+clusterLayers.forEach(
+layer => {
+
+if(
+map.hasLayer(layer)
+) {
+
+map.removeLayer(
+layer
+);
+
+}
+
+});
+
+
+clusterLayers = [];
+
+
+document
+.getElementById(
+"clusterList"
+)
+.innerHTML = "";
 
 }
 
@@ -1023,10 +1805,13 @@ fireLayers = [];
 
 function cargarIncendios() {
 
+
 const key =
 
 document
-.getElementById("mapKey")
+.getElementById(
+"mapKey"
+)
 .value
 .trim();
 
@@ -1034,9 +1819,12 @@ document
 if(!key) {
 
 document
-.getElementById("status")
+.getElementById(
+"status"
+)
 .innerHTML =
-"⚠️ Introduce tu MAP_KEY.";
+
+"⚠️ Introduce tu MAP_KEY de NASA FIRMS.";
 
 return;
 
@@ -1059,7 +1847,7 @@ actualizarIncendios(true);
 
 
 // =====================================================
-// ACTUALIZAR
+// ACTUALIZAR INCENDIOS
 // =====================================================
 
 async function actualizarIncendios(
@@ -1093,10 +1881,12 @@ obtenerPeriodo();
 
 
 document
-.getElementById("status")
+.getElementById(
+"status"
+)
 .innerHTML =
 
-"⏳ Consultando NASA FIRMS para Perú...";
+"⏳ Consultando incendios de Perú...";
 
 
 try {
@@ -1104,10 +1894,14 @@ try {
 
 limpiarIncendios();
 
+limpiarClusters();
+
+
+puntosDetectados = [];
+
 
 let total = 0;
 
-let ultimaFecha = null;
 
 let conteos = {
 
@@ -1120,6 +1914,13 @@ let conteos = {
 };
 
 
+let ultimaFecha = null;
+
+
+// ===================================================
+// CONSULTAR LOS 3 SATÉLITES
+// ===================================================
+
 for(
 const sat of SATELLITES
 ) {
@@ -1129,7 +1930,9 @@ try {
 
 
 const datos =
-await cargarSensor(sat);
+await cargarSensor(
+sat
+);
 
 
 datos.forEach(
@@ -1137,12 +1940,14 @@ fire => {
 
 
 const lat =
+
 parseFloat(
 fire.latitude
 );
 
 
 const lon =
+
 parseFloat(
 fire.longitude
 );
@@ -1159,7 +1964,7 @@ return;
 
 
 // =================================================
-// FILTRO REAL DE PERÚ
+// SOLO PERÚ
 // =================================================
 
 if(
@@ -1172,22 +1977,6 @@ lon
 return;
 
 }
-
-
-conteos[sat.name]++;
-
-
-const marker =
-
-L.marker(
-[lat,lon],
-{
-icon:
-crearIcono(
-sat.color
-)
-}
-);
 
 
 const fecha =
@@ -1222,11 +2011,66 @@ const daynight =
 fire.daynight || "--";
 
 
+// =================================================
+// GUARDAR PARA CLUSTERS
+// =================================================
+
+puntosDetectados.push({
+
+lat:lat,
+
+lon:lon,
+
+satelite:sat.name,
+
+color:sat.color,
+
+fecha:fecha,
+
+horaUTC:horaUTC,
+
+horaLocal:horaLocal,
+
+frp:parseFloat(frp) || 0,
+
+confidence:confidence
+
+});
+
+
+conteos[sat.name]++;
+
+
+total++;
+
+
+// =================================================
+// MARCADOR
+// =================================================
+
+const marker =
+
+L.marker(
+
+[lat,lon],
+
+{
+
+icon:
+crearIcono(
+sat.color
+)
+
+}
+
+);
+
+
 marker.bindPopup(`
 
 <div style="
 color:#111;
-min-width:240px;
+min-width:250px;
 ">
 
 <h3 style="
@@ -1234,7 +2078,7 @@ color:${sat.color};
 margin-top:0;
 ">
 
-🔥 Incendio detectado
+🔥 Incendio VIIRS
 
 </h3>
 
@@ -1282,10 +2126,8 @@ ${horaLocal}
 
 
 <small>
-
 Hora original:
 ${horaUTC} UTC
-
 </small>
 
 <br><br>
@@ -1320,9 +2162,7 @@ ${daynight}
 
 
 <small>
-
 NASA FIRMS / VIIRS NRT
-
 </small>
 
 </div>
@@ -1342,13 +2182,9 @@ satelite:sat.name
 });
 
 
-total++;
-
-
-if(fecha !== "--") {
-
 const fechaHora =
 `${fecha} ${horaUTC}`;
+
 
 if(
 !ultimaFecha ||
@@ -1357,8 +2193,6 @@ fechaHora > ultimaFecha
 
 ultimaFecha =
 fechaHora;
-
-}
 
 }
 
@@ -1372,77 +2206,423 @@ sat.name,
 error
 );
 
-conteos[sat.name] =
-"ERROR";
-
 }
 
 }
 
 
-// =====================================================
-// ESTADÍSTICAS
-// =====================================================
+// ===================================================
+// DETECTAR CLUSTERS
+// ===================================================
+
+const clusters =
+
+detectarClusters(
+
+puntosDetectados,
+
+1000,
+
+3
+
+);
+
+
+// ===================================================
+// ORDENAR POR CANTIDAD
+// ===================================================
+
+clusters.sort(
+
+(a,b) =>
+b.length - a.length
+
+);
+
+
+// ===================================================
+// DIBUJAR CLUSTERS
+// ===================================================
+
+clusters.forEach(
+
+(indices,index) => {
+
+
+const centro =
+
+centroCluster(
+indices
+);
+
+
+const diametro =
+
+diametroCluster(
+indices
+);
+
+
+// -----------------------------------------------
+// CÍRCULO
+// -----------------------------------------------
+
+const circle =
+
+L.circle(
+
+[
+centro.lat,
+centro.lon
+],
+
+{
+
+radius:1000,
+
+color:"#ef4444",
+
+weight:3,
+
+opacity:.9,
+
+fillColor:"#ef4444",
+
+fillOpacity:.12
+
+}
+
+);
+
+
+circle.addTo(map);
+
+
+clusterLayers.push(
+circle
+);
+
+
+// -----------------------------------------------
+// ETIQUETA
+// -----------------------------------------------
+
+const label =
+
+L.marker(
+
+[
+centro.lat,
+centro.lon
+],
+
+{
+
+icon:
+
+L.divIcon({
+
+className:"",
+
+html:
+
+`<div style="
+background:#dc2626;
+color:white;
+border:2px solid white;
+border-radius:50%;
+width:30px;
+height:30px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:12px;
+box-shadow:0 0 10px #dc2626;
+">
+${indices.length}
+</div>`,
+
+iconSize:[30,30],
+
+iconAnchor:[15,15]
+
+})
+
+}
+
+);
+
+
+label.addTo(map);
+
+
+clusterLayers.push(
+label
+);
+
+
+// -----------------------------------------------
+// INFORMACIÓN POPUP
+// -----------------------------------------------
+
+const puntosCluster =
+
+indices.map(
+i =>
+puntosDetectados[i]
+);
+
+
+const frpTotal =
+
+puntosCluster.reduce(
+
+(sum,p) =>
+sum + p.frp,
+
+0
+
+);
+
+
+const satelites =
+
+[
+
+...new Set(
+
+puntosCluster.map(
+p =>
+p.satelite
+)
+
+)
+
+].join(", ");
+
+
+circle.bindPopup(`
+
+<div style="
+color:#111;
+min-width:260px;
+">
+
+<h3 style="
+color:#dc2626;
+margin-top:0;
+">
+
+🚨 CLÚSTER DE INCENDIOS
+
+</h3>
+
+
+<b>🇵🇪 País:</b>
+
+PERÚ
+
+<br><br>
+
+
+<b>🔥 Detecciones:</b>
+
+${indices.length}
+
+<br>
+
+
+<b>📏 Diámetro:</b>
+
+${Math.round(diametro)} m
+
+<br>
+
+
+<b>📐 Regla:</b>
+
+≤ 1.000 m
+
+<br><br>
+
+
+<b>🛰️ Satélites:</b>
+
+${satelites}
+
+<br>
+
+
+<b>🔥 FRP total:</b>
+
+${frpTotal.toFixed(1)} MW
+
+<br><br>
+
+
+<b>📍 Centro:</b>
+
+${centro.lat.toFixed(5)},
+${centro.lon.toFixed(5)}
+
+<br><br>
+
+
+<small>
+Clúster #${index+1}
+</small>
+
+</div>
+
+`);
+
+
+// -----------------------------------------------
+// LISTA
+// -----------------------------------------------
+
+const item =
+
+document.createElement(
+"div"
+);
+
+
+item.className =
+"cluster-item";
+
+
+item.innerHTML =
+
+`
+
+<strong>
+🚨 CLÚSTER #${index+1}
+</strong>
+
+<br>
+
+🔥 ${indices.length} detecciones
+
+<br>
+
+📏 Diámetro:
+${Math.round(diametro)} m
+
+<br>
+
+🔥 FRP:
+${frpTotal.toFixed(1)} MW
+
+<br>
+
+🛰️ ${satelites}
+
+<br>
+
+📍 ${centro.lat.toFixed(4)},
+${centro.lon.toFixed(4)}
+
+`;
+
+
+item.onclick = () => {
+
+map.setView(
+
+[
+centro.lat,
+centro.lon
+],
+
+12
+
+);
+
+
+circle.openPopup();
+
+};
+
 
 document
-.getElementById("total")
+.getElementById(
+"clusterList"
+)
+.appendChild(
+item
+);
+
+});
+
+
+// ===================================================
+// ESTADÍSTICAS
+// ===================================================
+
+document
+.getElementById(
+"total"
+)
 .textContent =
 total;
 
 
-let ultimaHora =
-"--";
-
-
-if(ultimaFecha) {
-
-const partes =
-ultimaFecha.split(" ");
-
-ultimaHora =
-horaPeru(
-partes[0],
-partes[1]
-);
-
-}
-
-
 document
-.getElementById("ultima")
+.getElementById(
+"totalClusters"
+)
 .textContent =
-ultimaHora === "--"
-? "--"
-: ultimaHora.substring(
-12,
-17
-);
+clusters.length;
 
 
-// =====================================================
-// PRÓXIMA ACTUALIZACIÓN
-// =====================================================
-
-proximaActualizacion =
-Date.now() + INTERVALO;
-
+// ===================================================
+// HORA ACTUAL PERÚ
+// ===================================================
 
 const horaActual =
 
 inicio.toLocaleTimeString(
+
 "es-PE",
+
 {
-timeZone:"America/Lima",
+
+timeZone:
+"America/Lima",
+
 hour:"2-digit",
+
 minute:"2-digit",
+
 second:"2-digit",
+
 hour12:false
+
 }
+
 );
 
 
+// ===================================================
+// PRÓXIMA ACTUALIZACIÓN
+// ===================================================
+
+proximaActualizacion =
+
+Date.now() +
+INTERVALO;
+
+
+// ===================================================
+// ESTADO
+// ===================================================
+
 document
-.getElementById("status")
+.getElementById(
+"status"
+)
 .innerHTML =
 
 `
@@ -1453,12 +2633,17 @@ document
 
 <br>
 
-🇵🇪 Solo incendios dentro del Perú
+🇵🇪 Solo Perú
 
 <br>
 
-🔥 Total:
+🔥 Detecciones:
 ${total}
+
+<br>
+
+🚨 Clústeres:
+${clusters.length}
 
 <br>
 
@@ -1490,22 +2675,31 @@ ${horaActual} 🇵🇪
 `;
 
 
+// ===================================================
+// VISIBILIDAD
+// ===================================================
+
 actualizarVisibilidad();
+
+actualizarVisibilidadClusters();
 
 
 }
 catch(error) {
 
+
 console.error(error);
 
 
 document
-.getElementById("status")
+.getElementById(
+"status"
+)
 .innerHTML =
 
 `
 
-❌ Error FIRMS
+❌ Error consultando FIRMS
 
 <br>
 
@@ -1525,31 +2719,41 @@ false;
 
 
 // =====================================================
-// VISIBILIDAD
+// VISIBILIDAD SATÉLITES
 // =====================================================
 
 function actualizarVisibilidad() {
 
 
 const mostrar20 =
+
 document
-.getElementById("showNOAA20")
+.getElementById(
+"showNOAA20"
+)
 .checked;
 
 
 const mostrar21 =
+
 document
-.getElementById("showNOAA21")
+.getElementById(
+"showNOAA21"
+)
 .checked;
 
 
 const mostrarSNPP =
+
 document
-.getElementById("showSNPP")
+.getElementById(
+"showSNPP"
+)
 .checked;
 
 
 fireLayers.forEach(
+
 item => {
 
 
@@ -1557,7 +2761,8 @@ let mostrar = true;
 
 
 if(
-item.satelite === "NOAA-20"
+item.satelite ===
+"NOAA-20"
 ) {
 
 mostrar =
@@ -1567,7 +2772,8 @@ mostrar20;
 
 
 if(
-item.satelite === "NOAA-21"
+item.satelite ===
+"NOAA-21"
 ) {
 
 mostrar =
@@ -1577,7 +2783,8 @@ mostrar21;
 
 
 if(
-item.satelite === "Suomi-NPP"
+item.satelite ===
+"Suomi-NPP"
 ) {
 
 mostrar =
@@ -1606,25 +2813,35 @@ item.marker
 // ÓRBITAS
 // =====================================================
 
-const o20 =
+const orbit20 =
+
 document
-.getElementById("showOrbit20")
+.getElementById(
+"showOrbit20"
+)
 .checked;
 
 
-const o21 =
+const orbit21 =
+
 document
-.getElementById("showOrbit21")
+.getElementById(
+"showOrbit21"
+)
 .checked;
 
 
-const osnpp =
+const orbitSNPP =
+
 document
-.getElementById("showOrbitSNPP")
+.getElementById(
+"showOrbitSNPP"
+)
 .checked;
 
 
 orbitLayers.forEach(
+
 item => {
 
 
@@ -1632,28 +2849,34 @@ let mostrar = true;
 
 
 if(
-item.satelite === "NOAA-20"
+item.satelite ===
+"NOAA-20"
 ) {
 
-mostrar = o20;
+mostrar =
+orbit20;
 
 }
 
 
 if(
-item.satelite === "NOAA-21"
+item.satelite ===
+"NOAA-21"
 ) {
 
-mostrar = o21;
+mostrar =
+orbit21;
 
 }
 
 
 if(
-item.satelite === "Suomi-NPP"
+item.satelite ===
+"Suomi-NPP"
 ) {
 
-mostrar = osnpp;
+mostrar =
+orbitSNPP;
 
 }
 
@@ -1677,10 +2900,50 @@ item.layer
 
 
 // =====================================================
+// VISIBILIDAD CLUSTERS
+// =====================================================
+
+function actualizarVisibilidadClusters() {
+
+
+const mostrar =
+
+document
+.getElementById(
+"showClusters"
+)
+.checked;
+
+
+clusterLayers.forEach(
+layer => {
+
+
+if(mostrar) {
+
+layer.addTo(map);
+
+}
+else {
+
+map.removeLayer(
+layer
+);
+
+}
+
+});
+
+}
+
+
+// =====================================================
 // TLE
 // =====================================================
 
-async function obtenerTLE(sat) {
+async function obtenerTLE(
+sat
+) {
 
 
 const url =
@@ -1706,6 +2969,7 @@ await response.text();
 
 
 const lines =
+
 text
 .trim()
 .split(/\r?\n/)
@@ -1733,7 +2997,7 @@ throw new Error(
 
 
 // =====================================================
-// POSICIÓN
+// POSICIÓN SATÉLITE
 // =====================================================
 
 function posicionSatelite(
@@ -1743,6 +3007,7 @@ date
 
 
 const pv =
+
 satellite.propagate(
 satrec,
 date
@@ -1757,12 +3022,14 @@ return null;
 
 
 const gmst =
+
 satellite.gstime(
 date
 );
 
 
 const geo =
+
 satellite.eciToGeodetic(
 pv.position,
 gmst
@@ -1785,23 +3052,31 @@ geo.longitude
 
 
 // =====================================================
-// ÓRBITA
+// DIBUJAR ÓRBITA
 // =====================================================
 
-async function dibujarOrbita(sat) {
+async function dibujarOrbita(
+sat
+) {
 
 
 try {
 
 
 const tle =
-await obtenerTLE(sat);
+await obtenerTLE(
+sat
+);
 
 
 const satrec =
+
 satellite.twoline2satrec(
+
 tle.line1,
+
 tle.line2
+
 );
 
 
@@ -1812,20 +3087,28 @@ new Date();
 
 
 for(
-let m=-60;
-m<=60;
-m++
+let minuto=-60;
+
+minuto<=60;
+
+minuto++
+
 ) {
 
 
 const fecha =
+
 new Date(
-ahora.getTime() +
-m*60000
+
+ahora.getTime()
++
+minuto*60000
+
 );
 
 
 const pos =
+
 posicionSatelite(
 satrec,
 fecha
@@ -1844,13 +3127,21 @@ puntos.push(pos);
 const linea =
 
 L.polyline(
+
 puntos,
+
 {
+
 color:sat.color,
+
 weight:2,
+
 opacity:.8,
+
 dashArray:"7,5"
+
 }
+
 );
 
 
@@ -1867,6 +3158,7 @@ satelite:sat.name
 
 
 const actual =
+
 posicionSatelite(
 satrec,
 ahora
@@ -1879,14 +3171,23 @@ if(actual) {
 const marcador =
 
 L.circleMarker(
+
 actual,
+
 {
+
 radius:6,
+
 color:"white",
+
 weight:2,
+
 fillColor:sat.color,
+
 fillOpacity:1
+
 }
+
 );
 
 
@@ -1948,9 +3249,17 @@ async function cargarOrbitas() {
 orbitLayers.forEach(
 item => {
 
+if(
+map.hasLayer(
+item.layer
+)
+) {
+
 map.removeLayer(
 item.layer
 );
+
+}
 
 });
 
@@ -1979,6 +3288,7 @@ actualizarVisibilidad();
 // =====================================================
 
 setInterval(
+
 () => {
 
 
@@ -1992,9 +3302,12 @@ return;
 const restante =
 
 Math.max(
+
 0,
+
 proximaActualizacion -
 Date.now()
+
 );
 
 
@@ -2008,18 +3321,22 @@ restante / 60000
 const segundos =
 
 Math.floor(
+
 (restante % 60000) /
 1000
+
 );
 
 
 const reloj =
 
 `${String(minutos).padStart(2,"0")}:` +
+
 `${String(segundos).padStart(2,"0")}`;
 
 
 const contador =
+
 document.getElementById(
 "contador"
 );
@@ -2033,15 +3350,18 @@ reloj;
 }
 
 },
+
 1000
+
 );
 
 
 // =====================================================
-// ACTUALIZACIÓN AUTOMÁTICA
+// ACTUALIZACIÓN AUTOMÁTICA CADA 15 MIN
 // =====================================================
 
 setInterval(
+
 async () => {
 
 
@@ -2061,8 +3381,11 @@ return;
 
 await actualizarIncendios();
 
+
 },
+
 INTERVALO
+
 );
 
 
@@ -2071,6 +3394,7 @@ INTERVALO
 // =====================================================
 
 const savedKey =
+
 localStorage.getItem(
 "firms_map_key"
 );
@@ -2079,7 +3403,9 @@ localStorage.getItem(
 if(savedKey) {
 
 document
-.getElementById("mapKey")
+.getElementById(
+"mapKey"
+)
 .value =
 savedKey;
 

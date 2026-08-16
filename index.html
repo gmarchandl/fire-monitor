@@ -13,12 +13,12 @@ Monitor de Incendios Perú — FIRMS / VIIRS / MODIS
 </title>
 
 <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
 <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
 <style>
@@ -54,10 +54,6 @@ body {
     flex-direction: column;
 }
 
-/* =====================================================
-   HEADER
-===================================================== */
-
 #header {
 
     min-height: 58px;
@@ -87,7 +83,7 @@ body {
 
     font-size: 18px;
 
-    color: #ffffff;
+    color: #fff;
 }
 
 #estado {
@@ -98,11 +94,13 @@ body {
 
     color: #8ea5b8;
 
-    max-width: 45vw;
+    max-width: 420px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 #btnActualizar {
@@ -129,16 +127,10 @@ body {
 
 #btnActualizar:disabled {
 
-    background: #455a64;
+    opacity: .55;
 
-    cursor: not-allowed;
-
-    opacity: .7;
+    cursor: wait;
 }
-
-/* =====================================================
-   PANEL
-===================================================== */
 
 #panel {
 
@@ -155,12 +147,7 @@ body {
     overflow-y: auto;
 
     background:
-        rgba(
-            10,
-            18,
-            25,
-            0.95
-        );
+        rgba(10,18,25,.95);
 
     border:
         1px solid #334554;
@@ -172,10 +159,7 @@ body {
     z-index: 900;
 
     box-shadow:
-        0 4px 20px
-        rgba(0,0,0,.45);
-
-    scrollbar-width: thin;
+        0 4px 20px rgba(0,0,0,.45);
 }
 
 #panel h2 {
@@ -185,7 +169,7 @@ body {
     margin:
         0 0 10px 0;
 
-    color: #ffffff;
+    color: #fff;
 }
 
 .grupo {
@@ -214,7 +198,7 @@ body {
     border:
         1px solid #354957;
 
-    color: #ffffff;
+    color: #fff;
 
     border-radius: 4px;
 
@@ -241,38 +225,20 @@ body {
 }
 
 .btn-verde {
-
     background: #087f5b;
 }
 
-.btn-verde:hover {
-
-    background: #099268;
-}
-
 .btn-azul {
-
     background: #1565c0;
 }
 
-.btn-azul:hover {
-
-    background: #1976d2;
-}
-
 .btn-gris {
-
     background: #455a64;
 }
 
-.btn-gris:hover {
-
-    background: #546e7a;
+.btn-naranja {
+    background: #ef6c00;
 }
-
-/* =====================================================
-   ESTADÍSTICAS
-===================================================== */
 
 .stat {
 
@@ -281,33 +247,24 @@ body {
     justify-content:
         space-between;
 
-    gap: 10px;
-
     border-bottom:
         1px solid #263640;
 
     padding: 5px 0;
 
     font-size: 12px;
-}
 
-.stat span:first-child {
-
-    color: #90a4ae;
+    gap: 10px;
 }
 
 .stat span:last-child {
 
     font-weight: bold;
 
-    color: #ffffff;
+    color: #fff;
 
     text-align: right;
 }
-
-/* =====================================================
-   MAPA
-===================================================== */
 
 #map {
 
@@ -316,17 +273,13 @@ body {
     width: 100%;
 }
 
-/* =====================================================
-   POPUP
-===================================================== */
-
 .popup-incendio {
 
     color: #111;
 
     min-width: 330px;
 
-    max-width: 460px;
+    max-width: 480px;
 }
 
 .popup-incendio h3 {
@@ -363,41 +316,10 @@ body {
     font-weight: bold;
 }
 
-.alto {
-
-    background: #d50000;
-}
-
-.medio {
-
-    background: #ef6c00;
-}
-
-.vigilancia {
-
-    background: #1565c0;
-}
-
-.exposicion {
-
-    color: #c62828;
-
-    font-weight: bold;
-}
-
-/* =====================================================
-   LEYENDA
-===================================================== */
-
 .legend {
 
     background:
-        rgba(
-            15,
-            20,
-            25,
-            .92
-        );
+        rgba(15,20,25,.92);
 
     color: white;
 
@@ -421,10 +343,6 @@ body {
     opacity: .9;
 }
 
-/* =====================================================
-   SPINNER
-===================================================== */
-
 #cargando {
 
     display: none;
@@ -434,12 +352,7 @@ body {
     inset: 0;
 
     background:
-        rgba(
-            0,
-            0,
-            0,
-            .42
-        );
+        rgba(0,0,0,.42);
 
     z-index: 5000;
 
@@ -462,42 +375,37 @@ body {
     min-width: 280px;
 
     text-align: center;
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.45);
 }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+#diagnostico {
 
-@media (max-width: 700px) {
+    background: #101a22;
 
-    #header h1 {
+    border: 1px solid #263640;
 
-        font-size: 14px;
-    }
+    padding: 8px;
 
-    #estado {
+    border-radius: 5px;
 
-        display: none;
-    }
+    font-size: 11px;
 
-    #panel {
+    line-height: 17px;
 
-        width: calc(100% - 24px);
+    margin-top: 8px;
 
-        max-height: 48vh;
+    color: #b8c7d3;
+}
 
-        top: 65px;
-    }
+.ok {
+    color: #00c853;
+}
 
-    .popup-incendio {
+.warn {
+    color: #ffb300;
+}
 
-        min-width: 260px;
-
-        max-width: 320px;
-    }
+.error {
+    color: #ff5252;
 }
 
 </style>
@@ -519,14 +427,14 @@ Inicializando...
 </span>
 
 <button
-    id="btnActualizar"
-    type="button"
-    onclick="actualizarIncendios(true)"
+id="btnActualizar"
+onclick="actualizarIncendios(true)"
 >
 Actualizar
 </button>
 
 </header>
+
 
 <div id="panel">
 
@@ -534,32 +442,40 @@ Actualizar
 Configuración y resultados
 </h2>
 
+
 <div class="grupo">
 
-<label for="mapKey">
+<label>
 FIRMS MAP KEY
 </label>
 
 <input
-    id="mapKey"
-    type="password"
-    autocomplete="off"
-    placeholder="Ingrese su MAP_KEY"
+id="mapKey"
+type="password"
+placeholder="Ingrese su MAP_KEY"
+autocomplete="off"
 >
 
 <button
-    class="btn btn-azul"
-    type="button"
-    onclick="guardarMapKey()"
+class="btn btn-azul"
+onclick="guardarMapKey()"
 >
 Guardar MAP_KEY
 </button>
 
+<button
+class="btn btn-naranja"
+onclick="probarFIRMS()"
+>
+Probar conexión FIRMS
+</button>
+
 </div>
+
 
 <div class="grupo">
 
-<label for="intervaloSelect">
+<label>
 Intervalo actualización
 </label>
 
@@ -569,10 +485,7 @@ Intervalo actualización
 5 minutos
 </option>
 
-<option
-    value="600000"
-    selected
->
+<option value="600000" selected>
 10 minutos
 </option>
 
@@ -587,6 +500,7 @@ Intervalo actualización
 </select>
 
 </div>
+
 
 <div id="estadisticas">
 
@@ -606,18 +520,23 @@ Intervalo actualización
 </div>
 
 <div class="stat">
-<span>Última actualización</span>
-<span id="ultimaActualizacion">---</span>
-</div>
-
-<div class="stat">
-<span>VIIRS hoy</span>
+<span>VIIRS visibles</span>
 <span id="totalVIIRS">0</span>
 </div>
 
 <div class="stat">
-<span>MODIS hoy</span>
+<span>VIIRS hoy Perú</span>
+<span id="totalVIIRSHoy">0</span>
+</div>
+
+<div class="stat">
+<span>MODIS visibles</span>
 <span id="totalMODIS">0</span>
+</div>
+
+<div class="stat">
+<span>MODIS hoy Perú</span>
+<span id="totalMODISHoy">0</span>
 </div>
 
 <div class="stat">
@@ -637,10 +556,23 @@ Intervalo actualización
 
 </div>
 
+
+<div id="diagnostico">
+
+<b>Diagnóstico</b>
+
+<div id="diagnosticoTexto">
+Esperando MAP_KEY...
+</div>
+
+</div>
+
+
 <hr style="
 border:0;
 border-top:1px solid #30414e;
 ">
+
 
 <h2>
 Criterios utilizados
@@ -676,35 +608,38 @@ Criterios utilizados
 <span>≤ 3000 m</span>
 </div>
 
+
 <button
-    class="btn btn-verde"
-    type="button"
-    onclick="descargarCSV()"
+class="btn btn-verde"
+onclick="descargarCSV()"
 >
 Descargar CSV de clusters
 </button>
 
 <button
-    class="btn btn-gris"
-    type="button"
-    onclick="centrarPeru()"
+class="btn btn-gris"
+onclick="centrarPeru()"
 >
 Centrar Perú
 </button>
 
 </div>
 
+
 <div id="map"></div>
+
 
 <div id="cargando">
 
 <div class="spinner-box">
 
-<div>
-🔥 Procesando detecciones...
+<div style="font-size:28px">
+🔥
 </div>
 
-<br>
+<b>Procesando detecciones...</b>
+
+<br><br>
 
 <span id="textoCarga">
 Consultando FIRMS...
@@ -716,9 +651,11 @@ Consultando FIRMS...
 
 </div>
 
+
 <script>
 
 "use strict";
+
 
 /* =====================================================
    CONFIGURACIÓN
@@ -731,18 +668,24 @@ const CONFIG = {
         BASE:
             "https://firms.modaps.eosdis.nasa.gov",
 
-        COUNTRY:
-            "PER",
+        /*
+
+           Bounding box aproximado de Perú:
+
+           oeste, sur, este, norte
+
+        */
+
+        PERU_BBOX:
+            "-81.5,-18.5,-68.5,0.5",
 
         DAYS:
-            2,
+            3,
 
         SOURCES: [
 
             "VIIRS_NOAA21_NRT",
-
             "VIIRS_NOAA20_NRT",
-
             "VIIRS_SNPP_NRT"
 
         ],
@@ -785,13 +728,7 @@ const CONFIG = {
     CONTEXTO: {
 
         RADIO_CENTRO_POBLADO_M:
-            3000,
-
-        RADIO_EXPOSICION_M:
-            3000,
-
-        RADIO_ALTA_EXPOSICION_M:
-            1000
+            3000
 
     },
 
@@ -812,18 +749,13 @@ const CONFIG = {
         "",
 
     INTERVALO:
-        600000,
-
-    MAX_CLUSTERS_CONCURRENTES:
-        4,
-
-    FETCH_TIMEOUT_MS:
-        30000
+        600000
 
 };
 
+
 /* =====================================================
-   VARIABLES GLOBALES
+   VARIABLES
 ===================================================== */
 
 let map = null;
@@ -850,27 +782,8 @@ let datosMODIS = [];
 
 let temporizador = null;
 
-let actualizacionEnCurso = false;
+let actualizando = false;
 
-let ultimaActualizacion = null;
-
-let datosGOES = [];
-
-/* =====================================================
-   CACHE
-===================================================== */
-
-const cacheDistrito =
-    new Map();
-
-const cacheCentro =
-    new Map();
-
-const cacheLCM10 =
-    new Map();
-
-const cacheHRSL =
-    new Map();
 
 /* =====================================================
    CENTRO PERÚ
@@ -879,72 +792,9 @@ const cacheHRSL =
 const PERU_CENTER =
     [-9.19, -75.0152];
 
-/* =====================================================
-   UTILIDADES
-===================================================== */
-
-function escapeHTML(valor) {
-
-    return String(
-        valor ?? ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-}
-
-function numero(
-    valor,
-    decimales = 2
-) {
-
-    const n =
-        Number(valor);
-
-    return Number.isFinite(n)
-        ? n.toFixed(decimales)
-        : "N/D";
-}
-
-function coordenadaValida(
-    lat,
-    lon
-) {
-
-    return (
-
-        Number.isFinite(lat) &&
-
-        Number.isFinite(lon) &&
-
-        lat >= -90 &&
-        lat <= 90 &&
-
-        lon >= -180 &&
-        lon <= 180
-
-    );
-}
 
 /* =====================================================
-   MAPA
+   INICIO MAPA
 ===================================================== */
 
 function iniciarMapa() {
@@ -952,40 +802,32 @@ function iniciarMapa() {
     map = L.map(
         "map",
         {
-
             center:
                 PERU_CENTER,
 
             zoom:
                 5
-
         }
     );
 
+
     const satelite =
         L.tileLayer(
-
             "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-
             {
-
                 maxZoom:
                     19,
 
                 attribution:
                     "© Esri"
-
             }
-
         );
+
 
     const etiquetas =
         L.tileLayer(
-
             "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-
             {
-
                 maxZoom:
                     19,
 
@@ -994,35 +836,26 @@ function iniciarMapa() {
 
                 attribution:
                     "© Esri"
-
             }
-
         );
 
-    satelite.addTo(
-        map
-    );
 
-    etiquetas.addTo(
-        map
-    );
+    satelite.addTo(map);
+
+    etiquetas.addTo(map);
+
 
     capaHibrida =
         L.layerGroup([
-
             satelite,
-
             etiquetas
-
         ]);
+
 
     const worldCover =
         L.tileLayer.wms(
-
             "https://services.terrascope.be/wms/v2",
-
             {
-
                 layers:
                     "WORLDCOVER_2021_MAP",
 
@@ -1037,10 +870,9 @@ function iniciarMapa() {
 
                 attribution:
                     "© ESA WorldCover / Copernicus"
-
             }
-
         );
+
 
     const baseMaps = {
 
@@ -1051,6 +883,7 @@ function iniciarMapa() {
             satelite
 
     };
+
 
     const overlays = {
 
@@ -1071,6 +904,7 @@ function iniciarMapa() {
 
     };
 
+
     L.control.layers(
         baseMaps,
         overlays,
@@ -1078,24 +912,20 @@ function iniciarMapa() {
             collapsed:
                 false
         }
-    ).addTo(
-        map
-    );
+    ).addTo(map);
 
-    capaVIIRS.addTo(
-        map
-    );
 
-    capaMODIS.addTo(
-        map
-    );
+    capaVIIRS.addTo(map);
 
-    capaClusters.addTo(
-        map
-    );
+    capaMODIS.addTo(map);
+
+    capaClusters.addTo(map);
+
 
     crearLeyenda();
+
 }
+
 
 /* =====================================================
    LEYENDA
@@ -1105,11 +935,10 @@ function crearLeyenda() {
 
     const legend =
         L.control({
-
             position:
                 "bottomright"
-
         });
+
 
     legend.onAdd =
         function() {
@@ -1119,6 +948,7 @@ function crearLeyenda() {
                     "div",
                     "legend"
                 );
+
 
             div.innerHTML =
 
@@ -1139,13 +969,16 @@ function crearLeyenda() {
                 '<i style="background:#1565c0"></i>' +
                 "Vigilancia";
 
+
             return div;
+
         };
 
-    legend.addTo(
-        map
-    );
+
+    legend.addTo(map);
+
 }
+
 
 /* =====================================================
    MAP KEY
@@ -1161,6 +994,7 @@ function guardarMapKey() {
     const key =
         input.value.trim();
 
+
     if (!key) {
 
         alert(
@@ -1170,19 +1004,24 @@ function guardarMapKey() {
         return;
     }
 
+
     localStorage.setItem(
         "firms_map_key",
         key
     );
 
-    actualizarEstado(
-        "✓ MAP_KEY guardada"
+
+    actualizarDiagnostico(
+        "MAP_KEY guardada localmente.",
+        "ok"
     );
 
-    actualizarIncendios(
-        true
-    );
 }
+
+
+/* =====================================================
+   OBTENER KEY
+===================================================== */
 
 function obtenerMapKey() {
 
@@ -1192,18 +1031,46 @@ function obtenerMapKey() {
         )
         .value
         .trim();
+
 }
 
+
 /* =====================================================
-   FECHA / HORA
+   DIAGNÓSTICO
 ===================================================== */
 
-function fechaPeru() {
+function actualizarDiagnostico(
+    texto,
+    clase = ""
+) {
+
+    const el =
+        document.getElementById(
+            "diagnosticoTexto"
+        );
+
+
+    el.textContent =
+        texto;
+
+
+    el.className =
+        clase;
+
+}
+
+
+/* =====================================================
+   FECHA PERÚ
+===================================================== */
+
+function fechaPeru(
+    fecha = new Date()
+) {
 
     return new Intl.DateTimeFormat(
         "en-CA",
         {
-
             timeZone:
                 "America/Lima",
 
@@ -1215,21 +1082,23 @@ function fechaPeru() {
 
             day:
                 "2-digit"
-
         }
-    ).format(
-        new Date()
-    );
+    ).format(fecha);
+
 }
 
+
+/* =====================================================
+   HORA PERÚ
+===================================================== */
+
 function horaPeru(
-    fecha
+    fecha = new Date()
 ) {
 
     return new Intl.DateTimeFormat(
         "es-PE",
         {
-
             timeZone:
                 "America/Lima",
 
@@ -1244,21 +1113,23 @@ function horaPeru(
 
             hour12:
                 false
-
         }
-    ).format(
-        fecha
-    );
+    ).format(fecha);
+
 }
 
+
+/* =====================================================
+   HORA UTC
+===================================================== */
+
 function horaUTC(
-    fecha
+    fecha = new Date()
 ) {
 
     return new Intl.DateTimeFormat(
         "es-PE",
         {
-
             timeZone:
                 "UTC",
 
@@ -1273,15 +1144,14 @@ function horaUTC(
 
             hour12:
                 false
-
         }
-    ).format(
-        fecha
-    );
+    ).format(fecha);
+
 }
 
+
 /* =====================================================
-   PARSEAR FECHA FIRMS
+   FECHA FIRMS
 ===================================================== */
 
 function crearFechaDeteccion(
@@ -1289,9 +1159,9 @@ function crearFechaDeteccion(
     hora
 ) {
 
-    if (!fecha) {
+    if (!fecha)
         return null;
-    }
+
 
     let h =
         String(
@@ -1302,11 +1172,13 @@ function crearFechaDeteccion(
             ""
         );
 
+
     h =
         h.padStart(
             4,
             "0"
         );
+
 
     const hh =
         h.substring(
@@ -1314,43 +1186,38 @@ function crearFechaDeteccion(
             2
         );
 
+
     const mm =
         h.substring(
             2,
             4
         );
 
-    const horaNumero =
-        Number(hh);
-
-    const minutoNumero =
-        Number(mm);
-
-    if (
-        horaNumero > 23 ||
-        minutoNumero > 59
-    ) {
-        return null;
-    }
 
     const iso =
-        `${fecha}T${hh}:${mm}:00Z`;
+        `${String(fecha).substring(0,10)}T${hh}:${mm}:00Z`;
+
 
     const resultado =
-        new Date(
-            iso
-        );
+        new Date(iso);
+
 
     if (
-        isNaN(
+        !Number.isFinite(
             resultado.getTime()
         )
-    ) {
+    )
         return null;
-    }
+
 
     return resultado;
+
 }
+
+
+/* =====================================================
+   FECHA PERÚ DETECCIÓN
+===================================================== */
 
 function fechaPeruDeteccion(
     d
@@ -1362,34 +1229,20 @@ function fechaPeruDeteccion(
             d.acq_time
         );
 
-    if (!fecha) {
+
+    if (!fecha)
         return null;
-    }
 
-    return new Intl.DateTimeFormat(
-        "en-CA",
-        {
 
-            timeZone:
-                "America/Lima",
-
-            year:
-                "numeric",
-
-            month:
-                "2-digit",
-
-            day:
-                "2-digit"
-
-        }
-    ).format(
+    return fechaPeru(
         fecha
     );
+
 }
 
+
 /* =====================================================
-   CSV
+   PARSER CSV
 ===================================================== */
 
 function parseCSV(
@@ -1399,11 +1252,11 @@ function parseCSV(
     if (
         typeof texto !==
         "string"
-    ) {
+    )
         return [];
-    }
 
-    const limpio =
+
+    texto =
         texto
         .replace(
             /^\uFEFF/,
@@ -1411,20 +1264,22 @@ function parseCSV(
         )
         .trim();
 
-    if (!limpio) {
+
+    if (!texto)
         return [];
-    }
+
 
     const lineas =
-        limpio.split(
+        texto.split(
             /\r?\n/
         );
 
+
     if (
         lineas.length < 2
-    ) {
+    )
         return [];
-    }
+
 
     function dividir(
         linea
@@ -1434,8 +1289,8 @@ function parseCSV(
 
         let actual = "";
 
-        let comillas =
-            false;
+        let comillas = false;
+
 
         for (
             let i = 0;
@@ -1445,6 +1300,7 @@ function parseCSV(
 
             const c =
                 linea[i];
+
 
             if (
                 c === '"'
@@ -1460,6 +1316,7 @@ function parseCSV(
                     i++;
 
                 }
+
                 else {
 
                     comillas =
@@ -1468,6 +1325,7 @@ function parseCSV(
                 }
 
             }
+
             else if (
                 c === "," &&
                 !comillas
@@ -1480,18 +1338,25 @@ function parseCSV(
                 actual = "";
 
             }
+
             else {
 
                 actual += c;
+
             }
+
         }
+
 
         salida.push(
             actual.trim()
         );
 
+
         return salida;
+
     }
+
 
     const cabecera =
         dividir(
@@ -1500,11 +1365,17 @@ function parseCSV(
         .map(
             x =>
                 x
+                .replace(
+                    /^\uFEFF/,
+                    ""
+                )
                 .toLowerCase()
                 .trim()
         );
 
+
     const resultado = [];
+
 
     for (
         let i = 1;
@@ -1514,16 +1385,18 @@ function parseCSV(
 
         if (
             !lineas[i].trim()
-        ) {
+        )
             continue;
-        }
+
 
         const valores =
             dividir(
                 lineas[i]
             );
 
+
         const obj = {};
+
 
         cabecera.forEach(
             (
@@ -1538,72 +1411,87 @@ function parseCSV(
             }
         );
 
+
         resultado.push(
             obj
         );
+
     }
 
+
     return resultado;
+
 }
 
+
 /* =====================================================
-   FETCH CON TIMEOUT
+   FETCH GENÉRICO
 ===================================================== */
 
-async function fetchConTimeout(
-    url,
-    opciones = {},
-    timeout =
-        CONFIG.FIRMS.FETCH_TIMEOUT_MS
+async function fetchTexto(
+    url
 ) {
 
-    const controller =
-        new AbortController();
-
-    const timer =
-        setTimeout(
-            () =>
-                controller.abort(),
-            timeout
-        );
-
-    try {
-
-        return await fetch(
+    const respuesta =
+        await fetch(
             url,
             {
-                ...opciones,
-                signal:
-                    controller.signal
+                cache:
+                    "no-store"
             }
         );
 
-    }
-    catch (error) {
 
-        if (
-            error.name ===
-            "AbortError"
-        ) {
+    const texto =
+        await respuesta.text();
 
-            throw new Error(
-                "Tiempo de espera agotado"
-            );
-        }
 
-        throw error;
+    if (
+        !respuesta.ok
+    ) {
 
-    }
-    finally {
-
-        clearTimeout(
-            timer
+        throw new Error(
+            `HTTP ${respuesta.status}: ${texto.substring(0,150)}`
         );
+
     }
+
+
+    if (
+        /invalid map key/i.test(
+            texto
+        )
+    ) {
+
+        throw new Error(
+            "MAP_KEY inválida."
+        );
+
+    }
+
+
+    if (
+        /map key/i.test(texto) &&
+        /required|invalid|error/i.test(texto)
+    ) {
+
+        throw new Error(
+            texto.substring(
+                0,
+                250
+            )
+        );
+
+    }
+
+
+    return texto;
+
 }
 
+
 /* =====================================================
-   FIRMS
+   FETCH FIRMS AREA
 ===================================================== */
 
 async function fetchFIRMS(
@@ -1613,63 +1501,47 @@ async function fetchFIRMS(
     const key =
         obtenerMapKey();
 
+
     if (!key) {
 
         throw new Error(
-            "Falta FIRMS MAP_KEY"
+            "Falta FIRMS MAP_KEY."
         );
+
     }
+
 
     const url =
 
         `${CONFIG.FIRMS.BASE}` +
 
-        `/api/country/csv/` +
+        `/api/area/csv/` +
 
         `${encodeURIComponent(key)}/` +
 
-        `${source}/` +
+        `${encodeURIComponent(source)}/` +
 
-        `${CONFIG.FIRMS.COUNTRY}/` +
+        `${CONFIG.FIRMS.PERU_BBOX}/` +
 
         `${CONFIG.FIRMS.DAYS}`;
 
-    const respuesta =
-        await fetchConTimeout(
-            url,
-            {
-                cache:
-                    "no-store"
-            }
-        );
-
-    if (
-        !respuesta.ok
-    ) {
-
-        throw new Error(
-            `FIRMS HTTP ${respuesta.status}`
-        );
-    }
 
     const texto =
-        await respuesta.text();
-
-    if (
-        /invalid map key/i.test(
-            texto
-        )
-    ) {
-
-        throw new Error(
-            "MAP_KEY inválida"
+        await fetchTexto(
+            url
         );
-    }
 
-    return parseCSV(
-        texto
-    );
+
+    const datos =
+        parseCSV(
+            texto
+        );
+
+
+    return datos;
+
 }
+
 
 /* =====================================================
    NORMALIZAR VIIRS
@@ -1685,35 +1557,30 @@ function normalizarVIIRS(
             d.latitude
         );
 
+
     const lon =
         Number(
             d.longitude
         );
 
-    if (
-        !coordenadaValida(
-            lat,
-            lon
-        )
-    ) {
-
-        return null;
-    }
 
     const t4 =
         Number(
             d.bright_ti4
         );
 
+
     const t5 =
         Number(
             d.bright_ti5
         );
 
+
     const frp =
         Number(
             d.frp
         );
+
 
     return {
 
@@ -1758,7 +1625,9 @@ function normalizarVIIRS(
             "VIIRS"
 
     };
+
 }
+
 
 /* =====================================================
    NORMALIZAR MODIS
@@ -1768,50 +1637,37 @@ function normalizarMODIS(
     d
 ) {
 
-    const lat =
-        Number(
-            d.latitude
-        );
-
-    const lon =
-        Number(
-            d.longitude
-        );
-
-    if (
-        !coordenadaValida(
-            lat,
-            lon
-        )
-    ) {
-
-        return null;
-    }
-
     const brightness =
         Number(
             d.brightness
         );
 
-    const brightT31 =
+
+    const bright31 =
         Number(
             d.bright_t31
         );
+
 
     const frp =
         Number(
             d.frp
         );
 
+
     return {
 
         ...d,
 
         latitude:
-            lat,
+            Number(
+                d.latitude
+            ),
 
         longitude:
-            lon,
+            Number(
+                d.longitude
+            ),
 
         frp:
             Number.isFinite(frp)
@@ -1827,22 +1683,17 @@ function normalizarMODIS(
 
         t5:
             Number.isFinite(
-                brightT31
+                bright31
             )
-                ? brightT31
+                ? bright31
                 : null,
 
         deltaT:
 
-            Number.isFinite(
-                brightness
-            ) &&
-            Number.isFinite(
-                brightT31
-            )
+            Number.isFinite(brightness) &&
+            Number.isFinite(bright31)
 
-                ? brightness -
-                  brightT31
+                ? brightness - bright31
 
                 : null,
 
@@ -1850,110 +1701,87 @@ function normalizarMODIS(
             "MODIS"
 
     };
+
 }
 
+
 /* =====================================================
-   FILTRO HOY PERÚ
+   VALIDAR COORDENADAS
 ===================================================== */
 
-function filtrarHoyPeru(
-    datos
+function coordenadaValida(
+    d
 ) {
-
-    const hoy =
-        fechaPeru();
 
     return (
 
-        Array.isArray(
-            datos
-        )
+        Number.isFinite(
+            Number(d.latitude)
+        ) &&
 
-            ? datos.filter(
-                d =>
-                    fechaPeruDeteccion(
-                        d
-                    ) === hoy
-            )
+        Number.isFinite(
+            Number(d.longitude)
+        ) &&
 
-            : []
+        Number(d.latitude) >= -90 &&
+
+        Number(d.latitude) <= 90 &&
+
+        Number(d.longitude) >= -180 &&
+
+        Number(d.longitude) <= 180
 
     );
+
 }
 
+
 /* =====================================================
-   DEDUPLICACIÓN
+   SOLO PERÚ
 ===================================================== */
 
-function deduplicarDetecciones(
-    datos
+function dentroPeru(
+    d
 ) {
 
-    const mapa =
-        new Map();
+    if (
+        !coordenadaValida(d)
+    )
+        return false;
 
-    for (
-        const d of datos
-    ) {
 
-        if (
-            !coordenadaValida(
-                d.latitude,
-                d.longitude
-            )
-        ) {
-            continue;
-        }
+    return (
 
-        const fecha =
-            d.acq_date ||
-            "";
+        d.latitude >= -18.5 &&
+        d.latitude <= 0.5 &&
 
-        const hora =
-            String(
-                d.acq_time ?? ""
-            )
-            .padStart(
-                4,
-                "0"
-            );
+        d.longitude >= -81.5 &&
+        d.longitude <= -68.5
 
-        const clave = [
+    );
 
-            fecha,
-
-            hora,
-
-            d.latitude.toFixed(5),
-
-            d.longitude.toFixed(5),
-
-            d.satellite ||
-                d.source ||
-                ""
-
-        ].join("|");
-
-        if (
-            !mapa.has(
-                clave
-            )
-        ) {
-
-            mapa.set(
-                clave,
-                d
-            );
-        }
-    }
-
-    return [
-        ...mapa.values()
-    ];
 }
 
+
 /* =====================================================
-   DISTANCIA HAVERSINE
+   DETECCIÓN DE HOY EN PERÚ
+===================================================== */
+
+function esHoyPeru(
+    d
+) {
+
+    return (
+        fechaPeruDeteccion(d)
+        ===
+        fechaPeru()
+    );
+
+}
+
+
+/* =====================================================
+   HAVERSINE
 ===================================================== */
 
 function distanciaMetros(
@@ -1966,15 +1794,18 @@ function distanciaMetros(
     const R =
         6371000;
 
+
     const p1 =
         lat1 *
         Math.PI /
         180;
 
+
     const p2 =
         lat2 *
         Math.PI /
         180;
+
 
     const dp =
         (
@@ -1984,6 +1815,7 @@ function distanciaMetros(
         Math.PI /
         180;
 
+
     const dl =
         (
             lon2 -
@@ -1992,61 +1824,45 @@ function distanciaMetros(
         Math.PI /
         180;
 
+
     const a =
 
-        Math.sin(
-            dp / 2
-        ) ** 2 +
+        Math.sin(dp / 2) ** 2 +
 
         Math.cos(p1) *
-
         Math.cos(p2) *
+        Math.sin(dl / 2) ** 2;
 
-        Math.sin(
-            dl / 2
-        ) ** 2;
 
     return (
 
         2 *
-
         R *
-
         Math.atan2(
-
             Math.sqrt(a),
-
             Math.sqrt(
                 1 - a
             )
-
         )
 
     );
+
 }
 
+
 /* =====================================================
-   CREAR CLUSTERS
+   CLUSTERS
 ===================================================== */
 
 function crearClusters(
     datos
 ) {
 
-    if (
-        !Array.isArray(datos) ||
-        datos.length === 0
-    ) {
-
-        return [];
-    }
-
     const usados =
-        new Uint8Array(
-            datos.length
-        );
+        new Set();
 
     const clusters = [];
+
 
     for (
         let i = 0;
@@ -2055,36 +1871,30 @@ function crearClusters(
     ) {
 
         if (
-            usados[i]
-        ) {
+            usados.has(i)
+        )
             continue;
-        }
 
-        const grupo = [];
 
-        const cola = [i];
+        const grupo = [
+            datos[i]
+        ];
 
-        usados[i] = 1;
 
-        let posicion =
-            0;
+        usados.add(i);
+
+
+        let cambio =
+            true;
+
 
         while (
-            posicion <
-            cola.length
+            cambio
         ) {
 
-            const idx =
-                cola[
-                    posicion++
-                ];
+            cambio =
+                false;
 
-            const punto =
-                datos[idx];
-
-            grupo.push(
-                punto
-            );
 
             for (
                 let j = 0;
@@ -2093,51 +1903,64 @@ function crearClusters(
             ) {
 
                 if (
-                    usados[j]
-                ) {
+                    usados.has(j)
+                )
                     continue;
-                }
 
-                const candidato =
-                    datos[j];
+
+                const cerca =
+                    grupo.some(
+                        p =>
+
+                            distanciaMetros(
+                                p.latitude,
+                                p.longitude,
+                                datos[j].latitude,
+                                datos[j].longitude
+                            )
+                            <=
+                            CONFIG.CLUSTER.RADIO_MAX_M
+                    );
+
 
                 if (
-                    distanciaMetros(
-
-                        punto.latitude,
-                        punto.longitude,
-
-                        candidato.latitude,
-                        candidato.longitude
-
-                    ) <=
-                    CONFIG.CLUSTER
-                        .RADIO_MAX_M
+                    cerca
                 ) {
 
-                    usados[j] = 1;
-
-                    cola.push(
-                        j
+                    grupo.push(
+                        datos[j]
                     );
+
+                    usados.add(j);
+
+                    cambio =
+                        true;
+
                 }
+
             }
+
         }
+
 
         if (
             grupo.length >=
-            CONFIG.CLUSTER
-                .MIN_DETECCIONES
+            CONFIG.CLUSTER.MIN_DETECCIONES
         ) {
 
             clusters.push(
                 grupo
             );
+
         }
+
     }
 
+
     return clusters;
+
 }
+
 
 /* =====================================================
    ESTADÍSTICAS CLUSTER
@@ -2155,16 +1978,14 @@ function calcularEstadisticasCluster(
 
     let frpMax = 0;
 
-    let t4Max =
-        -Infinity;
+    let t4Max = -Infinity;
 
-    let t5Min =
-        Infinity;
+    let t5Min = Infinity;
 
-    let deltaTMax =
-        -Infinity;
+    let deltaTMax = -Infinity;
 
     let confianzaAlta = 0;
+
 
     grupo.forEach(
         d => {
@@ -2175,13 +1996,14 @@ function calcularEstadisticasCluster(
             lon +=
                 d.longitude;
 
+
             const frp =
-                Number(
-                    d.frp
-                ) || 0;
+                Number(d.frp) || 0;
+
 
             frpTotal +=
                 frp;
+
 
             frpMax =
                 Math.max(
@@ -2189,10 +2011,9 @@ function calcularEstadisticasCluster(
                     frp
                 );
 
+
             if (
-                Number.isFinite(
-                    d.t4
-                )
+                Number.isFinite(d.t4)
             ) {
 
                 t4Max =
@@ -2200,12 +2021,12 @@ function calcularEstadisticasCluster(
                         t4Max,
                         d.t4
                     );
+
             }
 
+
             if (
-                Number.isFinite(
-                    d.t5
-                )
+                Number.isFinite(d.t5)
             ) {
 
                 t5Min =
@@ -2213,7 +2034,9 @@ function calcularEstadisticasCluster(
                         t5Min,
                         d.t5
                     );
+
             }
+
 
             if (
                 Number.isFinite(
@@ -2226,56 +2049,60 @@ function calcularEstadisticasCluster(
                         deltaTMax,
                         d.deltaT
                     );
+
             }
 
-            if (
+
+            const confianza =
                 String(
                     d.confidence
                 )
-                .toLowerCase() ===
-                "h"
+                .toLowerCase();
+
+
+            if (
+                confianza === "h" ||
+                confianza === "high"
             ) {
 
                 confianzaAlta++;
+
             }
+
         }
     );
+
 
     lat /=
         grupo.length;
 
+
     lon /=
         grupo.length;
 
-    let radioMax = 0;
+
+    let radioMax =
+        0;
+
 
     grupo.forEach(
         d => {
 
             radioMax =
                 Math.max(
-
                     radioMax,
 
                     distanciaMetros(
-
                         lat,
                         lon,
-
                         d.latitude,
                         d.longitude
-
                     )
-
                 );
+
         }
     );
 
-    const frpPromedio =
-        grupo.length
-            ? frpTotal /
-              grupo.length
-            : 0;
 
     return {
 
@@ -2292,41 +2119,32 @@ function calcularEstadisticasCluster(
 
         frpTotal,
 
-        frpPromedio,
-
         frpMax,
 
         t4Max:
-
-            t4Max ===
-            -Infinity
-
+            t4Max === -Infinity
                 ? null
                 : t4Max,
 
         t5Min:
-
-            t5Min ===
-            Infinity
-
+            t5Min === Infinity
                 ? null
                 : t5Min,
 
         deltaTMax:
-
-            deltaTMax ===
-            -Infinity
-
+            deltaTMax === -Infinity
                 ? null
                 : deltaTMax,
 
         confianzaAlta
 
     };
+
 }
 
+
 /* =====================================================
-   CORROBORAR MODIS
+   CORROBORACIÓN MODIS
 ===================================================== */
 
 function corroborarMODIS(
@@ -2334,16 +2152,11 @@ function corroborarMODIS(
     modis
 ) {
 
-    if (
-        !Array.isArray(
-            modis
-        )
-    ) {
-
-        return [];
-    }
-
     return modis
+
+        .filter(
+            coordenadaValida
+        )
 
         .map(
             d => ({
@@ -2351,15 +2164,11 @@ function corroborarMODIS(
                 ...d,
 
                 distancia:
-
                     distanciaMetros(
-
                         cluster.latitude,
                         cluster.longitude,
-
                         d.latitude,
                         d.longitude
-
                     )
 
             })
@@ -2368,19 +2177,17 @@ function corroborarMODIS(
         .filter(
             d =>
                 d.distancia <=
-                CONFIG.CORROBORACION
-                    .RADIO_M
+                CONFIG.CORROBORACION.RADIO_M
         )
 
         .sort(
-            (
-                a,
-                b
-            ) =>
+            (a,b) =>
                 a.distancia -
                 b.distancia
         );
+
 }
+
 
 /* =====================================================
    GOES
@@ -2388,17 +2195,21 @@ function corroborarMODIS(
 
 async function obtenerGOES() {
 
-    /*
-       Pendiente de backend/proxy específico.
-       No se inventa endpoint.
-    */
-
     return [];
+
 }
+
 
 /* =====================================================
    ARC GIS
 ===================================================== */
+
+const cacheDistrito =
+    new Map();
+
+const cacheCentro =
+    new Map();
+
 
 async function consultarArcGIS(
     url,
@@ -2410,19 +2221,16 @@ async function consultarArcGIS(
             params
         );
 
+
     const respuesta =
-        await fetchConTimeout(
-
+        await fetch(
             `${url}/query?${query.toString()}`,
-
             {
                 cache:
                     "force-cache"
-            },
-
-            20000
-
+            }
         );
+
 
     if (
         !respuesta.ok
@@ -2431,23 +2239,14 @@ async function consultarArcGIS(
         throw new Error(
             `ArcGIS HTTP ${respuesta.status}`
         );
+
     }
 
-    const data =
-        await respuesta.json();
 
-    if (
-        data.error
-    ) {
+    return respuesta.json();
 
-        throw new Error(
-            data.error.message ||
-            "Error ArcGIS"
-        );
-    }
-
-    return data;
 }
+
 
 /* =====================================================
    DISTRITO
@@ -2461,16 +2260,12 @@ async function obtenerDistrito(
     const clave =
         `${lat.toFixed(4)},${lon.toFixed(4)}`;
 
-    if (
-        cacheDistrito.has(
-            clave
-        )
-    ) {
 
-        return cacheDistrito.get(
-            clave
-        );
-    }
+    if (
+        cacheDistrito.has(clave)
+    )
+        return cacheDistrito.get(clave);
+
 
     try {
 
@@ -2494,7 +2289,7 @@ async function obtenerDistrito(
                         "esriSpatialRelIntersects",
 
                     outFields:
-                        "UBIGEO,NOMBDEP,NOMBPROV,NOMBDIST,CAPITAL",
+                        "*",
 
                     returnGeometry:
                         "false",
@@ -2506,46 +2301,57 @@ async function obtenerDistrito(
 
             );
 
+
         const a =
-            data.features?.[0]
-            ?.attributes;
+            data
+            .features?.[0]
+            ?.attributes ||
+            {};
+
 
         const resultado = {
 
             distrito:
-                a?.NOMBDIST ||
+                a.NOMBDIST ||
+                a.NOM_DIST ||
                 "N/D",
 
             provincia:
-                a?.NOMBPROV ||
+                a.NOMBPROV ||
+                a.NOM_PROV ||
                 "N/D",
 
             departamento:
-                a?.NOMBDEP ||
+                a.NOMBDEP ||
+                a.NOM_DEP ||
                 "N/D",
 
             ubigeo:
-                a?.UBIGEO ||
+                a.UBIGEO ||
                 "N/D"
 
         };
+
 
         cacheDistrito.set(
             clave,
             resultado
         );
 
+
         return resultado;
 
     }
-    catch (error) {
+
+    catch(error) {
 
         console.warn(
             "Distrito:",
             error
         );
 
-        const resultado = {
+
+        return {
 
             distrito:
                 "N/D",
@@ -2561,14 +2367,10 @@ async function obtenerDistrito(
 
         };
 
-        cacheDistrito.set(
-            clave,
-            resultado
-        );
-
-        return resultado;
     }
+
 }
+
 
 /* =====================================================
    CENTRO POBLADO
@@ -2582,16 +2384,12 @@ async function obtenerCentroPoblado(
     const clave =
         `${lat.toFixed(4)},${lon.toFixed(4)}`;
 
-    if (
-        cacheCentro.has(
-            clave
-        )
-    ) {
 
-        return cacheCentro.get(
-            clave
-        );
-    }
+    if (
+        cacheCentro.has(clave)
+    )
+        return cacheCentro.get(clave);
+
 
     try {
 
@@ -2616,13 +2414,13 @@ async function obtenerCentroPoblado(
 
                     distance:
                         CONFIG.CONTEXTO
-                            .RADIO_CENTRO_POBLADO_M,
+                        .RADIO_CENTRO_POBLADO_M,
 
                     units:
                         "esriSRUnit_Meter",
 
                     outFields:
-                        "NOM_POBLAD,CAT_POBLAD,DIST,PROV,DEP,CÓDIGO",
+                        "*",
 
                     returnGeometry:
                         "true",
@@ -2637,6 +2435,7 @@ async function obtenerCentroPoblado(
 
             );
 
+
         const features =
             Array.isArray(
                 data.features
@@ -2644,11 +2443,14 @@ async function obtenerCentroPoblado(
                 ? data.features
                 : [];
 
+
         let mejor =
             null;
 
+
         let distanciaMin =
             Infinity;
+
 
         features.forEach(
             f => {
@@ -2656,39 +2458,37 @@ async function obtenerCentroPoblado(
                 const p =
                     f.geometry;
 
-                if (!p) {
+
+                if (!p)
                     return;
-                }
+
 
                 const y =
                     Number(p.y);
 
+
                 const x =
                     Number(p.x);
 
+
                 if (
-                    !coordenadaValida(
-                        y,
-                        x
-                    )
-                ) {
+                    !Number.isFinite(y) ||
+                    !Number.isFinite(x)
+                )
                     return;
-                }
+
 
                 const d =
                     distanciaMetros(
-
                         lat,
                         lon,
-
                         y,
                         x
-
                     );
 
+
                 if (
-                    d <
-                    distanciaMin
+                    d < distanciaMin
                 ) {
 
                     distanciaMin =
@@ -2696,9 +2496,12 @@ async function obtenerCentroPoblado(
 
                     mejor =
                         f;
+
                 }
+
             }
         );
+
 
         if (!mejor) {
 
@@ -2724,38 +2527,48 @@ async function obtenerCentroPoblado(
 
             };
 
+
             cacheCentro.set(
                 clave,
                 vacio
             );
 
+
             return vacio;
+
         }
+
 
         const a =
             mejor.attributes ||
             {};
 
+
         const resultado = {
 
             nombre:
                 a.NOM_POBLAD ||
+                a.NOMBRE ||
                 "N/D",
 
             categoria:
                 a.CAT_POBLAD ||
+                a.CATEGORIA ||
                 "N/D",
 
             distrito:
                 a.DIST ||
+                a.DISTRITO ||
                 "N/D",
 
             provincia:
                 a.PROV ||
+                a.PROVINCIA ||
                 "N/D",
 
             departamento:
                 a.DEP ||
+                a.DEPARTAMENTO ||
                 "N/D",
 
             distanciaM:
@@ -2763,22 +2576,26 @@ async function obtenerCentroPoblado(
 
         };
 
+
         cacheCentro.set(
             clave,
             resultado
         );
 
+
         return resultado;
 
     }
-    catch (error) {
+
+    catch(error) {
 
         console.warn(
             "Centro poblado:",
             error
         );
 
-        const resultado = {
+
+        return {
 
             nombre:
                 "N/D",
@@ -2800,14 +2617,10 @@ async function obtenerCentroPoblado(
 
         };
 
-        cacheCentro.set(
-            clave,
-            resultado
-        );
-
-        return resultado;
     }
+
 }
+
 
 /* =====================================================
    COBERTURA 10 m
@@ -2834,63 +2647,44 @@ async function obtenerCobertura10m(
                 null,
 
             fuente:
-                "Copernicus LCM-10 pendiente de proxy"
+                "LCM-10 no conectado"
 
         };
+
     }
 
-    const clave =
-        `${lat.toFixed(4)},${lon.toFixed(4)}`;
-
-    if (
-        cacheLCM10.has(
-            clave
-        )
-    ) {
-
-        return cacheLCM10.get(
-            clave
-        );
-    }
 
     try {
 
         const url =
-
             `${CONFIG.LCM10_PROXY}` +
-
             `?lat=${encodeURIComponent(lat)}` +
-
             `&lon=${encodeURIComponent(lon)}`;
 
+
         const respuesta =
-            await fetchConTimeout(
-
+            await fetch(
                 url,
-
                 {
                     cache:
                         "force-cache"
-                },
-
-                20000
-
+                }
             );
+
 
         if (
             !respuesta.ok
-        ) {
-
+        )
             throw new Error(
-                "LCM10 HTTP " +
-                respuesta.status
+                `LCM10 HTTP ${respuesta.status}`
             );
-        }
+
 
         const data =
             await respuesta.json();
 
-        const resultado = {
+
+        return {
 
             clase:
                 data.clase ||
@@ -2901,10 +2695,8 @@ async function obtenerCobertura10m(
                 null,
 
             vegetacion:
-
                 typeof data.vegetacion ===
                 "boolean"
-
                     ? data.vegetacion
                     : null,
 
@@ -2914,20 +2706,15 @@ async function obtenerCobertura10m(
 
         };
 
-        cacheLCM10.set(
-            clave,
-            resultado
-        );
-
-        return resultado;
-
     }
-    catch (error) {
+
+    catch(error) {
 
         console.warn(
             "LCM10:",
             error
         );
+
 
         return {
 
@@ -2944,8 +2731,11 @@ async function obtenerCobertura10m(
                 "Error"
 
         };
+
     }
+
 }
+
 
 /* =====================================================
    HRSL
@@ -2972,95 +2762,64 @@ async function obtenerPoblacionHRSL(
                 null,
 
             fuente:
-                "Meta HRSL no conectado"
+                "HRSL no conectado"
 
         };
+
     }
 
-    const clave =
-        `${lat.toFixed(4)},${lon.toFixed(4)}`;
-
-    if (
-        cacheHRSL.has(
-            clave
-        )
-    ) {
-
-        return cacheHRSL.get(
-            clave
-        );
-    }
 
     try {
 
         const url =
-
             `${CONFIG.HRSL_PROXY}` +
-
             `?lat=${encodeURIComponent(lat)}` +
-
             `&lon=${encodeURIComponent(lon)}`;
 
+
         const respuesta =
-            await fetchConTimeout(
-
+            await fetch(
                 url,
-
                 {
                     cache:
                         "force-cache"
-                },
-
-                20000
-
+                }
             );
+
 
         if (
             !respuesta.ok
-        ) {
-
+        )
             throw new Error(
-                "HRSL HTTP " +
-                respuesta.status
+                `HRSL HTTP ${respuesta.status}`
             );
-        }
+
 
         const data =
             await respuesta.json();
 
-        const resultado = {
+
+        return {
 
             population1km:
                 Number.isFinite(
-                    Number(
-                        data.population1km
-                    )
+                    Number(data.population1km)
                 )
-                    ? Number(
-                        data.population1km
-                    )
+                    ? Number(data.population1km)
                     : null,
 
             population3km:
                 Number.isFinite(
-                    Number(
-                        data.population3km
-                    )
+                    Number(data.population3km)
                 )
-                    ? Number(
-                        data.population3km
-                    )
+                    ? Number(data.population3km)
                     : null,
 
             settlementPixels:
                 Number.isFinite(
-                    Number(
-                        data.settlementPixels
-                    )
+                    Number(data.settlementPixels)
                 )
-                    ? Number(
-                        data.settlementPixels
-                    )
+                    ? Number(data.settlementPixels)
                     : null,
 
             fuente:
@@ -3069,20 +2828,15 @@ async function obtenerPoblacionHRSL(
 
         };
 
-        cacheHRSL.set(
-            clave,
-            resultado
-        );
-
-        return resultado;
-
     }
-    catch (error) {
+
+    catch(error) {
 
         console.warn(
             "HRSL:",
             error
         );
+
 
         return {
 
@@ -3099,65 +2853,53 @@ async function obtenerPoblacionHRSL(
                 "Error"
 
         };
+
     }
+
 }
+
 
 /* =====================================================
    FIRE SCORE
 ===================================================== */
 
-function puntosDetecciones(
-    size
-) {
-
-    if (size >= 10)
-        return 5;
-
-    if (size >= 7)
-        return 4;
-
-    if (size >= 5)
-        return 3;
-
-    if (size >= 3)
-        return 2;
-
-    return 0;
-}
-
 function calcularFireScore(
     c
 ) {
 
-    let score =
-        0;
+    let score = 0;
 
     const razones = [];
 
-    /* DETECCIONES */
-
-    const puntos =
-        puntosDetecciones(
-            c.size
-        );
-
-    score +=
-        puntos;
 
     if (
         c.size >= 3
     ) {
 
+        score += 3;
+
         razones.push(
-            `${c.size} detecciones VIIRS`
+            "≥3 VIIRS"
         );
+
     }
 
-    /* FRP */
 
     if (
-        c.frpMax >=
-        CONFIG.FILTRO.FRP_MIN
+        c.size >= 5
+    ) {
+
+        score += 1;
+
+        razones.push(
+            "≥5 VIIRS"
+        );
+
+    }
+
+
+    if (
+        c.frpMax >= 10
     ) {
 
         score += 2;
@@ -3165,7 +2907,9 @@ function calcularFireScore(
         razones.push(
             "FRP ≥10 MW"
         );
+
     }
+
 
     if (
         c.frpMax >= 30
@@ -3176,16 +2920,13 @@ function calcularFireScore(
         razones.push(
             "FRP ≥30 MW"
         );
+
     }
 
-    /* T4 */
 
     if (
-        Number.isFinite(
-            c.t4Max
-        ) &&
-        c.t4Max >=
-        CONFIG.FILTRO.T4_MIN
+        Number.isFinite(c.t4Max) &&
+        c.t4Max >= 320
     ) {
 
         score += 2;
@@ -3193,16 +2934,13 @@ function calcularFireScore(
         razones.push(
             "T4 ≥320 K"
         );
+
     }
 
-    /* DELTA T */
 
     if (
-        Number.isFinite(
-            c.deltaTMax
-        ) &&
-        c.deltaTMax >=
-        CONFIG.FILTRO.DELTAT_MIN
+        Number.isFinite(c.deltaTMax) &&
+        c.deltaTMax >= 20
     ) {
 
         score += 3;
@@ -3210,12 +2948,12 @@ function calcularFireScore(
         razones.push(
             "ΔT ≥20 K"
         );
+
     }
 
+
     if (
-        Number.isFinite(
-            c.deltaTMax
-        ) &&
+        Number.isFinite(c.deltaTMax) &&
         c.deltaTMax >= 30
     ) {
 
@@ -3224,9 +2962,9 @@ function calcularFireScore(
         razones.push(
             "ΔT ≥30 K"
         );
+
     }
 
-    /* CONFIANZA */
 
     if (
         c.confianzaAlta > 0
@@ -3237,9 +2975,9 @@ function calcularFireScore(
         razones.push(
             "Confianza alta"
         );
+
     }
 
-    /* MODIS */
 
     if (
         c.modisCercanos.length > 0
@@ -3250,27 +2988,12 @@ function calcularFireScore(
         razones.push(
             "MODIS ≤3 km"
         );
+
     }
 
-    /* GOES */
 
     if (
-        c.goesCercanos.length > 0
-    ) {
-
-        score += 2;
-
-        razones.push(
-            "GOES ≤3 km"
-        );
-    }
-
-    /* VEGETACIÓN */
-
-    if (
-        c.cobertura10m
-            ?.vegetacion ===
-        true
+        c.cobertura10m?.vegetacion === true
     ) {
 
         score += 2;
@@ -3278,14 +3001,12 @@ function calcularFireScore(
         razones.push(
             "Vegetación 10 m"
         );
+
     }
 
-    /* NO VEGETACIÓN */
 
     if (
-        c.cobertura10m
-            ?.vegetacion ===
-        false
+        c.cobertura10m?.vegetacion === false
     ) {
 
         score -= 2;
@@ -3293,7 +3014,9 @@ function calcularFireScore(
         razones.push(
             "No vegetación"
         );
+
     }
+
 
     score =
         Math.max(
@@ -3301,7 +3024,10 @@ function calcularFireScore(
             score
         );
 
-    let nivel;
+
+    let nivel =
+        "VIGILANCIA";
+
 
     if (
         score >= 12
@@ -3311,6 +3037,7 @@ function calcularFireScore(
             "ALTO";
 
     }
+
     else if (
         score >= 7
     ) {
@@ -3319,11 +3046,7 @@ function calcularFireScore(
             "MEDIO";
 
     }
-    else {
 
-        nivel =
-            "VIGILANCIA";
-    }
 
     return {
 
@@ -3334,7 +3057,9 @@ function calcularFireScore(
         razones
 
     };
+
 }
+
 
 /* =====================================================
    EXPOSURE SCORE
@@ -3344,18 +3069,20 @@ function calcularExposureScore(
     c
 ) {
 
-    let score =
-        0;
+    let score = 0;
 
     const razones = [];
+
 
     const poblacion =
         c.poblacion ||
         {};
 
+
     const distancia =
         c.centroPoblado
-            ?.distanciaM;
+        ?.distanciaM;
+
 
     if (
         Number.isFinite(
@@ -3364,8 +3091,7 @@ function calcularExposureScore(
     ) {
 
         if (
-            poblacion.population1km >=
-            1000
+            poblacion.population1km >= 1000
         ) {
 
             score += 5;
@@ -3375,9 +3101,9 @@ function calcularExposureScore(
             );
 
         }
+
         else if (
-            poblacion.population1km >=
-            100
+            poblacion.population1km >= 100
         ) {
 
             score += 3;
@@ -3387,6 +3113,7 @@ function calcularExposureScore(
             );
 
         }
+
         else if (
             poblacion.population1km > 0
         ) {
@@ -3396,8 +3123,11 @@ function calcularExposureScore(
             razones.push(
                 "Población cercana"
             );
+
         }
+
     }
+
 
     if (
         Number.isFinite(
@@ -3416,6 +3146,7 @@ function calcularExposureScore(
             );
 
         }
+
         else if (
             distancia <= 1000
         ) {
@@ -3427,6 +3158,7 @@ function calcularExposureScore(
             );
 
         }
+
         else if (
             distancia <= 3000
         ) {
@@ -3436,10 +3168,15 @@ function calcularExposureScore(
             razones.push(
                 "Centro poblado ≤3 km"
             );
+
         }
+
     }
 
-    let nivel;
+
+    let nivel =
+        "BAJA";
+
 
     if (
         score >= 8
@@ -3449,6 +3186,7 @@ function calcularExposureScore(
             "ALTA";
 
     }
+
     else if (
         score >= 4
     ) {
@@ -3457,11 +3195,7 @@ function calcularExposureScore(
             "MEDIA";
 
     }
-    else {
 
-        nivel =
-            "BAJA";
-    }
 
     return {
 
@@ -3472,16 +3206,16 @@ function calcularExposureScore(
         razones
 
     };
+
 }
+
 
 /* =====================================================
    ANALIZAR CLUSTER
 ===================================================== */
 
 async function analizarCluster(
-    grupo,
-    indice,
-    total
+    grupo
 ) {
 
     const stats =
@@ -3489,85 +3223,75 @@ async function analizarCluster(
             grupo
         );
 
+
     const modis =
         corroborarMODIS(
             stats,
             datosMODIS
         );
 
+
+    const goes =
+        await obtenerGOES();
+
+
     const goesCercanos =
-        datosGOES
-            .map(
-                d => ({
+        goes
+        .filter(
+            coordenadaValida
+        )
+        .map(
+            d => ({
 
-                    ...d,
+                ...d,
 
-                    distancia:
+                distancia:
+                    distanciaMetros(
+                        stats.latitude,
+                        stats.longitude,
+                        d.latitude,
+                        d.longitude
+                    )
 
-                        distanciaMetros(
+            })
+        )
+        .filter(
+            d =>
+                d.distancia <=
+                CONFIG.CORROBORACION.RADIO_M
+        );
 
-                            stats.latitude,
-                            stats.longitude,
-
-                            d.latitude,
-                            d.longitude
-
-                        )
-
-                })
-            )
-            .filter(
-                d =>
-                    d.distancia <=
-                    CONFIG.CORROBORACION
-                        .RADIO_M
-            )
-            .sort(
-                (
-                    a,
-                    b
-                ) =>
-                    a.distancia -
-                    b.distancia
-            );
-
-    actualizarCarga(
-        `Analizando cluster ${indice + 1}/${total}...`
-    );
-
-    /*
-       Las cuatro consultas son independientes,
-       por lo que se ejecutan simultáneamente.
-    */
 
     const [
         distrito,
         centroPoblado,
         cobertura10m,
         poblacion
-    ] = await Promise.all([
+    ] =
+        await Promise.all([
 
-        obtenerDistrito(
-            stats.latitude,
-            stats.longitude
-        ),
+            obtenerDistrito(
+                stats.latitude,
+                stats.longitude
+            ),
 
-        obtenerCentroPoblado(
-            stats.latitude,
-            stats.longitude
-        ),
+            obtenerCentroPoblado(
+                stats.latitude,
+                stats.longitude
+            ),
 
-        obtenerCobertura10m(
-            stats.latitude,
-            stats.longitude
-        ),
+            obtenerCobertura10m(
+                stats.latitude,
+                stats.longitude
+            ),
 
-        obtenerPoblacionHRSL(
-            stats.latitude,
-            stats.longitude
-        )
+            obtenerPoblacionHRSL(
+                stats.latitude,
+                stats.longitude
+            )
 
-    ]);
+        ]);
+
 
     const cluster = {
 
@@ -3612,10 +3336,12 @@ async function analizarCluster(
 
     };
 
+
     const fire =
         calcularFireScore(
             cluster
         );
+
 
     cluster.fireScore =
         fire.score;
@@ -3626,10 +3352,12 @@ async function analizarCluster(
     cluster.razonesFire =
         fire.razones;
 
+
     const exposure =
         calcularExposureScore(
             cluster
         );
+
 
     cluster.exposureScore =
         exposure.score;
@@ -3640,7 +3368,6 @@ async function analizarCluster(
     cluster.razonesExposure =
         exposure.razones;
 
-    /* PRIORIDAD */
 
     if (
 
@@ -3654,6 +3381,7 @@ async function analizarCluster(
             "CRÍTICA";
 
     }
+
     else if (
 
         cluster.fireScore >= 12 ||
@@ -3669,6 +3397,7 @@ async function analizarCluster(
             "ALTA";
 
     }
+
     else if (
         cluster.fireScore >= 7
     ) {
@@ -3677,97 +3406,19 @@ async function analizarCluster(
             "MEDIA";
 
     }
+
     else {
 
         cluster.prioridad =
             "BAJA";
+
     }
+
 
     return cluster;
+
 }
 
-/* =====================================================
-   PROCESAMIENTO CONCURRENTE LIMITADO
-===================================================== */
-
-async function procesarClusters(
-    grupos
-) {
-
-    const resultados =
-        new Array(
-            grupos.length
-        );
-
-    let siguiente =
-        0;
-
-    async function trabajador() {
-
-        while (true) {
-
-            const indice =
-                siguiente++;
-
-            if (
-                indice >=
-                grupos.length
-            ) {
-                return;
-            }
-
-            try {
-
-                resultados[indice] =
-                    await analizarCluster(
-
-                        grupos[indice],
-
-                        indice,
-
-                        grupos.length
-
-                    );
-
-            }
-            catch (error) {
-
-                console.warn(
-                    `Cluster ${indice + 1}:`,
-                    error
-                );
-
-                resultados[indice] =
-                    null;
-            }
-        }
-    }
-
-    const cantidadTrabajadores =
-        Math.min(
-
-            CONFIG
-                .MAX_CLUSTERS_CONCURRENTES,
-
-            grupos.length
-
-        );
-
-    await Promise.all(
-
-        Array.from(
-            {
-                length:
-                    cantidadTrabajadores
-            },
-            trabajador
-        )
-
-    );
-
-    return resultados
-        .filter(Boolean);
-}
 
 /* =====================================================
    COLORES
@@ -3778,32 +3429,32 @@ function colorNivel(
 ) {
 
     if (
-        nivel ===
-        "ALTO"
-    ) {
+        nivel === "ALTO"
+    )
         return "#d50000";
-    }
+
 
     if (
-        nivel ===
-        "MEDIO"
-    ) {
+        nivel === "MEDIO"
+    )
         return "#ef6c00";
-    }
+
 
     return "#1565c0";
+
 }
+
 
 function colorPrioridad(
     prioridad
 ) {
 
-    switch (
+    switch(
         prioridad
     ) {
 
         case "CRÍTICA":
-            return "#7f0000";
+            return "#8e0000";
 
         case "ALTA":
             return "#d50000";
@@ -3813,8 +3464,46 @@ function colorPrioridad(
 
         default:
             return "#1565c0";
+
     }
+
 }
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function esc(
+    valor
+) {
+
+    return String(
+        valor ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
 
 /* =====================================================
    POPUP
@@ -3827,114 +3516,75 @@ function popupCluster(
     const mejor =
         [...c.cluster]
         .sort(
-            (
-                a,
-                b
-            ) =>
-                (
-                    b.frp || 0
-                ) -
-                (
-                    a.frp || 0
-                )
+            (a,b) =>
+                (Number(b.frp) || 0) -
+                (Number(a.frp) || 0)
         )[0];
+
 
     const fecha =
         crearFechaDeteccion(
-
             mejor.acq_date,
-
             mejor.acq_time
-
         );
+
+
+    const fechaP =
+        fecha
+            ? fechaPeru(fecha)
+            : "N/D";
+
 
     const horaP =
         fecha
             ? horaPeru(fecha)
             : "N/D";
 
+
     const horaU =
         fecha
             ? horaUTC(fecha)
             : "N/D";
 
-    const fechaP =
-        fecha
-
-            ? new Intl.DateTimeFormat(
-                "es-PE",
-                {
-
-                    timeZone:
-                        "America/Lima",
-
-                    year:
-                        "numeric",
-
-                    month:
-                        "2-digit",
-
-                    day:
-                        "2-digit"
-
-                }
-            ).format(
-                fecha
-            )
-
-            : "N/D";
 
     const modisTexto =
 
-        c.modisCercanos.length
+        c.modisCercanos.length > 0
 
-            ? `${c.modisCercanos.length} detección(es), ` +
-              `${c.modisCercanos[0].distancia.toFixed(0)} m`
+            ?
 
-            : "No";
+            `${c.modisCercanos.length} detección(es), ` +
+            `${c.modisCercanos[0].distancia.toFixed(0)} m`
+
+            :
+
+            "No";
+
 
     const centro =
-        c.centroPoblado;
+        c.centroPoblado ||
+        {};
+
 
     const vegetacion =
         c.cobertura10m
-            ?.vegetacion;
+        ?.vegetacion;
+
 
     const vegetacionTexto =
 
         vegetacion === true
-
             ? "SÍ"
 
-            : vegetacion === false
+            :
 
-                ? "NO"
+        vegetacion === false
+            ? "NO"
 
-                : "N/D";
+            :
 
-    const razonesFire =
-        c.razonesFire.length
+        "N/D";
 
-            ? c.razonesFire
-                .map(
-                    r =>
-                        `✓ ${escapeHTML(r)}`
-                )
-                .join("<br>")
-
-            : "Sin criterios";
-
-    const razonesExposure =
-        c.razonesExposure.length
-
-            ? c.razonesExposure
-                .map(
-                    r =>
-                        `✓ ${escapeHTML(r)}`
-                )
-                .join("<br>")
-
-            : "Sin factores relevantes";
 
     return `
 
@@ -3944,7 +3594,7 @@ function popupCluster(
 color:${colorNivel(c.nivel)}
 ">
 
-🔥 INCENDIO ${escapeHTML(c.nivel)}
+🔥 INCENDIO ${esc(c.nivel)}
 
 </h3>
 
@@ -3956,7 +3606,7 @@ style="
 background:${colorPrioridad(c.prioridad)}
 "
 >
-PRIORIDAD ${escapeHTML(c.prioridad)}
+PRIORIDAD ${esc(c.prioridad)}
 </span>
 
 </div>
@@ -3984,32 +3634,32 @@ PRIORIDAD ${escapeHTML(c.prioridad)}
 <br><br>
 
 <b>Latitud:</b>
-${numero(c.latitude, 6)}
+${c.latitude.toFixed(6)}
 
 <br>
 
 <b>Longitud:</b>
-${numero(c.longitude, 6)}
+${c.longitude.toFixed(6)}
 
 <br>
 
 <b>Departamento:</b>
-${escapeHTML(c.distrito.departamento)}
+${esc(c.distrito.departamento)}
 
 <br>
 
 <b>Provincia:</b>
-${escapeHTML(c.distrito.provincia)}
+${esc(c.distrito.provincia)}
 
 <br>
 
 <b>Distrito:</b>
-${escapeHTML(c.distrito.distrito)}
+${esc(c.distrito.distrito)}
 
 <br>
 
 <b>UBIGEO:</b>
-${escapeHTML(c.distrito.ubigeo)}
+${esc(c.distrito.ubigeo)}
 
 <hr>
 
@@ -4018,35 +3668,30 @@ ${escapeHTML(c.distrito.ubigeo)}
 <br><br>
 
 <b>Nombre:</b>
-${escapeHTML(centro.nombre)}
+${esc(centro.nombre)}
 
 <br>
 
 <b>Categoría:</b>
-${escapeHTML(centro.categoria)}
+${esc(centro.categoria)}
 
 <br>
 
 <b>Distancia:</b>
 ${
-    Number.isFinite(
-        centro.distanciaM
-    )
-        ? numero(
-            centro.distanciaM,
-            0
-        ) + " m"
+    Number.isFinite(centro.distanciaM)
+        ? centro.distanciaM.toFixed(0) + " m"
         : "N/D"
 }
 
 <hr>
 
-<b>🌳 COBERTURA 10 m</b>
+<b>🌳 COBERTURA</b>
 
 <br><br>
 
 <b>Clase:</b>
-${escapeHTML(c.cobertura10m.clase)}
+${esc(c.cobertura10m?.clase)}
 
 <br>
 
@@ -4073,7 +3718,7 @@ ${vegetacionTexto}
 <br>
 
 <b>Fuente:</b>
-${escapeHTML(c.cobertura10m.fuente)}
+${esc(c.cobertura10m?.fuente)}
 
 <hr>
 
@@ -4085,11 +3730,15 @@ ${escapeHTML(c.cobertura10m.fuente)}
 
 ${
     Number.isFinite(
-        c.poblacion.population1km
+        c.poblacion?.population1km
     )
-        ? c.poblacion.population1km
-            .toLocaleString()
-        : "No conectado"
+
+        ?
+        c.poblacion.population1km
+        .toLocaleString()
+
+        :
+        "No conectado"
 }
 
 <br>
@@ -4098,17 +3747,21 @@ ${
 
 ${
     Number.isFinite(
-        c.poblacion.population3km
+        c.poblacion?.population3km
     )
-        ? c.poblacion.population3km
-            .toLocaleString()
-        : "No conectado"
+
+        ?
+        c.poblacion.population3km
+        .toLocaleString()
+
+        :
+        "No conectado"
 }
 
 <br>
 
 <b>Fuente:</b>
-${escapeHTML(c.poblacion.fuente)}
+${esc(c.poblacion?.fuente)}
 
 <hr>
 
@@ -4122,28 +3775,12 @@ ${fechaP}
 <br>
 
 <b>Hora Perú:</b>
-
-<span style="
-color:#006064;
-font-weight:bold;
-">
-
 ${horaP}
-
-</span>
 
 <br>
 
 <b>Hora UTC:</b>
-
-<span style="
-color:#1565c0;
-font-weight:bold;
-">
-
 ${horaU}
-
-</span>
 
 <hr>
 
@@ -4157,62 +3794,42 @@ ${c.size}
 <br>
 
 <b>Radio cluster:</b>
-${numero(c.radioMax, 0)} m
+${c.radioMax.toFixed(0)} m
 
 <br>
 
 <b>FRP máximo:</b>
-${numero(c.frpMax)} MW
-
-<br>
-
-<b>FRP promedio:</b>
-${numero(c.frpPromedio)} MW
+${c.frpMax.toFixed(2)} MW
 
 <br>
 
 <b>FRP acumulado:</b>
-${numero(c.frpTotal)} MW
+${c.frpTotal.toFixed(2)} MW
 
 <br>
 
 <b>T4 máximo:</b>
-
 ${
-    Number.isFinite(
-        c.t4Max
-    )
-        ? numero(
-            c.t4Max
-        ) + " K"
+    Number.isFinite(c.t4Max)
+        ? c.t4Max.toFixed(2) + " K"
         : "N/D"
 }
 
 <br>
 
 <b>T5 mínimo:</b>
-
 ${
-    Number.isFinite(
-        c.t5Min
-    )
-        ? numero(
-            c.t5Min
-        ) + " K"
+    Number.isFinite(c.t5Min)
+        ? c.t5Min.toFixed(2) + " K"
         : "N/D"
 }
 
 <br>
 
 <b>ΔT máximo:</b>
-
 ${
-    Number.isFinite(
-        c.deltaTMax
-    )
-        ? numero(
-            c.deltaTMax
-        ) + " K"
+    Number.isFinite(c.deltaTMax)
+        ? c.deltaTMax.toFixed(2) + " K"
         : "N/D"
 }
 
@@ -4223,12 +3840,11 @@ ${
 <br><br>
 
 <b>MODIS ≤3 km:</b>
-${escapeHTML(modisTexto)}
+${modisTexto}
 
-<br><br>
+<br>
 
 <b>GOES ≤3 km:</b>
-
 ${
     c.goesCercanos.length
         ? "SÍ"
@@ -4242,22 +3858,22 @@ ${
 <br><br>
 
 <b>Satélite:</b>
-${escapeHTML(mejor.satellite || "N/D")}
+${esc(mejor.satellite)}
 
 <br>
 
 <b>Confianza:</b>
-${escapeHTML(mejor.confidence || "N/D")}
+${esc(mejor.confidence)}
 
 <br>
 
 <b>Versión:</b>
-${escapeHTML(mejor.version || "N/D")}
+${esc(mejor.version)}
 
 <br>
 
 <b>FRP:</b>
-${escapeHTML(mejor.frp || "N/D")} MW
+${Number(mejor.frp || 0).toFixed(2)} MW
 
 <hr>
 
@@ -4265,7 +3881,18 @@ ${escapeHTML(mejor.frp || "N/D")} MW
 
 <br><br>
 
-${razonesFire}
+${
+    c.razonesFire.length
+        ?
+        c.razonesFire
+            .map(
+                r =>
+                    `✓ ${esc(r)}`
+            )
+            .join("<br>")
+        :
+        "Sin criterios adicionales"
+}
 
 <hr>
 
@@ -4273,12 +3900,25 @@ ${razonesFire}
 
 <br><br>
 
-${razonesExposure}
+${
+    c.razonesExposure.length
+        ?
+        c.razonesExposure
+            .map(
+                r =>
+                    `✓ ${esc(r)}`
+            )
+            .join("<br>")
+        :
+        "Sin factores relevantes"
+}
 
 </div>
 
 `;
+
 }
+
 
 /* =====================================================
    DIBUJAR VIIRS
@@ -4290,32 +3930,22 @@ function dibujarVIIRS(
 
     capaVIIRS.clearLayers();
 
+
     datos.forEach(
         d => {
 
             if (
-                !coordenadaValida(
-                    d.latitude,
-                    d.longitude
-                )
-            ) {
+                !coordenadaValida(d)
+            )
                 return;
-            }
 
-            const fecha =
-                crearFechaDeteccion(
-                    d.acq_date,
-                    d.acq_time
-                );
 
             const marker =
                 L.circleMarker(
-
                     [
                         d.latitude,
                         d.longitude
                     ],
-
                     {
 
                         radius:
@@ -4334,8 +3964,15 @@ function dibujarVIIRS(
                             1
 
                     }
-
                 );
+
+
+            const fecha =
+                crearFechaDeteccion(
+                    d.acq_date,
+                    d.acq_time
+                );
+
 
             marker.bindTooltip(
 
@@ -4345,31 +3982,20 @@ function dibujarVIIRS(
 
 <br>
 
-${escapeHTML(
-    d.satellite || ""
-)}
+${esc(d.satellite)}
 
 <br>
-
-Lat:
-${numero(d.latitude, 6)}
-
-<br>
-
-Lon:
-${numero(d.longitude, 6)}
-
-<br><br>
 
 FRP:
-${numero(d.frp)} MW
+${Number(d.frp || 0).toFixed(2)}
+MW
 
 <br>
 
 T4:
 ${
     Number.isFinite(d.t4)
-        ? numero(d.t4, 1)
+        ? d.t4.toFixed(1)
         : "N/D"
 }
 K
@@ -4379,7 +4005,7 @@ K
 T5:
 ${
     Number.isFinite(d.t5)
-        ? numero(d.t5, 1)
+        ? d.t5.toFixed(1)
         : "N/D"
 }
 K
@@ -4389,7 +4015,7 @@ K
 ΔT:
 ${
     Number.isFinite(d.deltaT)
-        ? numero(d.deltaT, 1)
+        ? d.deltaT.toFixed(1)
         : "N/D"
 }
 K
@@ -4412,12 +4038,16 @@ ${
 
             );
 
+
             marker.addTo(
                 capaVIIRS
             );
+
         }
     );
+
 }
+
 
 /* =====================================================
    DIBUJAR MODIS
@@ -4429,17 +4059,15 @@ function dibujarMODIS(
 
     capaMODIS.clearLayers();
 
+
     datos.forEach(
         d => {
 
             if (
-                !coordenadaValida(
-                    d.latitude,
-                    d.longitude
-                )
-            ) {
+                !coordenadaValida(d)
+            )
                 return;
-            }
+
 
             L.circleMarker(
 
@@ -4477,31 +4105,18 @@ function dibujarMODIS(
 
 <br>
 
-${escapeHTML(
-    d.satellite || ""
-)}
+${esc(d.satellite)}
 
 <br>
 
 FRP:
-${numero(d.frp)} MW
+${Number(d.frp || 0).toFixed(2)}
+MW
 
 <br>
 
 Confianza:
-${escapeHTML(
-    d.confidence || "N/D"
-)}
-
-<br>
-
-T4:
-${
-    Number.isFinite(d.t4)
-        ? numero(d.t4, 1)
-        : "N/D"
-}
-K
+${esc(d.confidence)}
 
 `
 
@@ -4510,9 +4125,12 @@ K
             .addTo(
                 capaMODIS
             );
+
         }
     );
+
 }
+
 
 /* =====================================================
    DIBUJAR CLUSTERS
@@ -4524,17 +4142,16 @@ function dibujarClusters(
 
     capaClusters.clearLayers();
 
+
     clusters.forEach(
         c => {
 
             const marker =
                 L.circleMarker(
-
                     [
                         c.latitude,
                         c.longitude
                     ],
-
                     {
 
                         radius:
@@ -4557,81 +4174,74 @@ function dibujarClusters(
                             3
 
                     }
-
                 );
 
+
             marker.bindPopup(
-
-                popupCluster(
-                    c
-                ),
-
+                popupCluster(c),
                 {
-
                     maxWidth:
                         500
-
                 }
-
             );
+
 
             marker.addTo(
                 capaClusters
             );
 
-            if (
-                Number.isFinite(
-                    c.radioMax
-                ) &&
-                c.radioMax > 0
-            ) {
 
-                L.circle(
+            L.circle(
 
-                    [
-                        c.latitude,
-                        c.longitude
-                    ],
+                [
+                    c.latitude,
+                    c.longitude
+                ],
 
-                    {
+                {
 
-                        radius:
+                    radius:
+                        Math.max(
                             c.radioMax,
+                            100
+                        ),
 
-                        color:
-                            colorPrioridad(
-                                c.prioridad
-                            ),
+                    color:
+                        colorPrioridad(
+                            c.prioridad
+                        ),
 
-                        fillColor:
-                            colorPrioridad(
-                                c.prioridad
-                            ),
+                    fillColor:
+                        colorPrioridad(
+                            c.prioridad
+                        ),
 
-                        fillOpacity:
-                            .05,
+                    fillOpacity:
+                        .05,
 
-                        weight:
-                            1,
+                    weight:
+                        1,
 
-                        dashArray:
-                            "5 5"
+                    dashArray:
+                        "5 5"
 
-                    }
+                }
 
-                )
+            )
 
-                .bindTooltip(
-                    `Cluster: ${c.size} detecciones`
-                )
+            .bindTooltip(
+                `Cluster: ${c.size} detecciones`
+            )
 
-                .addTo(
-                    capaClusters
-                );
-            }
+            .addTo(
+                capaClusters
+            );
+
         }
     );
+
 }
+
 
 /* =====================================================
    ESTADO
@@ -4647,7 +4257,9 @@ function actualizarEstado(
         )
         .textContent =
             texto;
+
 }
+
 
 /* =====================================================
    CARGA
@@ -4663,26 +4275,20 @@ function mostrarCarga(
             "cargando"
         );
 
+
     panel.style.display =
         mostrar
             ? "flex"
             : "none";
 
-    const boton =
-        document.getElementById(
-            "btnActualizar"
-        );
 
-    boton.disabled =
-        mostrar;
-
-    if (texto) {
-
+    if (texto)
         actualizarCarga(
             texto
         );
-    }
+
 }
+
 
 function actualizarCarga(
     texto
@@ -4694,7 +4300,9 @@ function actualizarCarga(
         )
         .textContent =
             texto;
+
 }
+
 
 /* =====================================================
    ESTADÍSTICAS
@@ -4707,12 +4315,14 @@ function actualizarEstadisticas(
     const ahora =
         new Date();
 
+
     document
         .getElementById(
             "fechaPeru"
         )
         .textContent =
             fechaPeru();
+
 
     document
         .getElementById(
@@ -4723,6 +4333,7 @@ function actualizarEstadisticas(
                 ahora
             );
 
+
     document
         .getElementById(
             "horaUTC"
@@ -4732,12 +4343,25 @@ function actualizarEstadisticas(
                 ahora
             );
 
+
     document
         .getElementById(
             "totalVIIRS"
         )
         .textContent =
             datosVIIRS.length;
+
+
+    document
+        .getElementById(
+            "totalVIIRSHoy"
+        )
+        .textContent =
+
+            datosVIIRS.filter(
+                esHoyPeru
+            ).length;
+
 
     document
         .getElementById(
@@ -4746,12 +4370,25 @@ function actualizarEstadisticas(
         .textContent =
             datosMODIS.length;
 
+
+    document
+        .getElementById(
+            "totalMODISHoy"
+        )
+        .textContent =
+
+            datosMODIS.filter(
+                esHoyPeru
+            ).length;
+
+
     document
         .getElementById(
             "totalClusters"
         )
         .textContent =
             clusters.length;
+
 
     document
         .getElementById(
@@ -4765,6 +4402,7 @@ function actualizarEstadisticas(
                     "ALTO"
             ).length;
 
+
     document
         .getElementById(
             "totalExposicion"
@@ -4776,23 +4414,9 @@ function actualizarEstadisticas(
                     c.exposureScore >=
                     4
             ).length;
+
 }
 
-function actualizarUltimaActualizacion() {
-
-    const ahora =
-        new Date();
-
-    ultimaActualizacion =
-        ahora;
-
-    document
-        .getElementById(
-            "ultimaActualizacion"
-        )
-        .textContent =
-            `${fechaPeru()} ${horaPeru(ahora)}`;
-}
 
 /* =====================================================
    ACTUALIZAR INCENDIOS
@@ -4802,22 +4426,24 @@ async function actualizarIncendios(
     manual = false
 ) {
 
-    if (
-        actualizacionEnCurso
-    ) {
+    if (actualizando) {
 
         if (manual) {
 
             actualizarEstado(
-                "⏳ Ya existe una actualización en curso"
+                "⏳ Ya existe una actualización en curso."
             );
+
         }
 
         return;
+
     }
+
 
     const key =
         obtenerMapKey();
+
 
     if (!key) {
 
@@ -4825,28 +4451,47 @@ async function actualizarIncendios(
             "⚠️ Falta MAP_KEY"
         );
 
+        actualizarDiagnostico(
+            "Ingrese una MAP_KEY de NASA FIRMS.",
+            "warn"
+        );
+
         return;
+
     }
 
-    actualizacionEnCurso =
+
+    actualizando =
         true;
+
+
+    const boton =
+        document.getElementById(
+            "btnActualizar"
+        );
+
+
+    boton.disabled =
+        true;
+
 
     mostrarCarga(
         true,
         "Consultando FIRMS..."
     );
 
+
     try {
+
+        const resultadosVIIRS = [];
+
+
+        let erroresVIIRS = 0;
+
 
         /* =============================================
            VIIRS
         ============================================= */
-
-        const resultadosVIIRS =
-            [];
-
-        const erroresFIRMS =
-            [];
 
         for (
             const source of
@@ -4857,6 +4502,7 @@ async function actualizarIncendios(
                 `Consultando ${source}...`
             );
 
+
             try {
 
                 const datos =
@@ -4864,49 +4510,75 @@ async function actualizarIncendios(
                         source
                     );
 
+
                 const normalizados =
-                    Array.isArray(
-                        datos
+                    datos
+
+                    .map(
+                        d =>
+                            normalizarVIIRS(
+                                d,
+                                source
+                            )
                     )
 
-                        ? datos
-                            .map(
-                                d =>
-                                    normalizarVIIRS(
-                                        d,
-                                        source
-                                    )
-                            )
-                            .filter(Boolean)
+                    .filter(
+                        dentroPeru
+                    );
 
-                        : [];
 
                 resultadosVIIRS.push(
                     ...normalizados
                 );
 
+
             }
-            catch (error) {
+
+            catch(error) {
+
+                erroresVIIRS++;
+
 
                 console.warn(
                     source,
                     error
                 );
 
-                erroresFIRMS.push(
-                    source
-                );
             }
+
         }
 
+
+        /* =============================================
+           ORDENAR VIIRS
+        ============================================= */
+
         datosVIIRS =
-            filtrarHoyPeru(
+            resultadosVIIRS
+            .sort(
+                (a,b) => {
 
-                deduplicarDetecciones(
-                    resultadosVIIRS
-                )
+                    const da =
+                        crearFechaDeteccion(
+                            a.acq_date,
+                            a.acq_time
+                        );
 
+                    const db =
+                        crearFechaDeteccion(
+                            b.acq_date,
+                            b.acq_time
+                        );
+
+
+                    return (
+                        (db?.getTime() || 0) -
+                        (da?.getTime() || 0)
+                    );
+
+                }
             );
+
 
         /* =============================================
            MODIS
@@ -4916,6 +4588,7 @@ async function actualizarIncendios(
             "Consultando MODIS..."
         );
 
+
         try {
 
             const datos =
@@ -4923,78 +4596,76 @@ async function actualizarIncendios(
                     CONFIG.FIRMS.MODIS
                 );
 
-            const modisNormalizado =
-                Array.isArray(
-                    datos
-                )
-
-                    ? datos
-                        .map(
-                            normalizarMODIS
-                        )
-                        .filter(Boolean)
-
-                    : [];
 
             datosMODIS =
-                filtrarHoyPeru(
-                    deduplicarDetecciones(
-                        modisNormalizado
-                    )
+                datos
+
+                .map(
+                    normalizarMODIS
+                )
+
+                .filter(
+                    dentroPeru
+                )
+
+                .sort(
+                    (a,b) => {
+
+                        const da =
+                            crearFechaDeteccion(
+                                a.acq_date,
+                                a.acq_time
+                            );
+
+                        const db =
+                            crearFechaDeteccion(
+                                b.acq_date,
+                                b.acq_time
+                            );
+
+
+                        return (
+                            (db?.getTime() || 0) -
+                            (da?.getTime() || 0)
+                        );
+
+                    }
                 );
 
         }
-        catch (error) {
+
+        catch(error) {
 
             console.warn(
                 "MODIS:",
                 error
             );
 
+
             datosMODIS =
                 [];
+
         }
+
 
         /* =============================================
-           GOES
-        ============================================= */
-
-        actualizarCarga(
-            "Consultando corroboración GOES..."
-        );
-
-        try {
-
-            datosGOES =
-                await obtenerGOES();
-
-        }
-        catch (error) {
-
-            console.warn(
-                "GOES:",
-                error
-            );
-
-            datosGOES =
-                [];
-        }
-
-        /* =============================================
-           MAPA
+           DIBUJAR DETECCIONES
         ============================================= */
 
         actualizarCarga(
             "Dibujando detecciones..."
         );
 
+
         dibujarVIIRS(
             datosVIIRS
         );
 
+
         dibujarMODIS(
             datosMODIS
         );
+
 
         /* =============================================
            CLUSTERS
@@ -5004,93 +4675,255 @@ async function actualizarIncendios(
             "Construyendo clusters..."
         );
 
+
         const grupos =
             crearClusters(
                 datosVIIRS
             );
 
-        const clusters =
-            await procesarClusters(
-                grupos
+
+        const clusters = [];
+
+
+        for (
+            let i = 0;
+            i < grupos.length;
+            i++
+        ) {
+
+            actualizarCarga(
+                `Analizando cluster ${i + 1} de ${grupos.length}...`
             );
+
+
+            try {
+
+                const c =
+                    await analizarCluster(
+                        grupos[i]
+                    );
+
+
+                clusters.push(
+                    c
+                );
+
+            }
+
+            catch(error) {
+
+                console.warn(
+                    "Cluster:",
+                    error
+                );
+
+            }
+
+        }
+
 
         clustersGlobal =
             clusters;
+
 
         dibujarClusters(
             clusters
         );
 
+
         actualizarEstadisticas(
             clusters
         );
 
-        actualizarUltimaActualizacion();
+
+        /* =============================================
+           DIAGNÓSTICO
+        ============================================= */
+
+        const viirsHoy =
+            datosVIIRS.filter(
+                esHoyPeru
+            ).length;
+
+
+        const modisHoy =
+            datosMODIS.filter(
+                esHoyPeru
+            ).length;
+
 
         if (
-            erroresFIRMS.length
+            datosVIIRS.length === 0 &&
+            datosMODIS.length === 0
         ) {
 
-            actualizarEstado(
+            actualizarDiagnostico(
 
-                `⚠️ FIRMS parcial — ` +
+                "FIRMS respondió correctamente, " +
+                "pero no hay detecciones dentro del " +
+                "bbox de Perú en las últimas 72 horas. " +
+                "Revise también la consola del navegador.",
 
-                `falló: ` +
-
-                erroresFIRMS.join(
-                    ", "
-                )
+                "warn"
 
             );
 
         }
+
         else {
 
-            actualizarEstado(
+            actualizarDiagnostico(
 
-                `✓ ${clusters.length} clusters — ` +
+                `VIIRS: ${datosVIIRS.length} ` +
+                `(${viirsHoy} hoy Perú) | ` +
+                `MODIS: ${datosMODIS.length} ` +
+                `(${modisHoy} hoy Perú) | ` +
+                `Clusters: ${clusters.length}`,
 
-                `${datosVIIRS.length} VIIRS — ` +
-
-                `${datosMODIS.length} MODIS`
+                "ok"
 
             );
+
         }
 
-        localStorage.setItem(
 
-            "ultimo_update_peru",
+        actualizarEstado(
 
-            new Date()
-                .toISOString()
+            `✓ ${clusters.length} clusters — ` +
+            `${datosVIIRS.length} VIIRS — ` +
+            `${datosMODIS.length} MODIS`
 
         );
 
+
+        localStorage.setItem(
+            "ultimo_update_peru",
+            new Date().toISOString()
+        );
+
     }
-    catch (error) {
+
+    catch(error) {
+
+        console.error(
+            "ERROR ACTUALIZACIÓN:",
+            error
+        );
+
+
+        actualizarEstado(
+            "❌ Error FIRMS"
+        );
+
+
+        actualizarDiagnostico(
+            error.message,
+            "error"
+        );
+
+    }
+
+    finally {
+
+        mostrarCarga(
+            false
+        );
+
+        actualizando =
+            false;
+
+        boton.disabled =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   PROBAR FIRMS
+===================================================== */
+
+async function probarFIRMS() {
+
+    const key =
+        obtenerMapKey();
+
+
+    if (!key) {
+
+        alert(
+            "Primero ingrese una MAP_KEY."
+        );
+
+        return;
+
+    }
+
+
+    actualizarEstado(
+        "Probando FIRMS..."
+    );
+
+
+    actualizarDiagnostico(
+        "Consultando NASA FIRMS...",
+        "warn"
+    );
+
+
+    try {
+
+        const datos =
+            await fetchFIRMS(
+                "VIIRS_NOAA21_NRT"
+            );
+
+
+        const peru =
+            datos.filter(
+                dentroPeru
+            );
+
+
+        actualizarDiagnostico(
+
+            `Conexión correcta. ` +
+            `${datos.length} registros recibidos; ` +
+            `${peru.length} dentro de Perú.`,
+
+            "ok"
+
+        );
+
+
+        actualizarEstado(
+            "✓ FIRMS conectado"
+        );
+
+    }
+
+    catch(error) {
 
         console.error(
             error
         );
 
+
+        actualizarDiagnostico(
+            error.message,
+            "error"
+        );
+
+
         actualizarEstado(
-
-            "❌ Error: " +
-            error.message
-
+            "❌ Error FIRMS"
         );
 
     }
-    finally {
 
-        actualizacionEnCurso =
-            false;
-
-        mostrarCarga(
-            false
-        );
-    }
 }
+
 
 /* =====================================================
    CSV
@@ -5103,245 +4936,186 @@ function descargarCSV() {
     ) {
 
         alert(
-            "No existen clusters."
+            "No existen clusters para descargar."
         );
 
         return;
+
     }
+
 
     const cabecera = [
 
         "fecha_peru",
-
         "hora_peru",
-
         "hora_utc",
-
         "latitud",
-
         "longitud",
-
         "departamento",
-
         "provincia",
-
         "distrito",
-
         "ubigeo",
-
         "centro_poblado",
-
         "distancia_centro_m",
-
         "detecciones_viirs",
-
         "radio_cluster_m",
-
         "frp_max_mw",
-
-        "frp_promedio_mw",
-
         "frp_total_mw",
-
         "t4_max_k",
-
         "t5_min_k",
-
         "delta_t_max_k",
-
         "modis_3km",
-
         "goes_3km",
-
         "cobertura_10m",
-
         "vegetacion",
-
         "poblacion_1km",
-
         "poblacion_3km",
-
         "fire_score",
-
         "exposure_score",
-
         "nivel_fuego",
-
         "nivel_exposicion",
-
         "prioridad"
 
     ];
 
+
     const filas = [
-
         cabecera.join(",")
-
     ];
+
 
     clustersGlobal.forEach(
         c => {
 
             const mejor =
-                [...c.cluster]
-                    .sort(
-                        (
-                            a,
-                            b
-                        ) =>
-                            (
-                                b.frp || 0
-                            ) -
-                            (
-                                a.frp || 0
-                            )
-                    )[0];
+                c.cluster[0];
+
 
             const fecha =
                 crearFechaDeteccion(
-
                     mejor.acq_date,
-
                     mejor.acq_time
-
                 );
+
 
             const fila = [
 
-                fechaPeruDeteccion(
-                    mejor
-                ),
-
                 fecha
-                    ? horaPeru(
-                        fecha
-                    )
+                    ? fechaPeru(fecha)
                     : "",
 
                 fecha
-                    ? horaUTC(
-                        fecha
-                    )
+                    ? horaPeru(fecha)
+                    : "",
+
+                fecha
+                    ? horaUTC(fecha)
                     : "",
 
                 c.latitude,
-
                 c.longitude,
 
-                c.distrito.departamento,
+                c.distrito?.departamento,
+                c.distrito?.provincia,
+                c.distrito?.distrito,
+                c.distrito?.ubigeo,
 
-                c.distrito.provincia,
-
-                c.distrito.distrito,
-
-                c.distrito.ubigeo,
-
-                c.centroPoblado.nombre,
-
-                c.centroPoblado.distanciaM,
+                c.centroPoblado?.nombre,
+                c.centroPoblado?.distanciaM,
 
                 c.size,
-
                 c.radioMax,
 
                 c.frpMax,
-
-                c.frpPromedio,
-
                 c.frpTotal,
 
                 c.t4Max,
-
                 c.t5Min,
-
                 c.deltaTMax,
 
                 c.modisCercanos.length,
-
                 c.goesCercanos.length,
 
-                c.cobertura10m.clase,
+                c.cobertura10m?.clase,
+                c.cobertura10m?.vegetacion,
 
-                c.cobertura10m.vegetacion,
-
-                c.poblacion.population1km,
-
-                c.poblacion.population3km,
+                c.poblacion?.population1km,
+                c.poblacion?.population3km,
 
                 c.fireScore,
-
                 c.exposureScore,
 
                 c.nivel,
-
                 c.nivelExposicion,
-
                 c.prioridad
 
             ];
 
+
             filas.push(
 
-                fila.map(
+                fila
+                .map(
                     v =>
-
                         `"${String(
-                            v ??
-                            ""
+                            v ?? ""
                         )
                         .replace(
                             /"/g,
                             '""'
                         )}"`
-
-                ).join(",")
+                )
+                .join(",")
 
             );
+
         }
     );
 
+
     const blob =
         new Blob(
-
             [
                 "\uFEFF" +
-                filas.join(
-                    "\n"
-                )
+                filas.join("\n")
             ],
-
             {
-
                 type:
                     "text/csv;charset=utf-8"
-
             }
-
         );
+
 
     const url =
         URL.createObjectURL(
             blob
         );
 
+
     const a =
         document.createElement(
             "a"
         );
 
+
     a.href =
         url;
 
+
     a.download =
         `incendios_peru_${fechaPeru()}.csv`;
+
 
     document.body.appendChild(
         a
     );
 
+
     a.click();
 
+
     a.remove();
+
 
     setTimeout(
         () =>
@@ -5350,7 +5124,9 @@ function descargarCSV() {
             ),
         1000
     );
+
 }
+
 
 /* =====================================================
    CENTRAR PERÚ
@@ -5358,15 +5134,17 @@ function descargarCSV() {
 
 function centrarPeru() {
 
-    if (!map) {
+    if (!map)
         return;
-    }
+
 
     map.setView(
         PERU_CENTER,
         5
     );
+
 }
+
 
 /* =====================================================
    TEMPORIZADOR
@@ -5374,52 +5152,30 @@ function centrarPeru() {
 
 function configurarTemporizador() {
 
-    if (
+    clearInterval(
         temporizador
-    ) {
+    );
 
-        clearTimeout(
-            temporizador
-        );
-    }
 
     const valor =
         Number(
             document
-                .getElementById(
-                    "intervaloSelect"
-                )
-                .value
+            .getElementById(
+                "intervaloSelect"
+            )
+            .value
         );
 
-    localStorage.setItem(
-
-        "intervalo_monitor",
-
-        String(valor)
-
-    );
-
-    const ejecutar =
-        async () => {
-
-            await actualizarIncendios(
-                false
-            );
-
-            temporizador =
-                setTimeout(
-                    ejecutar,
-                    valor
-                );
-        };
 
     temporizador =
-        setTimeout(
-            ejecutar,
+        setInterval(
+            () =>
+                actualizarIncendios(false),
             valor
         );
+
 }
+
 
 /* =====================================================
    RELOJ
@@ -5430,12 +5186,14 @@ function actualizarReloj() {
     const ahora =
         new Date();
 
+
     document
         .getElementById(
             "fechaPeru"
         )
         .textContent =
             fechaPeru();
+
 
     document
         .getElementById(
@@ -5446,6 +5204,7 @@ function actualizarReloj() {
                 ahora
             );
 
+
     document
         .getElementById(
             "horaUTC"
@@ -5454,12 +5213,15 @@ function actualizarReloj() {
             horaUTC(
                 ahora
             );
+
 }
+
 
 setInterval(
     actualizarReloj,
     1000
 );
+
 
 /* =====================================================
    EVENTOS
@@ -5474,8 +5236,9 @@ document
         configurarTemporizador
     );
 
+
 /* =====================================================
-   INICIO
+   DOM READY
 ===================================================== */
 
 document.addEventListener(
@@ -5484,12 +5247,12 @@ document.addEventListener(
 
         iniciarMapa();
 
-        /* MAP KEY */
 
         const savedKey =
             localStorage.getItem(
                 "firms_map_key"
             );
+
 
         if (
             savedKey
@@ -5501,63 +5264,48 @@ document.addEventListener(
                 )
                 .value =
                     savedKey;
+
         }
 
-        /* INTERVALO */
-
-        const intervaloGuardado =
-            localStorage.getItem(
-                "intervalo_monitor"
-            );
-
-        if (
-            intervaloGuardado
-        ) {
-
-            const select =
-                document.getElementById(
-                    "intervaloSelect"
-                );
-
-            const existe =
-                [
-                    ...select.options
-                ].some(
-                    option =>
-                        option.value ===
-                        intervaloGuardado
-                );
-
-            if (existe) {
-
-                select.value =
-                    intervaloGuardado;
-            }
-        }
 
         actualizarReloj();
 
+
         configurarTemporizador();
 
-        actualizarEstado(
-            savedKey
-                ? "Con MAP_KEY — iniciando..."
-                : "Esperando MAP_KEY..."
-        );
 
         if (
             savedKey
         ) {
+
+            actualizarEstado(
+                "Consultando FIRMS..."
+            );
+
 
             await actualizarIncendios(
                 false
             );
+
         }
+
+        else {
+
+            actualizarEstado(
+                "Esperando MAP_KEY..."
+            );
+
+            actualizarDiagnostico(
+                "Ingrese su MAP_KEY de NASA FIRMS.",
+                "warn"
+            );
+
+        }
+
     }
 );
 
 </script>
 
 </body>
-
 </html>

@@ -76,65 +76,89 @@ body {
     border-bottom:
         1px solid #293743;
 
-    padding: 8px 14px;
+    padding:
+        8px 14px;
 
-    display: flex;
-    align-items: center;
+    display:
+        flex;
 
-    gap: 12px;
+    align-items:
+        center;
 
-    z-index: 1000;
+    gap:
+        12px;
+
+    z-index:
+        1000;
 }
 
 #header h1 {
 
-    margin: 0;
+    margin:
+        0;
 
-    font-size: 18px;
+    font-size:
+        18px;
 
-    color: #fff;
+    color:
+        #fff;
 
-    white-space: nowrap;
+    white-space:
+        nowrap;
 }
 
 #estado {
 
-    margin-left: auto;
+    margin-left:
+        auto;
 
-    font-size: 12px;
+    font-size:
+        12px;
 
-    color: #9fb1bf;
+    color:
+        #9fb1bf;
 
-    text-align: right;
+    text-align:
+        right;
 }
 
 #btnActualizar {
 
-    background: #1565c0;
+    background:
+        #1565c0;
 
-    color: white;
+    color:
+        white;
 
-    border: 0;
+    border:
+        0;
 
-    padding: 8px 13px;
+    padding:
+        8px 13px;
 
-    border-radius: 5px;
+    border-radius:
+        5px;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
-    font-weight: bold;
+    font-weight:
+        bold;
 }
 
 #btnActualizar:hover {
 
-    background: #1976d2;
+    background:
+        #1976d2;
 }
 
 #btnActualizar:disabled {
 
-    background: #455a64;
+    background:
+        #455a64;
 
-    cursor: wait;
+    cursor:
+        wait;
 }
 
 
@@ -144,17 +168,23 @@ body {
 
 #panel {
 
-    position: absolute;
+    position:
+        absolute;
 
-    top: 68px;
-    left: 12px;
+    top:
+        68px;
 
-    width: 370px;
+    left:
+        12px;
+
+    width:
+        390px;
 
     max-height:
         calc(100vh - 82px);
 
-    overflow-y: auto;
+    overflow-y:
+        auto;
 
     background:
         rgba(10,18,25,.96);
@@ -162,148 +192,343 @@ body {
     border:
         1px solid #334554;
 
-    border-radius: 8px;
+    border-radius:
+        8px;
 
-    padding: 12px;
+    padding:
+        12px;
 
-    z-index: 900;
+    z-index:
+        900;
 
     box-shadow:
-        0 4px 20px
-        rgba(0,0,0,.5);
+        0 4px 20px rgba(0,0,0,.5);
 }
 
 #panel h2 {
 
-    font-size: 15px;
+    font-size:
+        15px;
 
     margin:
         0 0 10px 0;
 
-    color: white;
+    color:
+        white;
 }
 
 .grupo {
 
-    margin-bottom: 13px;
+    margin-bottom:
+        13px;
 }
 
-.grupo label {
+.grupo > label {
 
-    display: block;
+    display:
+        block;
 
-    font-size: 11px;
+    font-size:
+        11px;
 
-    color: #90a4ae;
+    color:
+        #90a4ae;
 
-    margin-bottom: 4px;
+    margin-bottom:
+        4px;
 }
 
 .grupo input,
 .grupo select {
 
-    width: 100%;
-
-    background: #101a22;
-
-    border:
-        1px solid #354957;
-
-    color: white;
-
-    border-radius: 4px;
-
-    padding: 8px;
-}
-
-.btn {
-
-    width: 100%;
-
-    padding: 8px;
-
-    margin-top: 5px;
-
-    border: 0;
-
-    border-radius: 4px;
-
-    cursor: pointer;
-
-    color: white;
-
-    font-weight: bold;
-}
-
-.btn-verde {
-    background: #087f5b;
-}
-
-.btn-azul {
-    background: #1565c0;
-}
-
-.btn-gris {
-    background: #455a64;
-}
-
-.btn-naranja {
-    background: #ef6c00;
-}
-
-
-/* =====================================================
-   CHECKBOX CAPAS
-===================================================== */
-
-.capa-operativa {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    padding: 7px;
-
-    margin-bottom: 5px;
+    width:
+        100%;
 
     background:
         #101a22;
 
     border:
-        1px solid #263640;
+        1px solid #354957;
 
-    border-radius: 5px;
+    color:
+        white;
 
-    cursor: pointer;
+    border-radius:
+        4px;
+
+    padding:
+        8px;
 }
 
-.capa-operativa:hover {
+.btn {
+
+    width:
+        100%;
+
+    padding:
+        8px;
+
+    margin-top:
+        5px;
+
+    border:
+        0;
+
+    border-radius:
+        4px;
+
+    cursor:
+        pointer;
+
+    color:
+        white;
+
+    font-weight:
+        bold;
+}
+
+.btn-verde {
 
     background:
-        #16232c;
+        #087f5b;
 }
 
-.capa-operativa input {
+.btn-azul {
 
-    width: auto;
+    background:
+        #1565c0;
 }
 
-.capa-icono {
+.btn-gris {
 
-    width: 22px;
-
-    text-align: center;
-
-    font-size: 17px;
+    background:
+        #455a64;
 }
 
-.capa-nombre {
+.btn-naranja {
 
-    flex: 1;
+    background:
+        #ef6c00;
+}
 
-    font-size: 12px;
+
+/* =====================================================
+   COORDENADAS
+===================================================== */
+
+.coord-box {
+
+    background:
+        #101a22;
+
+    border:
+        1px solid #30414e;
+
+    border-radius:
+        6px;
+
+    padding:
+        8px;
+
+    margin-bottom:
+        8px;
+}
+
+.coord-box-title {
+
+    font-size:
+        11px;
+
+    color:
+        #90a4ae;
+
+    margin-bottom:
+        6px;
+}
+
+.coord-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        6px;
+}
+
+.coord-grid input {
+
+    width:
+        100%;
+
+    padding:
+        8px;
+
+    background:
+        #0b151d;
+
+    border:
+        1px solid #354957;
+
+    color:
+        white;
+
+    border-radius:
+        4px;
+}
+
+
+/* =====================================================
+   CAPAS OPERATIVAS
+===================================================== */
+
+.capa-operativa {
+
+    margin-top:
+        5px;
+
+    background:
+        #101a22;
+
+    border:
+        1px solid #30414e;
+
+    border-radius:
+        5px;
+
+    padding:
+        8px;
+}
+
+.check-capa {
+
+    display:
+        flex !important;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    margin:
+        0 !important;
+
+    color:
+        #d7e0e7 !important;
+
+    font-size:
+        12px !important;
+
+    cursor:
+        pointer;
+}
+
+.check-capa input {
+
+    width:
+        16px !important;
+
+    height:
+        16px !important;
+
+    cursor:
+        pointer;
+}
+
+.check-capa b {
+
+    margin-left:
+        auto;
+
+    background:
+        #263640;
+
+    color:
+        white;
+
+    padding:
+        2px 7px;
+
+    border-radius:
+        10px;
+
+    font-size:
+        10px;
+}
+
+
+/* =====================================================
+   ICONO FOCO SERFOR
+===================================================== */
+
+.icono-foco {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        18px;
+
+    height:
+        18px;
+
+    color:
+        #800020;
+
+    font-size:
+        22px;
+
+    line-height:
+        18px;
+
+    text-shadow:
+        0 0 4px #ff4060;
+}
+
+
+/* =====================================================
+   ICONO INCENDIO SERFOR
+===================================================== */
+
+.icono-fuego {
+
+    font-size:
+        19px;
+
+    width:
+        20px;
+
+    text-align:
+        center;
+}
+
+
+/* =====================================================
+   ESTADO SERFOR
+===================================================== */
+
+.estado-capa {
+
+    margin-top:
+        7px;
+
+    font-size:
+        10px;
+
+    color:
+        #90a4ae;
+
+    line-height:
+        14px;
 }
 
 
@@ -313,7 +538,8 @@ body {
 
 .stat {
 
-    display: flex;
+    display:
+        flex;
 
     justify-content:
         space-between;
@@ -321,32 +547,44 @@ body {
     border-bottom:
         1px solid #263640;
 
-    padding: 5px 0;
+    padding:
+        5px 0;
 
-    font-size: 12px;
+    font-size:
+        12px;
 
-    gap: 10px;
+    gap:
+        10px;
 }
 
 .stat span:last-child {
 
-    font-weight: bold;
+    font-weight:
+        bold;
 
-    color: #fff;
+    color:
+        #fff;
 
-    text-align: right;
+    text-align:
+        right;
 }
 
 .sensor-ok {
-    color: #00e676 !important;
+
+    color:
+        #00e676 !important;
 }
 
 .sensor-error {
-    color: #ff5252 !important;
+
+    color:
+        #ff5252 !important;
 }
 
 .sensor-info {
-    color: #ffb300 !important;
+
+    color:
+        #ffb300 !important;
 }
 
 
@@ -356,38 +594,46 @@ body {
 
 #map {
 
-    flex: 1;
+    flex:
+        1;
 
-    width: 100%;
-
-    min-height: 0;
+    width:
+        100%;
 }
 
 
 /* =====================================================
-   POPUP
+   POPUPS
 ===================================================== */
 
-.popup-incendio {
+.popup-incendio,
+.popup-serfor {
 
-    color: #111;
+    color:
+        #111;
 
-    min-width: 300px;
+    min-width:
+        280px;
 
-    max-width: 430px;
+    max-width:
+        430px;
 
-    font-size: 13px;
+    font-size:
+        12px;
 }
 
-.popup-incendio h3 {
+.popup-incendio h3,
+.popup-serfor h3 {
 
     margin:
         0 0 8px 0;
 }
 
-.popup-incendio hr {
+.popup-incendio hr,
+.popup-serfor hr {
 
-    border: 0;
+    border:
+        0;
 
     border-top:
         1px solid #ddd;
@@ -396,132 +642,77 @@ body {
         8px 0;
 }
 
+.badge {
+
+    display:
+        inline-block;
+
+    padding:
+        3px 7px;
+
+    border-radius:
+        10px;
+
+    color:
+        white;
+
+    font-size:
+        11px;
+
+    font-weight:
+        bold;
+}
+
 
 /* =====================================================
-   ICONO FOCO SERFOR
+   ICONO FOCO MAPA
 ===================================================== */
 
-.icono-foco-serfor {
-
-    width: 18px;
-    height: 18px;
+.marker-foco-serfor {
 
     background:
-        #8B1E3F;
+        transparent;
 
     border:
-        3px solid white;
+        0;
+}
+
+.foco-serfor-marker {
+
+    width:
+        13px;
+
+    height:
+        13px;
+
+    background:
+        #800020;
+
+    border:
+        2px solid #ffb3c1;
 
     border-radius:
         50%;
 
     box-shadow:
-
-        0 0 0 3px
-        rgba(139,30,63,.30),
-
-        0 0 12px
-        rgba(139,30,63,.80);
+        0 0 8px #800020;
 }
 
 
 /* =====================================================
-   ICONO ALERTA SERFOR
+   ICONO INCENDIO MAPA
 ===================================================== */
 
-.icono-alerta-serfor {
-
-    width: 32px;
-    height: 32px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
+.marker-fuego-serfor {
 
     background:
-        rgba(211,47,47,.15);
+        transparent;
 
     border:
-        2px solid #d32f2f;
+        0;
 
-    border-radius:
-        50%;
-
-    font-size: 20px;
-
-    box-shadow:
-
-        0 0 0 4px
-        rgba(211,47,47,.20),
-
-        0 0 15px
-        rgba(255,87,34,.70);
-
-    animation:
-        pulsoAlertaSERFOR
-        1.8s infinite;
-}
-
-.icono-alerta-serfor span {
-
-    filter:
-        drop-shadow(
-            0 1px 2px
-            rgba(0,0,0,.7)
-        );
-}
-
-@keyframes pulsoAlertaSERFOR {
-
-    0% {
-
-        box-shadow:
-
-            0 0 0 3px
-            rgba(211,47,47,.20),
-
-            0 0 8px
-            rgba(255,87,34,.45);
-    }
-
-    50% {
-
-        box-shadow:
-
-            0 0 0 9px
-            rgba(211,47,47,.04),
-
-            0 0 22px
-            rgba(255,87,34,.90);
-    }
-
-    100% {
-
-        box-shadow:
-
-            0 0 0 3px
-            rgba(211,47,47,.20),
-
-            0 0 8px
-            rgba(255,87,34,.45);
-    }
-}
-
-
-/* =====================================================
-   COORDENADA
-===================================================== */
-
-.icono-coordenada {
-
-    font-size: 30px;
-
-    filter:
-        drop-shadow(
-            0 2px 3px
-            rgba(0,0,0,.7)
-        );
+    text-align:
+        center;
 }
 
 
@@ -534,13 +725,17 @@ body {
     background:
         rgba(15,20,25,.93);
 
-    color: white;
+    color:
+        white;
 
-    padding: 9px;
+    padding:
+        9px;
 
-    border-radius: 5px;
+    border-radius:
+        5px;
 
-    line-height: 20px;
+    line-height:
+        20px;
 
     box-shadow:
         0 2px 8px rgba(0,0,0,.3);
@@ -548,17 +743,23 @@ body {
 
 .legend i {
 
-    width: 13px;
+    width:
+        13px;
 
-    height: 13px;
+    height:
+        13px;
 
-    float: left;
+    float:
+        left;
 
-    margin-right: 7px;
+    margin-right:
+        7px;
 
-    margin-top: 3px;
+    margin-top:
+        3px;
 
-    opacity: .9;
+    opacity:
+        .9;
 }
 
 
@@ -568,42 +769,56 @@ body {
 
 #cargando {
 
-    display: none;
+    display:
+        none;
 
-    position: fixed;
+    position:
+        fixed;
 
-    inset: 0;
+    inset:
+        0;
 
     background:
         rgba(0,0,0,.42);
 
-    z-index: 5000;
+    z-index:
+        5000;
 
-    align-items: center;
+    align-items:
+        center;
 
-    justify-content: center;
+    justify-content:
+        center;
 }
 
 .spinner-box {
 
-    background: #101820;
+    background:
+        #101820;
 
-    padding: 20px;
+    padding:
+        20px;
 
-    border-radius: 8px;
+    border-radius:
+        8px;
 
     border:
         1px solid #344957;
 
-    min-width: 280px;
+    min-width:
+        280px;
 
-    text-align: center;
+    text-align:
+        center;
 }
 
 .spinner {
 
-    width: 28px;
-    height: 28px;
+    width:
+        28px;
+
+    height:
+        28px;
 
     border:
         3px solid #455a64;
@@ -611,7 +826,8 @@ body {
     border-top-color:
         #2196f3;
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     animation:
         spin .8s linear infinite;
@@ -623,7 +839,8 @@ body {
 @keyframes spin {
 
     to {
-        transform: rotate(360deg);
+        transform:
+            rotate(360deg);
     }
 }
 
@@ -636,12 +853,14 @@ body {
 
     #header h1 {
 
-        font-size: 14px;
+        font-size:
+            14px;
     }
 
     #estado {
 
-        display: none;
+        display:
+            none;
     }
 
     #panel {
@@ -650,7 +869,13 @@ body {
             calc(100vw - 24px);
 
         max-height:
-            52vh;
+            55vh;
+    }
+
+    .coord-grid {
+
+        grid-template-columns:
+            1fr;
     }
 
 }
@@ -685,7 +910,12 @@ Actualizar
 </header>
 
 
+<!-- =====================================================
+     PANEL
+===================================================== -->
+
 <div id="panel">
+
 
 <h2>
 Configuración y resultados
@@ -693,7 +923,7 @@ Configuración y resultados
 
 
 <!-- =====================================================
-     FIRMS
+     MAP KEY
 ===================================================== -->
 
 <div class="grupo">
@@ -725,24 +955,33 @@ Guardar MAP_KEY
 
 <div class="grupo">
 
-<label>
+<h2>
 📍 Ir a coordenadas
-</label>
+</h2>
+
+<div class="coord-box">
+
+<div class="coord-box-title">
+Ingrese latitud y longitud decimal
+</div>
+
+<div class="coord-grid">
 
 <input
-id="coordLat"
+id="latitudInput"
 type="number"
 step="0.000001"
 placeholder="Latitud, ej. -9.190000"
 >
 
 <input
-id="coordLon"
+id="longitudInput"
 type="number"
 step="0.000001"
 placeholder="Longitud, ej. -75.015200"
-style="margin-top:5px;"
 >
+
+</div>
 
 <button
 class="btn btn-azul"
@@ -753,73 +992,94 @@ onclick="irACoordenada()"
 
 <button
 class="btn btn-verde"
-onclick="agregarCoordenada()"
+onclick="agregarPuntoCoordenada()"
 >
 ➕ Agregar punto
 </button>
 
 <button
 class="btn btn-gris"
-onclick="limpiarCoordenada()"
+onclick="limpiarPuntoCoordenada()"
 >
 🧹 Limpiar punto
 </button>
 
 </div>
 
+</div>
+
 
 <!-- =====================================================
-     CAPAS SERFOR
+     CAPAS OPERATIVAS
 ===================================================== -->
 
 <div class="grupo">
 
 <h2>
-🛰️ Capas operativas
+🔥 Capas operativas SERFOR
 </h2>
 
 
-<label class="capa-operativa">
+<div class="capa-operativa">
+
+<label class="check-capa">
 
 <input
 type="checkbox"
 id="chkFocosSERFOR"
-onchange="alternarFocosSERFOR()"
+onchange="toggleFocosSERFOR()"
 >
 
-<span
-class="capa-icono"
-style="color:#8B1E3F"
->
+<span class="icono-foco">
 ●
 </span>
 
-<span class="capa-nombre">
+<span>
 Focos de calor SERFOR
 </span>
 
+<b id="contadorFocosSERFOR">
+0
+</b>
+
 </label>
 
+</div>
 
-<label class="capa-operativa">
+
+<div class="capa-operativa">
+
+<label class="check-capa">
 
 <input
 type="checkbox"
-id="chkAlertasSERFOR"
-onchange="alternarAlertasSERFOR()"
+id="chkIncendiosSERFOR"
+onchange="toggleIncendiosSERFOR()"
 >
 
-<span
-class="capa-icono"
->
+<span class="icono-fuego">
 🔥
 </span>
 
-<span class="capa-nombre">
+<span>
 Incendio Forestal SERFOR
 </span>
 
+<b id="contadorIncendiosSERFOR">
+0
+</b>
+
 </label>
+
+</div>
+
+
+<div
+id="estadoSERFOR"
+class="estado-capa"
+>
+SERFOR: esperando consulta...
+</div>
 
 </div>
 
@@ -859,85 +1119,90 @@ Intervalo automático
 
 <div id="estadisticas">
 
+
 <div class="stat">
 <span>Fecha Perú</span>
 <span id="fechaPeru">---</span>
 </div>
+
 
 <div class="stat">
 <span>Hora Perú</span>
 <span id="horaPeru">---</span>
 </div>
 
+
 <div class="stat">
 <span>Hora UTC</span>
 <span id="horaUTC">---</span>
 </div>
 
+
 <hr style="
 border:0;
 border-top:1px solid #30414e;
 ">
+
 
 <div class="stat">
 <span>VIIRS</span>
 <span id="estadoVIIRS">---</span>
 </div>
 
+
 <div class="stat">
 <span>VIIRS detecciones</span>
 <span id="totalVIIRS">0</span>
 </div>
+
 
 <div class="stat">
 <span>MODIS</span>
 <span id="estadoMODIS">---</span>
 </div>
 
+
 <div class="stat">
 <span>MODIS detecciones</span>
 <span id="totalMODIS">0</span>
 </div>
+
 
 <div class="stat">
 <span>GOES</span>
 <span id="estadoGOES">---</span>
 </div>
 
+
 <div class="stat">
 <span>GOES detecciones</span>
 <span id="totalGOES">0</span>
 </div>
+
 
 <hr style="
 border:0;
 border-top:1px solid #30414e;
 ">
 
-<div class="stat">
-<span>Focos SERFOR</span>
-<span id="totalFocosSERFOR">0</span>
-</div>
-
-<div class="stat">
-<span>Alertas SERFOR</span>
-<span id="totalAlertasSERFOR">0</span>
-</div>
 
 <div class="stat">
 <span>Clusters VIIRS</span>
 <span id="totalClusters">0</span>
 </div>
 
+
 <div class="stat">
 <span>Incendios ALTO</span>
 <span id="totalAlto">0</span>
 </div>
 
+
 <div class="stat">
 <span>Exposición alta</span>
 <span id="totalExposicion">0</span>
 </div>
+
 
 </div>
 
@@ -956,35 +1221,42 @@ border-top:1px solid #30414e;
 Criterios de detección
 </h2>
 
+
 <div class="stat">
 <span>Cluster</span>
 <span>≥ 3 VIIRS</span>
 </div>
+
 
 <div class="stat">
 <span>Radio cluster</span>
 <span>≤ 1000 m</span>
 </div>
 
+
 <div class="stat">
 <span>FRP</span>
 <span>≥ 10 MW</span>
 </div>
+
 
 <div class="stat">
 <span>T4</span>
 <span>≥ 320 K</span>
 </div>
 
+
 <div class="stat">
 <span>ΔT</span>
 <span>≥ 20 K</span>
 </div>
 
+
 <div class="stat">
 <span>MODIS</span>
 <span>≤ 3 km</span>
 </div>
+
 
 <div class="stat">
 <span>GOES</span>
@@ -1019,8 +1291,16 @@ onclick="limpiarDatos()"
 </div>
 
 
+<!-- =====================================================
+     MAPA
+===================================================== -->
+
 <div id="map"></div>
 
+
+<!-- =====================================================
+     CARGANDO
+===================================================== -->
 
 <div id="cargando">
 
@@ -1033,7 +1313,7 @@ onclick="limpiarDatos()"
 <br><br>
 
 <span id="textoCarga">
-Consultando FIRMS...
+Consultando...
 </span>
 
 </div>
@@ -1051,6 +1331,11 @@ Consultando FIRMS...
 ===================================================== */
 
 const CONFIG = {
+
+
+    /* =================================================
+       FIRMS
+    ================================================= */
 
     FIRMS: {
 
@@ -1082,22 +1367,27 @@ const CONFIG = {
     },
 
 
+    /* =================================================
+       SERFOR
+    ================================================= */
+
     SERFOR: {
 
-        REST:
+        BASE:
             "https://geo.serfor.gob.pe/geoservicios/rest/services/Servicios_OGC/Unidad_Monitoreo_Satelital/MapServer",
-
-        WMS:
-            "https://geo.serfor.gob.pe/geoservicios/services/Servicios_OGC/Unidad_Monitoreo_Satelital/MapServer/WMSServer",
 
         FOCOS:
             0,
 
-        ALERTAS:
+        INCENDIOS:
             1
 
     },
 
+
+    /* =================================================
+       CLUSTER
+    ================================================= */
 
     CLUSTER: {
 
@@ -1110,6 +1400,10 @@ const CONFIG = {
     },
 
 
+    /* =================================================
+       CORROBORACIÓN
+    ================================================= */
+
     CORROBORACION: {
 
         MODIS_M:
@@ -1120,6 +1414,10 @@ const CONFIG = {
 
     },
 
+
+    /* =================================================
+       FILTRO
+    ================================================= */
 
     FILTRO: {
 
@@ -1135,6 +1433,33 @@ const CONFIG = {
     },
 
 
+    /* =================================================
+       WORLDCOVER
+    ================================================= */
+
+    WORLD_COVER: {
+
+        URL:
+            "https://services.terrascope.be/wms/v2",
+
+        LAYER:
+            "WORLDCOVER_2021_MAP"
+
+    },
+
+
+    /* =================================================
+       HRSL
+    ================================================= */
+
+    HRSL_PROXY:
+        "",
+
+
+    /* =================================================
+       INTERVALO
+    ================================================= */
+
     INTERVALO:
         900000
 
@@ -1146,6 +1471,7 @@ const CONFIG = {
 ===================================================== */
 
 let map;
+
 
 let capaVIIRS =
     L.layerGroup();
@@ -1159,20 +1485,31 @@ let capaGOES =
 let capaClusters =
     L.layerGroup();
 
+let capaHRSL =
+    L.layerGroup();
+
+
+/* SERFOR */
+
 let capaFocosSERFOR =
     L.layerGroup();
 
-let capaAlertasSERFOR =
+let capaIncendiosSERFOR =
     L.layerGroup();
 
-let capaCoordenada =
+
+/* Punto manual */
+
+let capaPuntoCoordenada =
     L.layerGroup();
 
-let marcadorCoordenada =
-    null;
+
+let capaWorldCover;
+
 
 let clustersGlobal =
     [];
+
 
 let datosVIIRS =
     [];
@@ -1183,13 +1520,16 @@ let datosMODIS =
 let datosGOES =
     [];
 
+
 let datosFocosSERFOR =
     [];
 
-let datosAlertasSERFOR =
+let datosIncendiosSERFOR =
     [];
 
+
 let temporizador;
+
 
 let actualizando =
     false;
@@ -1204,88 +1544,11 @@ const PERU_CENTER =
 
 
 /* =====================================================
-   ICONOS
-===================================================== */
-
-const iconoFocoCalorSERFOR =
-    L.divIcon({
-
-        className:
-            "",
-
-        html:
-            `
-            <div class="icono-foco-serfor">
-            </div>
-            `,
-
-        iconSize:
-            [18,18],
-
-        iconAnchor:
-            [9,9],
-
-        popupAnchor:
-            [0,-10]
-
-    });
-
-
-const iconoAlertaSERFOR =
-    L.divIcon({
-
-        className:
-            "",
-
-        html:
-            `
-            <div class="icono-alerta-serfor">
-                <span>🔥</span>
-            </div>
-            `,
-
-        iconSize:
-            [32,32],
-
-        iconAnchor:
-            [16,16],
-
-        popupAnchor:
-            [0,-18]
-
-    });
-
-
-const iconoCoordenada =
-    L.divIcon({
-
-        className:
-            "",
-
-        html:
-            `
-            <div class="icono-coordenada">
-                📍
-            </div>
-            `,
-
-        iconSize:
-            [35,35],
-
-        iconAnchor:
-            [17,33],
-
-        popupAnchor:
-            [0,-30]
-
-    });
-
-
-/* =====================================================
    MAPA
 ===================================================== */
 
 function iniciarMapa() {
+
 
     map =
         L.map(
@@ -1303,29 +1566,48 @@ function iniciarMapa() {
         );
 
 
-    const satelite =
-        L.tileLayer(
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            {
+    /* =============================================
+       MAPA BASE OSM
+    ============================================= */
 
+    const osm =
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
                 maxZoom:
                     19,
 
                 attribution:
-                    "© Esri",
-
-                keepBuffer:
-                    2
-
+                    "© OpenStreetMap contributors"
             }
         );
 
+
+    /* =============================================
+       SATÉLITE ESRI
+    ============================================= */
+
+    const satelite =
+        L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            {
+                maxZoom:
+                    19,
+
+                attribution:
+                    "© Esri"
+            }
+        );
+
+
+    /* =============================================
+       ETIQUETAS
+    ============================================= */
 
     const etiquetas =
         L.tileLayer(
             "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
             {
-
                 maxZoom:
                     19,
 
@@ -1333,20 +1615,12 @@ function iniciarMapa() {
                     .95,
 
                 attribution:
-                    "© Esri",
-
-                keepBuffer:
-                    2
-
+                    "© Esri"
             }
         );
 
 
-    satelite.addTo(
-        map
-    );
-
-    etiquetas.addTo(
+    osm.addTo(
         map
     );
 
@@ -1358,20 +1632,17 @@ function iniciarMapa() {
         ]);
 
 
-    /*
-     * WMS SERFOR
-     *
-     * Se mantiene disponible,
-     * pero NO se carga automáticamente.
-     */
+    /* =============================================
+       WORLDCOVER
+    ============================================= */
 
-    const wmsSERFOR =
+    capaWorldCover =
         L.tileLayer.wms(
-            CONFIG.SERFOR.WMS,
+            CONFIG.WORLD_COVER.URL,
             {
 
                 layers:
-                    "0,1",
+                    CONFIG.WORLD_COVER.LAYER,
 
                 format:
                     "image/png",
@@ -1380,28 +1651,39 @@ function iniciarMapa() {
                     true,
 
                 opacity:
-                    .55,
+                    .42,
 
                 version:
                     "1.3.0",
 
                 attribution:
-                    "© SERFOR"
+                    "© ESA WorldCover / Copernicus"
 
             }
         );
 
 
+    /* =============================================
+       BASE MAPS
+    ============================================= */
+
     const baseMaps = {
 
-        "🛰️ Satélite híbrido":
-            hibrida,
+        "🗺️ OpenStreetMap":
+            osm,
 
-        "🗺️ Satélite":
-            satelite
+        "🛰️ Satélite":
+            satelite,
+
+        "🛰️ Satélite híbrido":
+            hibrida
 
     };
 
+
+    /* =============================================
+       OVERLAYS
+    ============================================= */
 
     const overlays = {
 
@@ -1414,20 +1696,23 @@ function iniciarMapa() {
         "🟠 GOES":
             capaGOES,
 
-        "🟣 SERFOR WMS":
-            wmsSERFOR,
-
-        "🔥 Clusters":
-            capaClusters,
-
-        "📍 Coordenada":
-            capaCoordenada,
-
-        "🔴 Focos SERFOR":
+        "🟣 Focos de calor SERFOR":
             capaFocosSERFOR,
 
-        "🔥 Alertas SERFOR":
-            capaAlertasSERFOR
+        "🔥 Incendio Forestal SERFOR":
+            capaIncendiosSERFOR,
+
+        "🌱 WorldCover 10 m":
+            capaWorldCover,
+
+        "👥 HRSL / población":
+            capaHRSL,
+
+        "🔥 Clusters VIIRS":
+            capaClusters,
+
+        "📍 Punto coordenada":
+            capaPuntoCoordenada
 
     };
 
@@ -1439,46 +1724,23 @@ function iniciarMapa() {
             collapsed:
                 false
         }
-    ).addTo(map);
+    ).addTo(
+        map
+    );
 
 
-    /*
-     * Solamente las capas principales
-     * se agregan inicialmente.
-     */
+    /* VIIRS y clusters visibles */
 
-    capaVIIRS.addTo(map);
+    capaVIIRS.addTo(
+        map
+    );
 
-    capaMODIS.addTo(map);
-
-    capaGOES.addTo(map);
-
-    capaClusters.addTo(map);
-
-    capaCoordenada.addTo(map);
+    capaClusters.addTo(
+        map
+    );
 
 
     crearLeyenda();
-
-
-    /*
-     * Importante:
-     * invalida el tamaño después de
-     * que el navegador haya pintado el mapa.
-     */
-
-    setTimeout(
-        () => {
-
-            if (map) {
-
-                map.invalidateSize();
-
-            }
-
-        },
-        100
-    );
 
 }
 
@@ -1489,15 +1751,19 @@ function iniciarMapa() {
 
 function crearLeyenda() {
 
+
     const legend =
         L.control({
+
             position:
                 "bottomright"
+
         });
 
 
     legend.onAdd =
         function() {
+
 
             const div =
                 L.DomUtil.create(
@@ -1508,18 +1774,7 @@ function crearLeyenda() {
 
             div.innerHTML =
 
-                "<b>🔥 MONITOR SERFOR</b><br>" +
-
-                '<i style="' +
-                'background:#8B1E3F;' +
-                'border-radius:50%' +
-                '"></i>' +
-                "Focos SERFOR<br>" +
-
-                '<span style="' +
-                'font-size:16px;' +
-                '">🔥</span> ' +
-                "Incendio SERFOR<br>" +
+                "<b>🔥 MONITOR</b><br>" +
 
                 '<i style="background:#ff1744"></i>' +
                 "VIIRS<br>" +
@@ -1530,6 +1785,11 @@ function crearLeyenda() {
                 '<i style="background:#ff6d00"></i>' +
                 "GOES<br>" +
 
+                '<i style="background:#800020"></i>' +
+                "Foco SERFOR<br>" +
+
+                "🔥 Incendio SERFOR<br>" +
+
                 '<i style="background:#d50000"></i>' +
                 "Fuego alto<br>" +
 
@@ -1539,91 +1799,15 @@ function crearLeyenda() {
                 '<i style="background:#1565c0"></i>' +
                 "Vigilancia";
 
+
             return div;
 
         };
 
 
-    legend.addTo(map);
-
-}
-
-
-/* =====================================================
-   ELEMENTO SEGURO
-===================================================== */
-
-function setText(
-    id,
-    texto
-) {
-
-    const elemento =
-        document.getElementById(
-            id
-        );
-
-
-    if (
-        elemento
-    ) {
-
-        elemento.textContent =
-            texto;
-
-    }
-
-}
-
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
-function actualizarEstado(
-    texto
-) {
-
-    setText(
-        "estado",
-        texto
+    legend.addTo(
+        map
     );
-
-}
-
-
-/* =====================================================
-   ESTADO SENSOR
-===================================================== */
-
-function estadoSensor(
-    id,
-    texto,
-    tipo
-) {
-
-    const el =
-        document.getElementById(
-            id
-        );
-
-
-    if (!el)
-        return;
-
-
-    el.textContent =
-        texto;
-
-
-    el.className =
-        tipo === "ok"
-            ? "sensor-ok"
-            :
-        tipo === "error"
-            ? "sensor-error"
-            :
-            "sensor-info";
 
 }
 
@@ -1634,14 +1818,18 @@ function estadoSensor(
 
 function guardarMapKey() {
 
+
     const input =
         document.getElementById(
             "mapKey"
         );
 
 
-    if (!input)
+    if (!input) {
+
         return;
+
+    }
 
 
     const key =
@@ -1655,6 +1843,7 @@ function guardarMapKey() {
         );
 
         return;
+
     }
 
 
@@ -1676,7 +1865,12 @@ function guardarMapKey() {
 }
 
 
+/* =====================================================
+   OBTENER MAP KEY
+===================================================== */
+
 function obtenerMapKey() {
+
 
     const input =
         document.getElementById(
@@ -1697,9 +1891,11 @@ function obtenerMapKey() {
 
 function fechaPeru() {
 
+
     return new Intl.DateTimeFormat(
         "en-CA",
         {
+
             timeZone:
                 "America/Lima",
 
@@ -1711,6 +1907,7 @@ function fechaPeru() {
 
             day:
                 "2-digit"
+
         }
     ).format(
         new Date()
@@ -1720,16 +1917,18 @@ function fechaPeru() {
 
 
 /* =====================================================
-   HORA
+   HORA PERÚ
 ===================================================== */
 
 function horaPeru(
     fecha
 ) {
 
+
     return new Intl.DateTimeFormat(
         "es-PE",
         {
+
             timeZone:
                 "America/Lima",
 
@@ -1744,6 +1943,7 @@ function horaPeru(
 
             hour12:
                 false
+
         }
     ).format(
         fecha
@@ -1752,13 +1952,19 @@ function horaPeru(
 }
 
 
+/* =====================================================
+   HORA UTC
+===================================================== */
+
 function horaUTC(
     fecha
 ) {
 
+
     return new Intl.DateTimeFormat(
         "es-PE",
         {
+
             timeZone:
                 "UTC",
 
@@ -1773,6 +1979,7 @@ function horaUTC(
 
             hour12:
                 false
+
         }
     ).format(
         fecha
@@ -1782,13 +1989,14 @@ function horaUTC(
 
 
 /* =====================================================
-   FECHA DETECCIÓN
+   FECHA FIRMS
 ===================================================== */
 
 function crearFechaDeteccion(
     fecha,
     hora
 ) {
+
 
     if (!fecha)
         return null;
@@ -1831,18 +2039,27 @@ function crearFechaDeteccion(
         );
 
 
-    return isNaN(
-        resultado.getTime()
+    if (
+        isNaN(
+            resultado.getTime()
+        )
     )
-        ? null
-        : resultado;
+        return null;
+
+
+    return resultado;
 
 }
 
 
+/* =====================================================
+   FECHA DETECCIÓN PERÚ
+===================================================== */
+
 function fechaPeruDeteccion(
     d
 ) {
+
 
     const fecha =
         crearFechaDeteccion(
@@ -1858,6 +2075,7 @@ function fechaPeruDeteccion(
     return new Intl.DateTimeFormat(
         "en-CA",
         {
+
             timeZone:
                 "America/Lima",
 
@@ -1869,6 +2087,7 @@ function fechaPeruDeteccion(
 
             day:
                 "2-digit"
+
         }
     ).format(
         fecha
@@ -1885,8 +2104,10 @@ function parseCSV(
     texto
 ) {
 
+
     if (
-        typeof texto !== "string"
+        typeof texto !==
+        "string"
     )
         return [];
 
@@ -1901,7 +2122,9 @@ function parseCSV(
     const lineas =
         texto
         .trim()
-        .split(/\r?\n/);
+        .split(
+            /\r?\n/
+        );
 
 
     if (
@@ -1914,9 +2137,12 @@ function parseCSV(
         linea
     ) {
 
-        const salida = [];
 
-        let actual = "";
+        const salida =
+            [];
+
+        let actual =
+            "";
 
         let comillas =
             false;
@@ -1928,6 +2154,7 @@ function parseCSV(
             i++
         ) {
 
+
             const c =
                 linea[i];
 
@@ -1936,12 +2163,14 @@ function parseCSV(
                 c === '"'
             ) {
 
+
                 if (
                     comillas &&
                     linea[i + 1] === '"'
                 ) {
 
-                    actual += '"';
+                    actual +=
+                        '"';
 
                     i++;
 
@@ -1965,13 +2194,15 @@ function parseCSV(
                     actual.trim()
                 );
 
-                actual = "";
+                actual =
+                    "";
 
             }
 
             else {
 
-                actual += c;
+                actual +=
+                    c;
 
             }
 
@@ -2000,7 +2231,8 @@ function parseCSV(
         );
 
 
-    const resultado = [];
+    const resultado =
+        [];
 
 
     for (
@@ -2008,6 +2240,7 @@ function parseCSV(
         i < lineas.length;
         i++
     ) {
+
 
         if (
             !lineas[i].trim()
@@ -2021,7 +2254,8 @@ function parseCSV(
             );
 
 
-        const obj = {};
+        const obj =
+            {};
 
 
         cabecera.forEach(
@@ -2051,12 +2285,13 @@ function parseCSV(
 
 
 /* =====================================================
-   FIRMS
+   FETCH FIRMS
 ===================================================== */
 
 async function fetchFIRMSArea(
     source
 ) {
+
 
     const key =
         obtenerMapKey();
@@ -2071,10 +2306,15 @@ async function fetchFIRMSArea(
     const url =
 
         `${CONFIG.FIRMS.BASE}` +
+
         `/api/area/csv/` +
+
         `${encodeURIComponent(key)}/` +
+
         `${encodeURIComponent(source)}/` +
+
         `${CONFIG.FIRMS.BBOX}/` +
+
         `${CONFIG.FIRMS.DAYS}`;
 
 
@@ -2088,7 +2328,9 @@ async function fetchFIRMSArea(
         );
 
 
-    if (!respuesta.ok) {
+    if (
+        !respuesta.ok
+    ) {
 
         throw new Error(
             `HTTP ${respuesta.status}`
@@ -2123,13 +2365,14 @@ async function fetchFIRMSArea(
 
 
 /* =====================================================
-   NORMALIZACIÓN VIIRS
+   NORMALIZAR VIIRS
 ===================================================== */
 
 function normalizarVIIRS(
     d,
     source
 ) {
+
 
     const lat =
         Number(
@@ -2186,8 +2429,10 @@ function normalizarVIIRS(
             Number.isFinite(t4) &&
             Number.isFinite(t5)
 
-                ? t4 - t5
-                : null,
+                ?
+                t4 - t5
+                :
+                null,
 
         frp:
             Number.isFinite(frp)
@@ -2206,12 +2451,13 @@ function normalizarVIIRS(
 
 
 /* =====================================================
-   NORMALIZACIÓN MODIS
+   NORMALIZAR MODIS
 ===================================================== */
 
 function normalizarMODIS(
     d
 ) {
+
 
     const t4 =
         Number(
@@ -2259,8 +2505,10 @@ function normalizarMODIS(
             Number.isFinite(t4) &&
             Number.isFinite(t5)
 
-                ? t4 - t5
-                : null,
+                ?
+                t4 - t5
+                :
+                null,
 
         sensor:
             "MODIS"
@@ -2271,12 +2519,13 @@ function normalizarMODIS(
 
 
 /* =====================================================
-   NORMALIZACIÓN GOES
+   NORMALIZAR GOES
 ===================================================== */
 
 function normalizarGOES(
     d
 ) {
+
 
     return {
 
@@ -2306,12 +2555,13 @@ function normalizarGOES(
 
 
 /* =====================================================
-   HOY PERÚ
+   FILTRAR HOY PERÚ
 ===================================================== */
 
 function filtrarHoyPeru(
     datos
 ) {
+
 
     const hoy =
         fechaPeru();
@@ -2319,6 +2569,7 @@ function filtrarHoyPeru(
 
     return datos.filter(
         d =>
+
             fechaPeruDeteccion(
                 d
             ) === hoy
@@ -2337,6 +2588,7 @@ function distanciaMetros(
     lat2,
     lon2
 ) {
+
 
     const R =
         6371000;
@@ -2374,12 +2626,16 @@ function distanciaMetros(
 
     const a =
 
-        Math.sin(dp / 2) ** 2 +
+        Math.sin(
+            dp / 2
+        ) ** 2 +
 
         Math.cos(p1) *
         Math.cos(p2) *
 
-        Math.sin(dl / 2) ** 2;
+        Math.sin(
+            dl / 2
+        ) ** 2;
 
 
     return (
@@ -2409,10 +2665,13 @@ function crearClusters(
     datos
 ) {
 
+
     const usados =
         new Set();
 
-    const clusters = [];
+
+    const clusters =
+        [];
 
 
     for (
@@ -2420,6 +2679,7 @@ function crearClusters(
         i < datos.length;
         i++
     ) {
+
 
         if (
             usados.has(i)
@@ -2442,6 +2702,7 @@ function crearClusters(
             cambio
         ) {
 
+
             cambio =
                 false;
 
@@ -2451,6 +2712,7 @@ function crearClusters(
                 j < datos.length;
                 j++
             ) {
+
 
                 if (
                     usados.has(j)
@@ -2521,11 +2783,18 @@ function calcularEstadisticasCluster(
     grupo
 ) {
 
-    let lat = 0;
-    let lon = 0;
 
-    let frpTotal = 0;
-    let frpMax = 0;
+    let lat =
+        0;
+
+    let lon =
+        0;
+
+    let frpTotal =
+        0;
+
+    let frpMax =
+        0;
 
     let t4Max =
         -Infinity;
@@ -2536,11 +2805,13 @@ function calcularEstadisticasCluster(
     let deltaTMax =
         -Infinity;
 
-    let confianzaAlta = 0;
+    let confianzaAlta =
+        0;
 
 
     grupo.forEach(
         d => {
+
 
             lat +=
                 d.latitude;
@@ -2548,10 +2819,12 @@ function calcularEstadisticasCluster(
             lon +=
                 d.longitude;
 
+
             frpTotal +=
                 Number(
                     d.frp
                 ) || 0;
+
 
             frpMax =
                 Math.max(
@@ -2566,36 +2839,45 @@ function calcularEstadisticasCluster(
                 Number.isFinite(
                     d.t4
                 )
-            )
+            ) {
+
                 t4Max =
                     Math.max(
                         t4Max,
                         d.t4
                     );
 
+            }
+
 
             if (
                 Number.isFinite(
                     d.t5
                 )
-            )
+            ) {
+
                 t5Min =
                     Math.min(
                         t5Min,
                         d.t5
                     );
 
+            }
+
 
             if (
                 Number.isFinite(
                     d.deltaT
                 )
-            )
+            ) {
+
                 deltaTMax =
                     Math.max(
                         deltaTMax,
                         d.deltaT
                     );
+
+            }
 
 
             const conf =
@@ -2617,6 +2899,7 @@ function calcularEstadisticasCluster(
 
     lat /=
         grupo.length;
+
 
     lon /=
         grupo.length;
@@ -2669,18 +2952,24 @@ function calcularEstadisticasCluster(
 
         t4Max:
             t4Max === -Infinity
-                ? null
-                : t4Max,
+                ?
+                null
+                :
+                t4Max,
 
         t5Min:
             t5Min === Infinity
-                ? null
-                : t5Min,
+                ?
+                null
+                :
+                t5Min,
 
         deltaTMax:
             deltaTMax === -Infinity
-                ? null
-                : deltaTMax,
+                ?
+                null
+                :
+                deltaTMax,
 
         confianzaAlta
 
@@ -2690,12 +2979,13 @@ function calcularEstadisticasCluster(
 
 
 /* =====================================================
-   CORROBORACIÓN MODIS
+   CORROBORAR MODIS
 ===================================================== */
 
 function corroborarMODIS(
     cluster
 ) {
+
 
     return datosMODIS
 
@@ -2734,12 +3024,13 @@ function corroborarMODIS(
 
 
 /* =====================================================
-   CORROBORACIÓN GOES
+   CORROBORAR GOES
 ===================================================== */
 
 function corroborarGOES(
     cluster
 ) {
+
 
     return datosGOES
 
@@ -2778,6 +3069,114 @@ function corroborarGOES(
 
 
 /* =====================================================
+   HRSL
+===================================================== */
+
+async function obtenerHRSL(
+    lat,
+    lon
+) {
+
+
+    if (
+        !CONFIG.HRSL_PROXY
+    ) {
+
+        return {
+
+            population1km:
+                null,
+
+            population3km:
+                null,
+
+            fuente:
+                "HRSL no conectado"
+
+        };
+
+    }
+
+
+    try {
+
+
+        const url =
+            `${CONFIG.HRSL_PROXY}` +
+            `?lat=${encodeURIComponent(lat)}` +
+            `&lon=${encodeURIComponent(lon)}`;
+
+
+        const respuesta =
+            await fetch(
+                url,
+                {
+                    cache:
+                        "force-cache"
+                }
+            );
+
+
+        if (
+            !respuesta.ok
+        )
+            throw new Error(
+                `HRSL HTTP ${respuesta.status}`
+            );
+
+
+        const data =
+            await respuesta.json();
+
+
+        return {
+
+            population1km:
+                Number(
+                    data.population1km
+                ) || 0,
+
+            population3km:
+                Number(
+                    data.population3km
+                ) || 0,
+
+            fuente:
+                data.fuente ||
+                "HRSL"
+
+        };
+
+    }
+
+    catch(error) {
+
+
+        console.warn(
+            "HRSL:",
+            error
+        );
+
+
+        return {
+
+            population1km:
+                null,
+
+            population3km:
+                null,
+
+            fuente:
+                "Error HRSL"
+
+        };
+
+    }
+
+}
+
+
+/* =====================================================
    FIRE SCORE
 ===================================================== */
 
@@ -2785,17 +3184,21 @@ function calcularFireScore(
     c
 ) {
 
+
     let score =
         0;
 
-    const razones = [];
+
+    const razones =
+        [];
 
 
     if (
         c.size >= 3
     ) {
 
-        score += 3;
+        score +=
+            3;
 
         razones.push(
             "≥3 VIIRS"
@@ -2808,7 +3211,8 @@ function calcularFireScore(
         c.size >= 5
     ) {
 
-        score += 1;
+        score +=
+            1;
 
         razones.push(
             "≥5 VIIRS"
@@ -2822,7 +3226,8 @@ function calcularFireScore(
         CONFIG.FILTRO.FRP_MIN
     ) {
 
-        score += 2;
+        score +=
+            2;
 
         razones.push(
             "FRP ≥10 MW"
@@ -2832,10 +3237,12 @@ function calcularFireScore(
 
 
     if (
-        c.frpMax >= 30
+        c.frpMax >=
+        30
     ) {
 
-        score += 2;
+        score +=
+            2;
 
         razones.push(
             "FRP ≥30 MW"
@@ -2852,7 +3259,8 @@ function calcularFireScore(
         CONFIG.FILTRO.T4_MIN
     ) {
 
-        score += 2;
+        score +=
+            2;
 
         razones.push(
             "T4 ≥320 K"
@@ -2869,7 +3277,8 @@ function calcularFireScore(
         CONFIG.FILTRO.DELTAT_MIN
     ) {
 
-        score += 3;
+        score +=
+            3;
 
         razones.push(
             "ΔT ≥20 K"
@@ -2879,10 +3288,29 @@ function calcularFireScore(
 
 
     if (
+        Number.isFinite(
+            c.deltaTMax
+        ) &&
+        c.deltaTMax >=
+        30
+    ) {
+
+        score +=
+            1;
+
+        razones.push(
+            "ΔT ≥30 K"
+        );
+
+    }
+
+
+    if (
         c.confianzaAlta > 0
     ) {
 
-        score += 2;
+        score +=
+            2;
 
         razones.push(
             "Confianza alta"
@@ -2895,7 +3323,8 @@ function calcularFireScore(
         c.modisCercanos.length
     ) {
 
-        score += 2;
+        score +=
+            2;
 
         razones.push(
             "MODIS ≤3 km"
@@ -2908,7 +3337,8 @@ function calcularFireScore(
         c.goesCercanos.length
     ) {
 
-        score += 2;
+        score +=
+            2;
 
         razones.push(
             "GOES ≤10 km"
@@ -2940,7 +3370,9 @@ function calcularFireScore(
     return {
 
         score,
+
         nivel,
+
         razones
 
     };
@@ -2949,642 +3381,569 @@ function calcularFireScore(
 
 
 /* =====================================================
-   POPUP SERFOR
+   EXPOSURE SCORE
 ===================================================== */
 
-function popupSERFOR(
-    feature,
-    tipo
+function calcularExposureScore(
+    c
 ) {
 
-    const props =
-        feature.properties ||
+
+    let score =
+        0;
+
+
+    const razones =
+        [];
+
+
+    const p =
+        c.poblacion ||
         {};
 
 
-    const titulo =
-        tipo === "foco"
-            ? "🔥 FOCO DE CALOR SERFOR"
-            : "🔥 INCENDIO FORESTAL SERFOR";
-
-
-    const color =
-        tipo === "foco"
-            ? "#8B1E3F"
-            : "#d32f2f";
-
-
-    let contenido = "";
-
-
-    Object.keys(
-        props
-    )
-    .slice(0,20)
-    .forEach(
-        campo => {
-
-            contenido +=
-
-                `<b>${campo}:</b> ` +
-
-                `${props[campo] ?? "N/D"}` +
-
-                "<br>";
-
-        }
-    );
-
-
-    return `
-
-    <div class="popup-incendio">
-
-        <h3 style="color:${color}">
-            ${titulo}
-        </h3>
-
-        <hr>
-
-        ${contenido}
-
-    </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   CONSULTAR SERFOR
-===================================================== */
-
-async function consultarSERFOR(
-    layerId
-) {
-
-    const url =
-        `${CONFIG.SERFOR.REST}/${layerId}/query` +
-
-        `?where=1%3D1` +
-
-        `&outFields=*` +
-
-        `&returnGeometry=true` +
-
-        `&outSR=4326` +
-
-        `&f=geojson`;
-
-
-    const respuesta =
-        await fetch(
-            url,
-            {
-                cache:
-                    "no-store"
-            }
-        );
-
-
     if (
-        !respuesta.ok
+        Number.isFinite(
+            p.population1km
+        )
     ) {
 
-        throw new Error(
-            `SERFOR HTTP ${respuesta.status}`
-        );
 
-    }
+        if (
+            p.population1km >=
+            1000
+        ) {
 
+            score +=
+                5;
 
-    return await respuesta.json();
-
-}
-
-
-/* =====================================================
-   DIBUJAR FOCOS
-===================================================== */
-
-function dibujarFocosSERFOR(
-    geojson
-) {
-
-    capaFocosSERFOR.clearLayers();
-
-
-    if (
-        !geojson ||
-        !geojson.features
-    )
-        return;
-
-
-    geojson.features.forEach(
-        feature => {
-
-            const geometry =
-                feature.geometry;
-
-
-            if (!geometry)
-                return;
-
-
-            if (
-                geometry.type ===
-                "Point"
-            ) {
-
-                const lon =
-                    geometry.coordinates[0];
-
-                const lat =
-                    geometry.coordinates[1];
-
-
-                L.marker(
-                    [
-                        lat,
-                        lon
-                    ],
-                    {
-                        icon:
-                            iconoFocoCalorSERFOR
-                    }
-                )
-                .bindPopup(
-                    popupSERFOR(
-                        feature,
-                        "foco"
-                    )
-                )
-                .bindTooltip(
-                    "🔥 Foco de calor SERFOR"
-                )
-                .addTo(
-                    capaFocosSERFOR
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   DIBUJAR ALERTAS
-===================================================== */
-
-function dibujarAlertasSERFOR(
-    geojson
-) {
-
-    capaAlertasSERFOR.clearLayers();
-
-
-    if (
-        !geojson ||
-        !geojson.features
-    )
-        return;
-
-
-    geojson.features.forEach(
-        feature => {
-
-            const geometry =
-                feature.geometry;
-
-
-            if (!geometry)
-                return;
-
-
-            if (
-                geometry.type ===
-                "Point"
-            ) {
-
-                const lon =
-                    geometry.coordinates[0];
-
-                const lat =
-                    geometry.coordinates[1];
-
-
-                L.marker(
-                    [
-                        lat,
-                        lon
-                    ],
-                    {
-                        icon:
-                            iconoAlertaSERFOR
-                    }
-                )
-                .bindPopup(
-                    popupSERFOR(
-                        feature,
-                        "alerta"
-                    )
-                )
-                .bindTooltip(
-                    "🔥 Incendio Forestal SERFOR"
-                )
-                .addTo(
-                    capaAlertasSERFOR
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   CARGAR FOCOS SERFOR
-===================================================== */
-
-async function cargarFocosSERFOR() {
-
-    try {
-
-        const geojson =
-            await consultarSERFOR(
-                CONFIG.SERFOR.FOCOS
+            razones.push(
+                "≥1000 personas/1 km"
             );
 
+        }
 
-        datosFocosSERFOR =
-            geojson.features ||
-            [];
+        else if (
+            p.population1km >=
+            100
+        ) {
 
+            score +=
+                3;
 
-        dibujarFocosSERFOR(
-            geojson
-        );
-
-
-        setText(
-            "totalFocosSERFOR",
-            datosFocosSERFOR.length
-        );
-
-    }
-
-    catch(error) {
-
-        console.error(
-            "Focos SERFOR:",
-            error
-        );
-
-
-        setText(
-            "totalFocosSERFOR",
-            "ERROR"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   CARGAR ALERTAS SERFOR
-===================================================== */
-
-async function cargarAlertasSERFOR() {
-
-    try {
-
-        const geojson =
-            await consultarSERFOR(
-                CONFIG.SERFOR.ALERTAS
+            razones.push(
+                "≥100 personas/1 km"
             );
 
+        }
 
-        datosAlertasSERFOR =
-            geojson.features ||
-            [];
+        else if (
+            p.population1km > 0
+        ) {
 
+            score +=
+                1;
 
-        dibujarAlertasSERFOR(
-            geojson
-        );
+            razones.push(
+                "Población cercana"
+            );
 
-
-        setText(
-            "totalAlertasSERFOR",
-            datosAlertasSERFOR.length
-        );
-
-    }
-
-    catch(error) {
-
-        console.error(
-            "Alertas SERFOR:",
-            error
-        );
-
-
-        setText(
-            "totalAlertasSERFOR",
-            "ERROR"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   CAPAS SERFOR
-===================================================== */
-
-function alternarFocosSERFOR() {
-
-    const checkbox =
-        document.getElementById(
-            "chkFocosSERFOR"
-        );
-
-
-    if (!checkbox)
-        return;
-
-
-    if (
-        checkbox.checked
-    ) {
-
-        capaFocosSERFOR.addTo(
-            map
-        );
-
-        cargarFocosSERFOR();
-
-    }
-
-    else {
-
-        map.removeLayer(
-            capaFocosSERFOR
-        );
-
-    }
-
-}
-
-
-function alternarAlertasSERFOR() {
-
-    const checkbox =
-        document.getElementById(
-            "chkAlertasSERFOR"
-        );
-
-
-    if (!checkbox)
-        return;
-
-
-    if (
-        checkbox.checked
-    ) {
-
-        capaAlertasSERFOR.addTo(
-            map
-        );
-
-        cargarAlertasSERFOR();
-
-    }
-
-    else {
-
-        map.removeLayer(
-            capaAlertasSERFOR
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   COORDENADAS
-===================================================== */
-
-function obtenerCoordenadasIngresadas() {
-
-    const lat =
-        Number(
-            document
-                .getElementById(
-                    "coordLat"
-                )
-                .value
-        );
-
-
-    const lon =
-        Number(
-            document
-                .getElementById(
-                    "coordLon"
-                )
-                .value
-        );
-
-
-    if (
-        !Number.isFinite(lat) ||
-        !Number.isFinite(lon)
-    ) {
-
-        alert(
-            "Ingrese una latitud y longitud válidas."
-        );
-
-        return null;
+        }
 
     }
 
 
     if (
-        lat < -90 ||
-        lat > 90
+        Number.isFinite(
+            p.population3km
+        )
     ) {
 
-        alert(
-            "Latitud fuera de rango."
-        );
 
-        return null;
+        if (
+            p.population3km >=
+            10000
+        ) {
+
+            score +=
+                3;
+
+            razones.push(
+                "≥10000 personas/3 km"
+            );
+
+        }
+
+        else if (
+            p.population3km >=
+            1000
+        ) {
+
+            score +=
+                2;
+
+            razones.push(
+                "≥1000 personas/3 km"
+            );
+
+        }
 
     }
+
+
+    let nivel;
 
 
     if (
-        lon < -180 ||
-        lon > 180
-    ) {
+        score >= 8
+    )
+        nivel =
+            "ALTA";
 
-        alert(
-            "Longitud fuera de rango."
-        );
+    else if (
+        score >= 4
+    )
+        nivel =
+            "MEDIA";
 
-        return null;
-
-    }
+    else
+        nivel =
+            "BAJA";
 
 
     return {
-        lat,
-        lon
+
+        score,
+
+        nivel,
+
+        razones
+
     };
 
 }
 
 
-function agregarMarcadorCoordenada(
-    lat,
-    lon
+/* =====================================================
+   ANALIZAR CLUSTER
+===================================================== */
+
+async function analizarCluster(
+    grupo
 ) {
 
-    capaCoordenada.clearLayers();
 
-
-    marcadorCoordenada =
-        L.marker(
-            [
-                lat,
-                lon
-            ],
-            {
-                icon:
-                    iconoCoordenada
-            }
+    const stats =
+        calcularEstadisticasCluster(
+            grupo
         );
 
 
-    marcadorCoordenada
-        .bindPopup(`
-
-            <div class="popup-incendio">
-
-                <h3 style="color:#1565c0">
-                    📍 COORDENADA
-                </h3>
-
-                <hr>
-
-                <b>Latitud:</b>
-                ${lat.toFixed(6)}
-
-                <br>
-
-                <b>Longitud:</b>
-                ${lon.toFixed(6)}
-
-            </div>
-
-        `)
-        .openPopup();
-
-
-    marcadorCoordenada.addTo(
-        capaCoordenada
-    );
-
-}
-
-
-function irACoordenada() {
-
-    const coordenadas =
-        obtenerCoordenadasIngresadas();
-
-
-    if (!coordenadas)
-        return;
-
-
-    agregarMarcadorCoordenada(
-        coordenadas.lat,
-        coordenadas.lon
-    );
-
-
-    const delta =
-        0.04;
-
-
-    const bounds =
-        L.latLngBounds(
-
-            [
-                coordenadas.lat - delta,
-                coordenadas.lon - delta
-            ],
-
-            [
-                coordenadas.lat + delta,
-                coordenadas.lon + delta
-            ]
-
+    const modis =
+        corroborarMODIS(
+            stats
         );
 
 
-    map.fitBounds(
-        bounds,
-        {
-            padding:
-                [40,40],
-
-            maxZoom:
-                14,
-
-            animate:
-                true
-        }
-    );
+    const goes =
+        corroborarGOES(
+            stats
+        );
 
 
-    actualizarEstado(
-        `📍 ${coordenadas.lat.toFixed(6)}, ` +
-        `${coordenadas.lon.toFixed(6)}`
-    );
+    const poblacion =
+        await obtenerHRSL(
+            stats.latitude,
+            stats.longitude
+        );
+
+
+    const cluster = {
+
+        ...stats,
+
+        cluster:
+            grupo,
+
+        modisCercanos:
+            modis,
+
+        goesCercanos:
+            goes,
+
+        poblacion,
+
+        fireScore:
+            0,
+
+        exposureScore:
+            0,
+
+        nivel:
+            "VIGILANCIA",
+
+        nivelExposicion:
+            "BAJA",
+
+        prioridad:
+            "BAJA"
+
+    };
+
+
+    const fire =
+        calcularFireScore(
+            cluster
+        );
+
+
+    cluster.fireScore =
+        fire.score;
+
+
+    cluster.nivel =
+        fire.nivel;
+
+
+    cluster.razonesFire =
+        fire.razones;
+
+
+    const exposure =
+        calcularExposureScore(
+            cluster
+        );
+
+
+    cluster.exposureScore =
+        exposure.score;
+
+
+    cluster.nivelExposicion =
+        exposure.nivel;
+
+
+    if (
+
+        cluster.fireScore >=
+        12 &&
+
+        cluster.exposureScore >=
+        8
+
+    ) {
+
+        cluster.prioridad =
+            "CRÍTICA";
+
+    }
+
+    else if (
+
+        cluster.fireScore >=
+        12 ||
+
+        (
+            cluster.fireScore >=
+            7 &&
+
+            cluster.exposureScore >=
+            4
+        )
+
+    ) {
+
+        cluster.prioridad =
+            "ALTA";
+
+    }
+
+    else if (
+        cluster.fireScore >=
+        7
+    ) {
+
+        cluster.prioridad =
+            "MEDIA";
+
+    }
+
+    else {
+
+        cluster.prioridad =
+            "BAJA";
+
+    }
+
+
+    return cluster;
 
 }
 
 
-function agregarCoordenada() {
+/* =====================================================
+   COLORES
+===================================================== */
 
-    irACoordenada();
+function colorNivel(
+    nivel
+) {
+
+
+    if (
+        nivel ===
+        "ALTO"
+    )
+        return "#d50000";
+
+
+    if (
+        nivel ===
+        "MEDIO"
+    )
+        return "#ef6c00";
+
+
+    return "#1565c0";
 
 }
 
 
-function limpiarCoordenada() {
-
-    capaCoordenada.clearLayers();
-
-    marcadorCoordenada =
-        null;
+function colorPrioridad(
+    prioridad
+) {
 
 
-    actualizarEstado(
-        "📍 Coordenada eliminada"
-    );
+    switch(
+        prioridad
+    ) {
+
+        case "CRÍTICA":
+            return "#8e0000";
+
+        case "ALTA":
+            return "#d50000";
+
+        case "MEDIA":
+            return "#ef6c00";
+
+        default:
+            return "#1565c0";
+
+    }
+
+}
+
+
+/* =====================================================
+   POPUP CLUSTER
+===================================================== */
+
+function popupCluster(
+    c
+) {
+
+
+    const mejor =
+        [...c.cluster]
+        .sort(
+            (a,b) =>
+                (b.frp || 0) -
+                (a.frp || 0)
+        )[0];
+
+
+    const fecha =
+        crearFechaDeteccion(
+            mejor.acq_date,
+            mejor.acq_time
+        );
+
+
+    const fechaP =
+        fecha
+            ?
+            fechaPeruDeteccion(
+                mejor
+            )
+            :
+            "N/D";
+
+
+    const horaP =
+        fecha
+            ?
+            horaPeru(fecha)
+            :
+            "N/D";
+
+
+    const horaU =
+        fecha
+            ?
+            horaUTC(fecha)
+            :
+            "N/D";
+
+
+    const p =
+        c.poblacion ||
+        {};
+
+
+    return `
+
+<div class="popup-incendio">
+
+<h3 style="
+color:${colorNivel(c.nivel)}
+">
+🔥 INCENDIO ${c.nivel}
+</h3>
+
+<span
+class="badge"
+style="
+background:${colorPrioridad(c.prioridad)}
+">
+PRIORIDAD ${c.prioridad}
+</span>
+
+<hr>
+
+<b>FIRE SCORE:</b>
+${c.fireScore}
+
+<br>
+
+<b>EXPOSURE SCORE:</b>
+${c.exposureScore}
+
+<hr>
+
+<b>Latitud:</b>
+${c.latitude.toFixed(6)}
+
+<br>
+
+<b>Longitud:</b>
+${c.longitude.toFixed(6)}
+
+<hr>
+
+<b>Fecha Perú:</b>
+${fechaP}
+
+<br>
+
+<b>Hora Perú:</b>
+${horaP}
+
+<br>
+
+<b>Hora UTC:</b>
+${horaU}
+
+<hr>
+
+<b>VIIRS:</b>
+${c.size}
+
+<br>
+
+<b>Radio:</b>
+${c.radioMax.toFixed(0)} m
+
+<br>
+
+<b>FRP máximo:</b>
+${c.frpMax.toFixed(2)} MW
+
+<br>
+
+<b>FRP acumulado:</b>
+${c.frpTotal.toFixed(2)} MW
+
+<br>
+
+<b>T4 máximo:</b>
+${
+    Number.isFinite(c.t4Max)
+        ?
+        c.t4Max.toFixed(2) + " K"
+        :
+        "N/D"
+}
+
+<br>
+
+<b>ΔT máximo:</b>
+${
+    Number.isFinite(c.deltaTMax)
+        ?
+        c.deltaTMax.toFixed(2) + " K"
+        :
+        "N/D"
+}
+
+<hr>
+
+<b>MODIS ≤3 km:</b>
+${c.modisCercanos.length}
+
+<br>
+
+<b>GOES ≤10 km:</b>
+${c.goesCercanos.length}
+
+<hr>
+
+<b>👥 Población 1 km:</b>
+${
+    Number.isFinite(
+        p.population1km
+    )
+        ?
+        p.population1km.toLocaleString()
+        :
+        "No conectado"
+}
+
+<br>
+
+<b>👥 Población 3 km:</b>
+${
+    Number.isFinite(
+        p.population3km
+    )
+        ?
+        p.population3km.toLocaleString()
+        :
+        "No conectado"
+}
+
+<hr>
+
+<b>CRITERIOS</b>
+
+<br><br>
+
+${
+    c.razonesFire.length
+        ?
+        c.razonesFire
+        .map(
+            r =>
+                `✓ ${r}`
+        )
+        .join("<br>")
+        :
+        "Ninguno"
+}
+
+</div>
+
+`;
 
 }
 
@@ -3597,11 +3956,13 @@ function dibujarVIIRS(
     datos
 ) {
 
+
     capaVIIRS.clearLayers();
 
 
     datos.forEach(
         d => {
+
 
             if (
                 !Number.isFinite(
@@ -3616,10 +3977,12 @@ function dibujarVIIRS(
 
             const marker =
                 L.circleMarker(
+
                     [
                         d.latitude,
                         d.longitude
                     ],
+
                     {
 
                         radius:
@@ -3638,26 +4001,49 @@ function dibujarVIIRS(
                             1
 
                     }
+
                 );
 
 
             marker.bindTooltip(`
 
-                <b>🔥 VIIRS</b>
+<b>🔥 VIIRS</b>
 
-                <br>
+<br>
 
-                ${d.satellite || ""}
+${d.satellite || ""}
 
-                <br>
+<br>
 
-                FRP:
-                ${Number(
-                    d.frp || 0
-                ).toFixed(2)}
-                MW
+FRP:
+${Number(d.frp || 0).toFixed(2)}
+MW
 
-            `);
+<br>
+
+T4:
+${
+    Number.isFinite(d.t4)
+        ?
+        d.t4.toFixed(1)
+        :
+        "N/D"
+}
+K
+
+<br>
+
+ΔT:
+${
+    Number.isFinite(d.deltaT)
+        ?
+        d.deltaT.toFixed(1)
+        :
+        "N/D"
+}
+K
+
+`);
 
 
             marker.addTo(
@@ -3678,11 +4064,13 @@ function dibujarMODIS(
     datos
 ) {
 
+
     capaMODIS.clearLayers();
 
 
     datos.forEach(
         d => {
+
 
             if (
                 !Number.isFinite(
@@ -3722,19 +4110,28 @@ function dibujarMODIS(
                 }
 
             )
+
             .bindTooltip(`
 
-                <b>🛰️ MODIS</b>
+<b>🛰️ MODIS</b>
 
-                <br>
+<br>
 
-                FRP:
-                ${Number(
-                    d.frp || 0
-                ).toFixed(2)}
-                MW
+${d.satellite || ""}
 
-            `)
+<br>
+
+FRP:
+${Number(d.frp || 0).toFixed(2)}
+MW
+
+<br>
+
+Confianza:
+${d.confidence || "N/D"}
+
+`)
+
             .addTo(
                 capaMODIS
             );
@@ -3753,11 +4150,13 @@ function dibujarGOES(
     datos
 ) {
 
+
     capaGOES.clearLayers();
 
 
     datos.forEach(
         d => {
+
 
             if (
                 !Number.isFinite(
@@ -3783,58 +4182,71 @@ function dibujarGOES(
             if (
                 frp >= 100
             )
-                radio = 10;
+                radio =
+                    10;
 
             else if (
                 frp >= 50
             )
-                radio = 8;
+                radio =
+                    8;
 
             else if (
                 frp >= 20
             )
-                radio = 7;
+                radio =
+                    7;
 
 
-            L.circleMarker(
+            const marker =
+                L.circleMarker(
 
-                [
-                    d.latitude,
-                    d.longitude
-                ],
+                    [
+                        d.latitude,
+                        d.longitude
+                    ],
 
-                {
+                    {
 
-                    radius:
-                        radio,
+                        radius:
+                            radio,
 
-                    color:
-                        "#ff6d00",
+                        color:
+                            "#ff6d00",
 
-                    fillColor:
-                        "#ff9800",
+                        fillColor:
+                            "#ff9800",
 
-                    fillOpacity:
-                        .80,
+                        fillOpacity:
+                            .80,
 
-                    weight:
-                        2
+                        weight:
+                            2
 
-                }
+                    }
 
-            )
-            .bindTooltip(`
+                );
 
-                <b>🟠 GOES</b>
 
-                <br>
+            marker.bindTooltip(`
 
-                FRP:
-                ${frp.toFixed(2)}
-                MW
+<b>🟠 GOES</b>
 
-            `)
-            .addTo(
+<br>
+
+Satélite:
+${d.satellite || "GOES"}
+
+<br>
+
+FRP:
+${frp.toFixed(2)}
+MW
+
+`);
+
+
+            marker.addTo(
                 capaGOES
             );
 
@@ -3845,51 +4257,2180 @@ function dibujarGOES(
 
 
 /* =====================================================
-   COLORES
+   SERFOR — CONSULTA REST
 ===================================================== */
 
-function colorNivel(
-    nivel
+async function consultarSERFOR(
+    layerId
 ) {
 
-    if (
-        nivel === "ALTO"
-    )
-        return "#d50000";
+
+    const url =
+
+        CONFIG.SERFOR.BASE +
+
+        "/" +
+
+        layerId +
+
+        "/query?" +
+
+        "where=1%3D1" +
+
+        "&outFields=*" +
+
+        "&returnGeometry=true" +
+
+        "&outSR=4326" +
+
+        "&returnZ=false" +
+
+        "&f=geojson";
+
+
+    const respuesta =
+        await fetch(
+            url,
+            {
+                cache:
+                    "no-store"
+            }
+        );
 
 
     if (
-        nivel === "MEDIO"
-    )
-        return "#ef6c00";
+        !respuesta.ok
+    ) {
+
+        throw new Error(
+            "SERFOR HTTP " +
+            respuesta.status
+        );
+
+    }
 
 
-    return "#1565c0";
+    const data =
+        await respuesta.json();
+
+
+    if (
+        data.error
+    ) {
+
+        throw new Error(
+            data.error.message ||
+            "Error SERFOR"
+        );
+
+    }
+
+
+    return data.features || [];
 
 }
 
 
-function colorPrioridad(
-    prioridad
+/* =====================================================
+   FORMATEAR VALOR
+===================================================== */
+
+function formatearValor(
+    valor
 ) {
 
-    switch(
-        prioridad
+
+    if (
+        valor === null ||
+        valor === undefined ||
+        valor === ""
+    )
+        return "N/D";
+
+
+    if (
+        typeof valor ===
+        "number"
     ) {
 
-        case "CRÍTICA":
-            return "#8e0000";
-
-        case "ALTA":
-            return "#d50000";
-
-        case "MEDIA":
-            return "#ef6c00";
-
-        default:
-            return "#1565c0";
+        return valor.toLocaleString(
+            "es-PE"
+        );
 
     }
+
+
+    return String(
+        valor
+    );
+
+}
+
+
+/* =====================================================
+   POPUP GENÉRICO SERFOR
+===================================================== */
+
+function crearPopupSERFOR(
+    titulo,
+    color,
+    properties,
+    lat,
+    lon,
+    tipo
+) {
+
+
+    let html = `
+
+<div class="popup-serfor">
+
+<h3 style="
+color:${color}
+">
+${titulo}
+</h3>
+
+<hr>
+
+<b>Latitud:</b>
+${lat.toFixed(6)}
+
+<br>
+
+<b>Longitud:</b>
+${lon.toFixed(6)}
+
+<hr>
+`;
+
+
+    /* Campos principales */
+
+    const camposPreferidos = [
+
+        ["FUENTE","Fuente"],
+        ["CODREP","Código de reporte"],
+        ["FECHA","Fecha"],
+        ["HORA","Hora"],
+        ["SENSAT","Satélite"],
+        ["CONF","Confianza"],
+        ["ESTADO","Estado"],
+        ["PELIGRO","Nivel de peligro"],
+        ["TIPCOB","Tipo de cobertura"],
+        ["NOMDEP","Departamento"],
+        ["NOMPRO","Provincia"],
+        ["NOMDIS","Distrito"],
+        ["NOMCATEG","Categoría territorial"],
+        ["OBSERV","Observación"],
+        ["DOCREG","Documento"],
+        ["FECREG","Fecha registro"]
+
+    ];
+
+
+    camposPreferidos.forEach(
+        ([campo, etiqueta]) => {
+
+            if (
+                properties[campo] !==
+                undefined
+            ) {
+
+                let valor =
+                    properties[campo];
+
+
+                if (
+                    campo ===
+                    "ESTADO"
+                ) {
+
+                    valor =
+                        estadoIncendioSERFOR(
+                            valor
+                        );
+
+                }
+
+
+                html += `
+
+<b>${etiqueta}:</b>
+${formatearValor(valor)}
+
+<br>
+
+`;
+
+            }
+
+        }
+    );
+
+
+    html += `
+
+<hr>
+
+<b>Campos SERFOR:</b>
+
+<br><br>
+
+`;
+
+
+    /* Mostrar todos los campos */
+
+    Object.keys(
+        properties
+    ).forEach(
+        campo => {
+
+
+            if (
+                camposPreferidos
+                .some(
+                    x =>
+                        x[0] ===
+                        campo
+                )
+            )
+                return;
+
+
+            const valor =
+                properties[campo];
+
+
+            if (
+                valor ===
+                null ||
+                valor ===
+                undefined ||
+                valor ===
+                ""
+            )
+                return;
+
+
+            html += `
+
+<span style="
+font-size:10px;
+color:#555;
+">
+
+<b>${campo}:</b>
+${formatearValor(valor)}
+
+</span>
+
+<br>
+
+`;
+
+        }
+    );
+
+
+    html +=
+        "</div>";
+
+
+    return html;
+
+}
+
+
+/* =====================================================
+   ESTADO INCENDIO SERFOR
+===================================================== */
+
+function estadoIncendioSERFOR(
+    estado
+) {
+
+
+    switch(
+        Number(estado)
+    ) {
+
+        case 1:
+            return "🔴 Alertado";
+
+        case 2:
+            return "🔥 Confirmado";
+
+        case 3:
+            return "🟠 Controlado";
+
+        case 4:
+            return "🟢 Extinguido";
+
+        default:
+            return formatearValor(
+                estado
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   DIBUJAR FOCOS SERFOR
+===================================================== */
+
+function dibujarFocosSERFOR(
+    features
+) {
+
+
+    capaFocosSERFOR.clearLayers();
+
+
+    features.forEach(
+        feature => {
+
+
+            const coords =
+                feature.geometry &&
+                feature.geometry.coordinates;
+
+
+            if (
+                !coords ||
+                coords.length <
+                2
+            )
+                return;
+
+
+            const lon =
+                Number(
+                    coords[0]
+                );
+
+
+            const lat =
+                Number(
+                    coords[1]
+                );
+
+
+            if (
+                !Number.isFinite(
+                    lat
+                ) ||
+                !Number.isFinite(
+                    lon
+                )
+            )
+                return;
+
+
+            const properties =
+                feature.properties ||
+                {};
+
+
+            const icon =
+                L.divIcon({
+
+                    className:
+                        "marker-foco-serfor",
+
+                    html:
+                        '<div class="foco-serfor-marker"></div>',
+
+                    iconSize:
+                        [13,13],
+
+                    iconAnchor:
+                        [6,6]
+
+                });
+
+
+            const marker =
+                L.marker(
+
+                    [
+                        lat,
+                        lon
+                    ],
+
+                    {
+                        icon:
+                            icon
+                    }
+
+                );
+
+
+            marker.bindPopup(
+
+                crearPopupSERFOR(
+
+                    "🟣 FOCO DE CALOR SERFOR",
+
+                    "#800020",
+
+                    properties,
+
+                    lat,
+
+                    lon,
+
+                    "FOCO"
+
+                ),
+
+                {
+                    maxWidth:
+                        430
+                }
+
+            );
+
+
+            marker.bindTooltip(
+
+                `
+
+<b>🟣 FOCO DE CALOR SERFOR</b>
+
+<br>
+
+${properties.NOMDEP || ""}
+
+<br>
+
+${properties.NOMPRO || ""}
+
+<br>
+
+${properties.NOMDIS || ""}
+
+`,
+
+                {
+                    direction:
+                        "top"
+                }
+
+            );
+
+
+            marker.addTo(
+                capaFocosSERFOR
+            );
+
+        }
+    );
+
+
+    actualizarContador(
+        "contadorFocosSERFOR",
+        features.length
+    );
+
+}
+
+
+/* =====================================================
+   DIBUJAR INCENDIOS SERFOR
+===================================================== */
+
+function dibujarIncendiosSERFOR(
+    features
+) {
+
+
+    capaIncendiosSERFOR.clearLayers();
+
+
+    features.forEach(
+        feature => {
+
+
+            const coords =
+                feature.geometry &&
+                feature.geometry.coordinates;
+
+
+            if (
+                !coords ||
+                coords.length <
+                2
+            )
+                return;
+
+
+            const lon =
+                Number(
+                    coords[0]
+                );
+
+
+            const lat =
+                Number(
+                    coords[1]
+                );
+
+
+            if (
+                !Number.isFinite(
+                    lat
+                ) ||
+                !Number.isFinite(
+                    lon
+                )
+            )
+                return;
+
+
+            const properties =
+                feature.properties ||
+                {};
+
+
+            const estado =
+                Number(
+                    properties.ESTADO
+                );
+
+
+            let emoji =
+                "🔥";
+
+
+            if (
+                estado ===
+                1
+            )
+                emoji =
+                    "🔴";
+
+            else if (
+                estado ===
+                3
+            )
+                emoji =
+                    "🟠";
+
+            else if (
+                estado ===
+                4
+            )
+                emoji =
+                    "🟢";
+
+
+            const icon =
+                L.divIcon({
+
+                    className:
+                        "marker-fuego-serfor",
+
+                    html:
+
+                        `<div style="
+                            font-size:24px;
+                            line-height:26px;
+                            filter:
+                            drop-shadow(
+                                0 0 3px #000
+                            );
+                        ">
+                        ${emoji}
+                        </div>`,
+
+                    iconSize:
+                        [26,26],
+
+                    iconAnchor:
+                        [13,24]
+
+                });
+
+
+            const marker =
+                L.marker(
+
+                    [
+                        lat,
+                        lon
+                    ],
+
+                    {
+                        icon:
+                            icon
+                    }
+
+                );
+
+
+            marker.bindPopup(
+
+                crearPopupSERFOR(
+
+                    "🔥 INCENDIO FORESTAL SERFOR",
+
+                    "#d50000",
+
+                    properties,
+
+                    lat,
+
+                    lon,
+
+                    "INCENDIO"
+
+                ),
+
+                {
+                    maxWidth:
+                        430
+                }
+
+            );
+
+
+            marker.bindTooltip(
+
+                `
+
+<b>🔥 INCENDIO FORESTAL SERFOR</b>
+
+<br>
+
+Estado:
+${estadoIncendioSERFOR(
+    properties.ESTADO
+)}
+
+<br>
+
+${properties.NOMDEP || ""}
+
+<br>
+
+${properties.NOMPRO || ""}
+
+<br>
+
+${properties.NOMDIS || ""}
+
+`,
+
+                {
+                    direction:
+                        "top"
+                }
+
+            );
+
+
+            marker.addTo(
+                capaIncendiosSERFOR
+            );
+
+        }
+    );
+
+
+    actualizarContador(
+        "contadorIncendiosSERFOR",
+        features.length
+    );
+
+}
+
+
+/* =====================================================
+   CONTADOR SEGURO
+===================================================== */
+
+function actualizarContador(
+    id,
+    valor
+) {
+
+
+    const elemento =
+        document.getElementById(
+            id
+        );
+
+
+    if (
+        elemento
+    ) {
+
+        elemento.textContent =
+            valor;
+
+    }
+
+}
+
+
+/* =====================================================
+   ESTADO SERFOR
+===================================================== */
+
+function actualizarEstadoSERFOR(
+    texto
+) {
+
+
+    const elemento =
+        document.getElementById(
+            "estadoSERFOR"
+        );
+
+
+    if (
+        elemento
+    ) {
+
+        elemento.textContent =
+            texto;
+
+    }
+
+}
+
+
+/* =====================================================
+   CARGAR FOCOS SERFOR
+===================================================== */
+
+async function cargarFocosSERFOR() {
+
+
+    try {
+
+
+        actualizarEstadoSERFOR(
+            "Consultando Focos de Calor SERFOR..."
+        );
+
+
+        const features =
+            await consultarSERFOR(
+                CONFIG.SERFOR.FOCOS
+            );
+
+
+        datosFocosSERFOR =
+            features;
+
+
+        dibujarFocosSERFOR(
+            features
+        );
+
+
+        actualizarEstadoSERFOR(
+
+            "✓ Focos de calor SERFOR: " +
+            features.length +
+            " registros"
+
+        );
+
+    }
+
+    catch(error) {
+
+
+        console.error(
+            "Focos SERFOR:",
+            error
+        );
+
+
+        actualizarEstadoSERFOR(
+
+            "❌ Error Focos SERFOR: " +
+            error.message
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CARGAR INCENDIOS SERFOR
+===================================================== */
+
+async function cargarIncendiosSERFOR() {
+
+
+    try {
+
+
+        actualizarEstadoSERFOR(
+            "Consultando Incendios Forestales SERFOR..."
+        );
+
+
+        const features =
+            await consultarSERFOR(
+                CONFIG.SERFOR.INCENDIOS
+            );
+
+
+        datosIncendiosSERFOR =
+            features;
+
+
+        dibujarIncendiosSERFOR(
+            features
+        );
+
+
+        actualizarEstadoSERFOR(
+
+            "✓ Incendios forestales SERFOR: " +
+            features.length +
+            " registros"
+
+        );
+
+    }
+
+    catch(error) {
+
+
+        console.error(
+            "Incendios SERFOR:",
+            error
+        );
+
+
+        actualizarEstadoSERFOR(
+
+            "❌ Error Incendios SERFOR: " +
+            error.message
+
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TOGGLE FOCOS SERFOR
+===================================================== */
+
+function toggleFocosSERFOR() {
+
+
+    const checkbox =
+        document.getElementById(
+            "chkFocosSERFOR"
+        );
+
+
+    if (
+        !checkbox
+    )
+        return;
+
+
+    if (
+        checkbox.checked
+    ) {
+
+
+        capaFocosSERFOR.addTo(
+            map
+        );
+
+
+        if (
+            datosFocosSERFOR.length
+        ) {
+
+            dibujarFocosSERFOR(
+                datosFocosSERFOR
+            );
+
+        }
+
+        else {
+
+            cargarFocosSERFOR();
+
+        }
+
+    }
+
+    else {
+
+
+        map.removeLayer(
+            capaFocosSERFOR
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TOGGLE INCENDIOS SERFOR
+===================================================== */
+
+function toggleIncendiosSERFOR() {
+
+
+    const checkbox =
+        document.getElementById(
+            "chkIncendiosSERFOR"
+        );
+
+
+    if (
+        !checkbox
+    )
+        return;
+
+
+    if (
+        checkbox.checked
+    ) {
+
+
+        capaIncendiosSERFOR.addTo(
+            map
+        );
+
+
+        if (
+            datosIncendiosSERFOR.length
+        ) {
+
+            dibujarIncendiosSERFOR(
+                datosIncendiosSERFOR
+            );
+
+        }
+
+        else {
+
+            cargarIncendiosSERFOR();
+
+        }
+
+    }
+
+    else {
+
+
+        map.removeLayer(
+            capaIncendiosSERFOR
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   COORDENADAS
+===================================================== */
+
+function obtenerCoordenadasInput() {
+
+
+    const latInput =
+        document.getElementById(
+            "latitudInput"
+        );
+
+
+    const lonInput =
+        document.getElementById(
+            "longitudInput"
+        );
+
+
+    if (
+        !latInput ||
+        !lonInput
+    ) {
+
+        return null;
+
+    }
+
+
+    const lat =
+        Number(
+            latInput.value
+        );
+
+
+    const lon =
+        Number(
+            lonInput.value
+        );
+
+
+    if (
+        !Number.isFinite(lat) ||
+        !Number.isFinite(lon)
+    ) {
+
+        alert(
+            "Ingrese latitud y longitud válidas."
+        );
+
+        return null;
+
+    }
+
+
+    if (
+        lat < -90 ||
+        lat > 90
+    ) {
+
+        alert(
+            "La latitud debe estar entre -90 y 90."
+        );
+
+        return null;
+
+    }
+
+
+    if (
+        lon < -180 ||
+        lon > 180
+    ) {
+
+        alert(
+            "La longitud debe estar entre -180 y 180."
+        );
+
+        return null;
+
+    }
+
+
+    return {
+        lat,
+        lon
+    };
+
+}
+
+
+/* =====================================================
+   ZOOM PROPORCIONAL A PANTALLA
+===================================================== */
+
+function zoomCoordenada() {
+
+
+    const ancho =
+        window.innerWidth;
+
+
+    if (
+        ancho < 600
+    )
+        return 9;
+
+
+    if (
+        ancho < 1000
+    )
+        return 10;
+
+
+    return 11;
+
+}
+
+
+/* =====================================================
+   IR A COORDENADA
+===================================================== */
+
+function irACoordenada() {
+
+
+    const coordenadas =
+        obtenerCoordenadasInput();
+
+
+    if (
+        !coordenadas
+    )
+        return;
+
+
+    map.setView(
+
+        [
+            coordenadas.lat,
+            coordenadas.lon
+        ],
+
+        zoomCoordenada(),
+
+        {
+            animate:
+                true
+        }
+
+    );
+
+
+    actualizarEstado(
+
+        `📍 Vista:
+        ${coordenadas.lat.toFixed(6)},
+        ${coordenadas.lon.toFixed(6)}`
+
+    );
+
+}
+
+
+/* =====================================================
+   AGREGAR PUNTO
+===================================================== */
+
+function agregarPuntoCoordenada() {
+
+
+    const coordenadas =
+        obtenerCoordenadasInput();
+
+
+    if (
+        !coordenadas
+    )
+        return;
+
+
+    capaPuntoCoordenada.clearLayers();
+
+
+    const marker =
+        L.marker(
+
+            [
+                coordenadas.lat,
+                coordenadas.lon
+            ]
+
+        );
+
+
+    marker.bindPopup(`
+
+<div class="popup-serfor">
+
+<h3 style="
+color:#1565c0
+">
+📍 PUNTO DE CONSULTA
+</h3>
+
+<hr>
+
+<b>Latitud:</b>
+${coordenadas.lat.toFixed(6)}
+
+<br>
+
+<b>Longitud:</b>
+${coordenadas.lon.toFixed(6)}
+
+</div>
+
+`);
+
+
+    marker.addTo(
+        capaPuntoCoordenada
+    );
+
+
+    capaPuntoCoordenada.addTo(
+        map
+    );
+
+
+    map.setView(
+
+        [
+            coordenadas.lat,
+            coordenadas.lon
+        ],
+
+        zoomCoordenada(),
+
+        {
+            animate:
+                true
+        }
+
+    );
+
+
+    marker.openPopup();
+
+
+    actualizarEstado(
+        "📍 Punto agregado"
+    );
+
+}
+
+
+/* =====================================================
+   LIMPIAR PUNTO
+===================================================== */
+
+function limpiarPuntoCoordenada() {
+
+
+    capaPuntoCoordenada.clearLayers();
+
+
+    actualizarEstado(
+        "Punto eliminado"
+    );
+
+}
+
+
+/* =====================================================
+   ESTADO GENERAL
+===================================================== */
+
+function actualizarEstado(
+    texto
+) {
+
+
+    const elemento =
+        document.getElementById(
+            "estado"
+        );
+
+
+    if (
+        elemento
+    ) {
+
+        elemento.textContent =
+            texto;
+
+    }
+
+}
+
+
+/* =====================================================
+   CARGA
+===================================================== */
+
+function mostrarCarga(
+    mostrar,
+    texto
+) {
+
+
+    const panel =
+        document.getElementById(
+            "cargando"
+        );
+
+
+    if (
+        !panel
+    )
+        return;
+
+
+    panel.style.display =
+        mostrar
+            ?
+            "flex"
+            :
+            "none";
+
+
+    if (
+        texto
+    )
+        actualizarCarga(
+            texto
+        );
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR CARGA
+===================================================== */
+
+function actualizarCarga(
+    texto
+) {
+
+
+    const elemento =
+        document.getElementById(
+            "textoCarga"
+        );
+
+
+    if (
+        elemento
+    ) {
+
+        elemento.textContent =
+            texto;
+
+    }
+
+}
+
+
+/* =====================================================
+   ESTADÍSTICAS
+===================================================== */
+
+function actualizarEstadisticas(
+    clusters
+) {
+
+
+    const ahora =
+        new Date();
+
+
+    const fecha =
+        document.getElementById(
+            "fechaPeru"
+        );
+
+
+    const hora =
+        document.getElementById(
+            "horaPeru"
+        );
+
+
+    const utc =
+        document.getElementById(
+            "horaUTC"
+        );
+
+
+    const viirs =
+        document.getElementById(
+            "totalVIIRS"
+        );
+
+
+    const modis =
+        document.getElementById(
+            "totalMODIS"
+        );
+
+
+    const goes =
+        document.getElementById(
+            "totalGOES"
+        );
+
+
+    const totalClusters =
+        document.getElementById(
+            "totalClusters"
+        );
+
+
+    const totalAlto =
+        document.getElementById(
+            "totalAlto"
+        );
+
+
+    const totalExposicion =
+        document.getElementById(
+            "totalExposicion"
+        );
+
+
+    if (fecha)
+        fecha.textContent =
+            fechaPeru();
+
+
+    if (hora)
+        hora.textContent =
+            horaPeru(
+                ahora
+            );
+
+
+    if (utc)
+        utc.textContent =
+            horaUTC(
+                ahora
+            );
+
+
+    if (viirs)
+        viirs.textContent =
+            datosVIIRS.length;
+
+
+    if (modis)
+        modis.textContent =
+            datosMODIS.length;
+
+
+    if (goes)
+        goes.textContent =
+            datosGOES.length;
+
+
+    if (totalClusters)
+        totalClusters.textContent =
+            clusters.length;
+
+
+    if (totalAlto)
+        totalAlto.textContent =
+
+            clusters.filter(
+                c =>
+                    c.nivel ===
+                    "ALTO"
+            ).length;
+
+
+    if (totalExposicion)
+        totalExposicion.textContent =
+
+            clusters.filter(
+                c =>
+                    c.exposureScore >=
+                    4
+            ).length;
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR INCENDIOS
+===================================================== */
+
+async function actualizarIncendios(
+    manual = false
+) {
+
+
+    if (
+        actualizando
+    )
+        return;
+
+
+    const key =
+        obtenerMapKey();
+
+
+    if (!key) {
+
+
+        actualizarEstado(
+            "⚠️ Falta MAP_KEY"
+        );
+
+
+        return;
+
+    }
+
+
+    actualizando =
+        true;
+
+
+    const boton =
+        document.getElementById(
+            "btnActualizar"
+        );
+
+
+    if (boton)
+        boton.disabled =
+            true;
+
+
+    mostrarCarga(
+        true,
+        "Consultando FIRMS..."
+    );
+
+
+    try {
+
+
+        /* =========================================
+           VIIRS
+        ========================================= */
+
+        const resultadosVIIRS =
+            [];
+
+
+        const erroresVIIRS =
+            [];
+
+
+        for (
+            const source of
+            CONFIG.FIRMS.SOURCES
+        ) {
+
+
+            actualizarCarga(
+                `Consultando ${source}...`
+            );
+
+
+            try {
+
+
+                const datos =
+                    await fetchFIRMSArea(
+                        source
+                    );
+
+
+                const normalizados =
+                    datos
+
+                    .map(
+                        d =>
+                            normalizarVIIRS(
+                                d,
+                                source
+                            )
+                    )
+
+                    .filter(
+                        d =>
+
+                            Number.isFinite(
+                                d.latitude
+                            ) &&
+
+                            Number.isFinite(
+                                d.longitude
+                            )
+                    );
+
+
+                resultadosVIIRS.push(
+                    ...normalizados
+                );
+
+
+            }
+
+            catch(error) {
+
+
+                console.warn(
+                    source,
+                    error
+                );
+
+
+                erroresVIIRS.push(
+                    source
+                );
+
+            }
+
+        }
+
+
+        datosVIIRS =
+            filtrarHoyPeru(
+                resultadosVIIRS
+            );
+
+
+        const estadoVIIRS =
+            document.getElementById(
+                "estadoVIIRS"
+            );
+
+
+        if (
+            estadoVIIRS
+        ) {
+
+            estadoVIIRS.textContent =
+
+                erroresVIIRS.length === 0
+
+                    ?
+                    "OK"
+
+                    :
+                    `Parcial (${erroresVIIRS.length})`;
+
+
+            estadoVIIRS.className =
+
+                erroresVIIRS.length === 0
+
+                    ?
+                    "sensor-ok"
+
+                    :
+                    "sensor-error";
+
+        }
+
+
+        /* =========================================
+           MODIS
+        ========================================= */
+
+        actualizarCarga(
+            "Consultando MODIS..."
+        );
+
+
+        try {
+
+
+            const datos =
+                await fetchFIRMSArea(
+                    CONFIG.FIRMS.MODIS
+                );
+
+
+            datosMODIS =
+                datos
+
+                .map(
+                    normalizarMODIS
+                )
+
+                .filter(
+                    d =>
+
+                        Number.isFinite(
+                            d.latitude
+                        ) &&
+
+                        Number.isFinite(
+                            d.longitude
+                        )
+                );
+
+
+            datosMODIS =
+                filtrarHoyPeru(
+                    datosMODIS
+                );
+
+
+            estadoSensor(
+                "estadoMODIS",
+                "OK",
+                "ok"
+            );
+
+
+        }
+
+        catch(error) {
+
+
+            console.warn(
+                "MODIS",
+                error
+            );
+
+
+            datosMODIS =
+                [];
+
+
+            estadoSensor(
+                "estadoMODIS",
+                "ERROR",
+                "error"
+            );
+
+        }
+
+
+        /* =========================================
+           GOES
+        ========================================= */
+
+        actualizarCarga(
+            "Consultando GOES..."
+        );
+
+
+        try {
+
+
+            const datos =
+                await fetchFIRMSArea(
+                    CONFIG.FIRMS.GOES
+                );
+
+
+            datosGOES =
+                datos
+
+                .map(
+                    normalizarGOES
+                )
+
+                .filter(
+                    d =>
+
+                        Number.isFinite(
+                            d.latitude
+                        ) &&
+
+                        Number.isFinite(
+                            d.longitude
+                        )
+                );
+
+
+            datosGOES =
+                filtrarHoyPeru(
+                    datosGOES
+                );
+
+
+            estadoSensor(
+                "estadoGOES",
+                "OK",
+                "ok"
+            );
+
+
+        }
+
+        catch(error) {
+
+
+            console.warn(
+                "GOES",
+                error
+            );
+
+
+            datosGOES =
+                [];
+
+
+            estadoSensor(
+                "estadoGOES",
+                "NO DISPONIBLE",
+                "error"
+            );
+
+        }
+
+
+        /* =========================================
+           DIBUJAR
+        ========================================= */
+
+        actualizarCarga(
+            "Dibujando detecciones..."
+        );
+
+
+        dibujarVIIRS(
+            datosVIIRS
+        );
+
+
+        dibujarMODIS(
+            datosMODIS
+        );
+
+
+        dibujarGOES(
+            datosGOES
+        );
+
+
+        /* =========================================
+           CLUSTERS
+        ========================================= */
+
+        actualizarCarga(
+            "Construyendo clusters VIIRS..."
+        );
+
+
+        const grupos =
+            crearClusters(
+                datosVIIRS
+            );
+
+
+        const clusters =
+            [];
+
+
+        for (
+            const grupo of
+            grupos
+        ) {
+
+
+            try {
+
+
+                const c =
+                    await analizarCluster(
+                        grupo
+                    );
+
+
+                clusters.push(
+                    c
+                );
+
+
+            }
+
+            catch(error) {
+
+
+                console.warn(
+                    "Cluster",
+                    error
+                );
+
+            }
+
+        }
+
+
+        clustersGlobal =
+            clusters;
+
+
+        dibujarClusters(
+            clusters
+        );
+
+
+        dibujarHRSL(
+            clusters
+        );
+
+
+        actualizarEstadisticas(
+            clusters
+        );
+
+
+        /* =========================================
+           SERFOR
+        ========================================= */
+
+        const chkFocos =
+            document.getElementById(
+                "chkFocosSERFOR"
+            );
+
+
+        const chkIncendios =
+            document.getElementById(
+                "chkIncendiosSERFOR"
+            );
+
+
+        if (
+            chkFocos &&
+            chkFocos.checked
+        ) {
+
+            await cargarFocosSERFOR();
+
+        }
+
+
+        if (
+            chkIncendios &&
+            chkIncendios.checked
+        ) {
+
+            await cargarIncendiosSERFOR();
+
+        }
+
+
+        /* =========================================
+           ESTADO
+        ========================================= */
+
+        actualizarEstado(
+
+            `✓ ${clusters.length} clusters — ` +
+            `${datosVIIRS.length} VIIRS — ` +
+            `${datosMODIS.length} MODIS — ` +
+            `${datosGOES.length} GOES`
+
+        );
+
+
+        localStorage.setItem(
+            "ultimo_update_peru",
+            new Date().toISOString()
+        );
+
+
+    }
+
+    catch(error) {
+
+
+        console.error(
+            error
+        );
+
+
+        actualizarEstado(
+            "❌ " +
+            error.message
+        );
+
+    }
+
+    finally {
+
+
+        actualizando =
+            false;
+
+
+        if (boton)
+            boton.disabled =
+                false;
+
+
+        mostrarCarga(
+            false
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ESTADO SENSOR
+===================================================== */
+
+function estadoSensor(
+    id,
+    texto,
+    tipo
+) {
+
+
+    const el =
+        document.getElementById(
+            id
+        );
+
+
+    if (!el)
+        return;
+
+
+    el.textContent =
+        texto;
+
+
+    el.className =
+
+        tipo ===
+        "ok"
+
+            ?
+            "sensor-ok"
+
+            :
+
+        tipo ===
+        "error"
+
+            ?
+            "sensor-error"
+
+            :
+            "sensor-info";
+
+}
+
+
+/* =====================================================
+   DIBUJAR HRSL
+===================================================== */
+
+function dibujarHRSL(
+    clusters
+) {
+
+
+    capaHRSL.clearLayers();
+
+
+    clusters.forEach(
+        c => {
+
+
+            const p =
+                c.poblacion ||
+                {};
+
+
+            if (
+                !Number.isFinite(
+                    p.population1km
+                )
+            )
+                return;
+
+
+            let color =
+                "#7e57c2";
+
+
+            if (
+                p.population1km >=
+                1000
+            )
+                color =
+                    "#e53935";
+
+            else if (
+                p.population1km >=
+                100
+            )
+                color =
+                    "#fb8c00";
+
+
+            const radio =
+
+                p.population1km >=
+                1000
+
+                    ?
+                    1000
+
+                    :
+
+                p.population1km >=
+                100
+
+                    ?
+                    700
+
+                    :
+                    400;
+
+
+            L.circle(
+
+                [
+                    c.latitude,
+                    c.longitude
+                ],
+
+                {
+
+                    radius:
+                        radio,
+
+                    color:
+                        color,
+
+                    fillColor:
+                        color,
+
+                    fillOpacity:
+                        .16,
+
+                    weight:
+                        2
+
+                }
+
+            )
+
+            .bindTooltip(`
+
+<b>👥 HRSL / POBLACIÓN</b>
+
+<br>
+
+Población 1 km:
+${p.population1km.toLocaleString()}
+
+<br>
+
+Población 3 km:
+${
+    Number.isFinite(
+        p.population3km
+    )
+        ?
+        p.population3km.toLocaleString()
+        :
+        "N/D"
+}
+
+`)
+
+            .addTo(
+                capaHRSL
+            );
+
+        }
+    );
 
 }
 
@@ -3902,18 +6443,22 @@ function dibujarClusters(
     clusters
 ) {
 
+
     capaClusters.clearLayers();
 
 
     clusters.forEach(
         c => {
 
+
             const marker =
                 L.circleMarker(
+
                     [
                         c.latitude,
                         c.longitude
                     ],
+
                     {
 
                         radius:
@@ -3936,43 +6481,20 @@ function dibujarClusters(
                             3
 
                     }
+
                 );
 
 
-            marker.bindPopup(`
+            marker.bindPopup(
 
-                <div class="popup-incendio">
+                popupCluster(c),
 
-                    <h3 style="
-                        color:${colorNivel(c.nivel)}
-                    ">
-                        🔥 INCENDIO ${c.nivel}
-                    </h3>
+                {
+                    maxWidth:
+                        500
+                }
 
-                    <hr>
-
-                    <b>Fire Score:</b>
-                    ${c.fireScore}
-
-                    <br>
-
-                    <b>VIIRS:</b>
-                    ${c.size}
-
-                    <br>
-
-                    <b>FRP máximo:</b>
-                    ${c.frpMax.toFixed(2)}
-                    MW
-
-                    <br>
-
-                    <b>Prioridad:</b>
-                    ${c.prioridad}
-
-                </div>
-
-            `);
+            );
 
 
             marker.addTo(
@@ -4016,653 +6538,14 @@ function dibujarClusters(
 
                 }
 
-            ).addTo(
+            )
+
+            .addTo(
                 capaClusters
             );
 
         }
     );
-
-}
-
-
-/* =====================================================
-   CARGA
-===================================================== */
-
-function mostrarCarga(
-    mostrar,
-    texto
-) {
-
-    const panel =
-        document.getElementById(
-            "cargando"
-        );
-
-
-    if (!panel)
-        return;
-
-
-    panel.style.display =
-        mostrar
-            ? "flex"
-            : "none";
-
-
-    if (texto)
-        actualizarCarga(
-            texto
-        );
-
-}
-
-
-function actualizarCarga(
-    texto
-) {
-
-    setText(
-        "textoCarga",
-        texto
-    );
-
-}
-
-
-/* =====================================================
-   ESTADÍSTICAS
-===================================================== */
-
-function actualizarEstadisticas(
-    clusters
-) {
-
-    const ahora =
-        new Date();
-
-
-    setText(
-        "fechaPeru",
-        fechaPeru()
-    );
-
-
-    setText(
-        "horaPeru",
-        horaPeru(
-            ahora
-        )
-    );
-
-
-    setText(
-        "horaUTC",
-        horaUTC(
-            ahora
-        )
-    );
-
-
-    setText(
-        "totalVIIRS",
-        datosVIIRS.length
-    );
-
-
-    setText(
-        "totalMODIS",
-        datosMODIS.length
-    );
-
-
-    setText(
-        "totalGOES",
-        datosGOES.length
-    );
-
-
-    setText(
-        "totalFocosSERFOR",
-        datosFocosSERFOR.length
-    );
-
-
-    setText(
-        "totalAlertasSERFOR",
-        datosAlertasSERFOR.length
-    );
-
-
-    setText(
-        "totalClusters",
-        clusters.length
-    );
-
-
-    setText(
-        "totalAlto",
-
-        clusters.filter(
-            c =>
-                c.nivel ===
-                "ALTO"
-        ).length
-
-    );
-
-
-    setText(
-        "totalExposicion",
-
-        clusters.filter(
-            c =>
-                c.exposureScore >=
-                4
-        ).length
-
-    );
-
-}
-
-
-/* =====================================================
-   ACTUALIZAR INCENDIOS
-===================================================== */
-
-async function actualizarIncendios(
-    manual = false
-) {
-
-    if (actualizando)
-        return;
-
-
-    const key =
-        obtenerMapKey();
-
-
-    if (!key) {
-
-        actualizarEstado(
-            "⚠️ Falta MAP_KEY"
-        );
-
-        return;
-
-    }
-
-
-    actualizando =
-        true;
-
-
-    const boton =
-        document.getElementById(
-            "btnActualizar"
-        );
-
-
-    if (boton)
-        boton.disabled =
-            true;
-
-
-    mostrarCarga(
-        true,
-        "Consultando FIRMS..."
-    );
-
-
-    try {
-
-        /* =========================================
-           VIIRS EN PARALELO
-        ========================================= */
-
-        actualizarCarga(
-            "Consultando VIIRS..."
-        );
-
-
-        const resultadosVIIRS =
-            [];
-
-
-        const resultados =
-            await Promise.allSettled(
-
-                CONFIG.FIRMS.SOURCES.map(
-                    source =>
-                        fetchFIRMSArea(
-                            source
-                        )
-                )
-
-            );
-
-
-        const erroresVIIRS =
-            [];
-
-
-        resultados.forEach(
-            (
-                resultado,
-                index
-            ) => {
-
-                const source =
-                    CONFIG.FIRMS.SOURCES[index];
-
-
-                if (
-                    resultado.status ===
-                    "fulfilled"
-                ) {
-
-                    resultadosVIIRS.push(
-
-                        ...resultado.value
-
-                        .map(
-                            d =>
-                                normalizarVIIRS(
-                                    d,
-                                    source
-                                )
-                        )
-
-                        .filter(
-                            d =>
-
-                                Number.isFinite(
-                                    d.latitude
-                                ) &&
-
-                                Number.isFinite(
-                                    d.longitude
-                                )
-                        )
-
-                    );
-
-                }
-
-                else {
-
-                    console.warn(
-                        source,
-                        resultado.reason
-                    );
-
-                    erroresVIIRS.push(
-                        source
-                    );
-
-                }
-
-            }
-        );
-
-
-        datosVIIRS =
-            filtrarHoyPeru(
-                resultadosVIIRS
-            );
-
-
-        estadoSensor(
-
-            "estadoVIIRS",
-
-            erroresVIIRS.length
-                ? "PARCIAL"
-                : "OK",
-
-            erroresVIIRS.length
-                ? "error"
-                : "ok"
-
-        );
-
-
-        /* =========================================
-           MODIS Y GOES EN PARALELO
-        ========================================= */
-
-        actualizarCarga(
-            "Consultando MODIS y GOES..."
-        );
-
-
-        const sensores =
-            await Promise.allSettled([
-
-                fetchFIRMSArea(
-                    CONFIG.FIRMS.MODIS
-                ),
-
-                fetchFIRMSArea(
-                    CONFIG.FIRMS.GOES
-                )
-
-            ]);
-
-
-        /* =========================================
-           MODIS
-        ========================================= */
-
-        if (
-            sensores[0].status ===
-            "fulfilled"
-        ) {
-
-            datosMODIS =
-                filtrarHoyPeru(
-
-                    sensores[0]
-                    .value
-                    .map(
-                        normalizarMODIS
-                    )
-                    .filter(
-                        d =>
-
-                            Number.isFinite(
-                                d.latitude
-                            ) &&
-
-                            Number.isFinite(
-                                d.longitude
-                            )
-                    )
-
-                );
-
-
-            estadoSensor(
-                "estadoMODIS",
-                "OK",
-                "ok"
-            );
-
-        }
-
-        else {
-
-            datosMODIS =
-                [];
-
-
-            estadoSensor(
-                "estadoMODIS",
-                "ERROR",
-                "error"
-            );
-
-        }
-
-
-        /* =========================================
-           GOES
-        ========================================= */
-
-        if (
-            sensores[1].status ===
-            "fulfilled"
-        ) {
-
-            datosGOES =
-                filtrarHoyPeru(
-
-                    sensores[1]
-                    .value
-                    .map(
-                        normalizarGOES
-                    )
-                    .filter(
-                        d =>
-
-                            Number.isFinite(
-                                d.latitude
-                            ) &&
-
-                            Number.isFinite(
-                                d.longitude
-                            )
-                    )
-
-                );
-
-
-            estadoSensor(
-                "estadoGOES",
-                "OK",
-                "ok"
-            );
-
-        }
-
-        else {
-
-            datosGOES =
-                [];
-
-
-            estadoSensor(
-                "estadoGOES",
-                "NO DISPONIBLE",
-                "error"
-            );
-
-        }
-
-
-        /* =========================================
-           DIBUJAR
-        ========================================= */
-
-        actualizarCarga(
-            "Dibujando detecciones..."
-        );
-
-
-        dibujarVIIRS(
-            datosVIIRS
-        );
-
-        dibujarMODIS(
-            datosMODIS
-        );
-
-        dibujarGOES(
-            datosGOES
-        );
-
-
-        /* =========================================
-           CLUSTERS
-        ========================================= */
-
-        actualizarCarga(
-            "Construyendo clusters..."
-        );
-
-
-        const grupos =
-            crearClusters(
-                datosVIIRS
-            );
-
-
-        const clusters =
-            [];
-
-
-        for (
-            const grupo of
-            grupos
-        ) {
-
-            const stats =
-                calcularEstadisticasCluster(
-                    grupo
-                );
-
-
-            const modis =
-                corroborarMODIS(
-                    stats
-                );
-
-
-            const goes =
-                corroborarGOES(
-                    stats
-                );
-
-
-            const cluster = {
-
-                ...stats,
-
-                cluster:
-                    grupo,
-
-                modisCercanos:
-                    modis,
-
-                goesCercanos:
-                    goes,
-
-                fireScore:
-                    0,
-
-                exposureScore:
-                    0,
-
-                nivel:
-                    "VIGILANCIA",
-
-                prioridad:
-                    "BAJA"
-
-            };
-
-
-            const fire =
-                calcularFireScore(
-                    cluster
-                );
-
-
-            cluster.fireScore =
-                fire.score;
-
-
-            cluster.nivel =
-                fire.nivel;
-
-
-            if (
-                cluster.fireScore >= 12
-            )
-                cluster.prioridad =
-                    "ALTA";
-
-            else if (
-                cluster.fireScore >= 7
-            )
-                cluster.prioridad =
-                    "MEDIA";
-
-
-            clusters.push(
-                cluster
-            );
-
-        }
-
-
-        clustersGlobal =
-            clusters;
-
-
-        dibujarClusters(
-            clusters
-        );
-
-
-        /* =========================================
-           ACTUALIZAR ESTADÍSTICAS
-        ========================================= */
-
-        actualizarEstadisticas(
-            clusters
-        );
-
-
-        actualizarEstado(
-
-            `✓ ${clusters.length} clusters — ` +
-
-            `${datosVIIRS.length} VIIRS — ` +
-
-            `${datosMODIS.length} MODIS — ` +
-
-            `${datosGOES.length} GOES`
-
-        );
-
-
-        localStorage.setItem(
-            "ultimo_update_peru",
-            new Date().toISOString()
-        );
-
-
-        /*
-         * SERFOR ya NO se consulta aquí.
-         *
-         * Solo se consulta cuando el usuario
-         * activa la casilla correspondiente.
-         */
-
-    }
-
-    catch(error) {
-
-        console.error(
-            error
-        );
-
-
-        actualizarEstado(
-            "❌ " +
-            error.message
-        );
-
-    }
-
-    finally {
-
-        actualizando =
-            false;
-
-
-        if (boton)
-            boton.disabled =
-                false;
-
-
-        mostrarCarga(
-            false
-        );
-
-    }
 
 }
 
@@ -4675,6 +6558,7 @@ function csvEscape(
     valor
 ) {
 
+
     return `"${String(
         valor ?? ""
     ).replace(
@@ -4685,7 +6569,12 @@ function csvEscape(
 }
 
 
+/* =====================================================
+   DESCARGAR CSV
+===================================================== */
+
 function descargarCSV() {
+
 
     if (
         !clustersGlobal.length
@@ -4722,9 +6611,15 @@ function descargarCSV() {
         "modis_3km",
         "goes_10km",
 
+        "poblacion_hrsl_1km",
+        "poblacion_hrsl_3km",
+
         "fire_score",
+        "exposure_score",
 
         "nivel_fuego",
+        "nivel_exposicion",
+
         "prioridad"
 
     ];
@@ -4740,6 +6635,7 @@ function descargarCSV() {
     clustersGlobal.forEach(
         c => {
 
+
             const mejor =
                 c.cluster[0];
 
@@ -4751,6 +6647,11 @@ function descargarCSV() {
                 );
 
 
+            const p =
+                c.poblacion ||
+                {};
+
+
             const fila = [
 
                 fechaPeruDeteccion(
@@ -4758,12 +6659,16 @@ function descargarCSV() {
                 ),
 
                 fecha
-                    ? horaPeru(fecha)
-                    : "",
+                    ?
+                    horaPeru(fecha)
+                    :
+                    "",
 
                 fecha
-                    ? horaUTC(fecha)
-                    : "",
+                    ?
+                    horaUTC(fecha)
+                    :
+                    "",
 
                 c.latitude,
                 c.longitude,
@@ -4783,9 +6688,17 @@ function descargarCSV() {
 
                 c.goesCercanos.length,
 
+                p.population1km,
+
+                p.population3km,
+
                 c.fireScore,
 
+                c.exposureScore,
+
                 c.nivel,
+
+                c.nivelExposicion,
 
                 c.prioridad
 
@@ -4815,8 +6728,10 @@ function descargarCSV() {
             ],
 
             {
+
                 type:
                     "text/csv;charset=utf-8"
+
             }
 
         );
@@ -4849,25 +6764,30 @@ function descargarCSV() {
 
     a.click();
 
+
     a.remove();
 
 
     setTimeout(
+
         () =>
             URL.revokeObjectURL(
                 url
             ),
+
         1000
+
     );
 
 }
 
 
 /* =====================================================
-   LIMPIAR
+   LIMPIAR DATOS
 ===================================================== */
 
 function limpiarDatos() {
+
 
     capaVIIRS.clearLayers();
 
@@ -4877,9 +6797,13 @@ function limpiarDatos() {
 
     capaClusters.clearLayers();
 
+    capaHRSL.clearLayers();
+
+    capaPuntoCoordenada.clearLayers();
+
     capaFocosSERFOR.clearLayers();
 
-    capaAlertasSERFOR.clearLayers();
+    capaIncendiosSERFOR.clearLayers();
 
 
     datosVIIRS =
@@ -4894,7 +6818,7 @@ function limpiarDatos() {
     datosFocosSERFOR =
         [];
 
-    datosAlertasSERFOR =
+    datosIncendiosSERFOR =
         [];
 
     clustersGlobal =
@@ -4903,6 +6827,23 @@ function limpiarDatos() {
 
     actualizarEstadisticas(
         []
+    );
+
+
+    actualizarContador(
+        "contadorFocosSERFOR",
+        0
+    );
+
+
+    actualizarContador(
+        "contadorIncendiosSERFOR",
+        0
+    );
+
+
+    actualizarEstadoSERFOR(
+        "SERFOR: esperando consulta..."
     );
 
 
@@ -4919,9 +6860,13 @@ function limpiarDatos() {
 
 function centrarPeru() {
 
+
     map.setView(
+
         PERU_CENTER,
+
         5
+
     );
 
 }
@@ -4933,25 +6878,26 @@ function centrarPeru() {
 
 function configurarTemporizador() {
 
+
     clearInterval(
         temporizador
     );
 
 
-    const selector =
+    const select =
         document.getElementById(
             "intervaloSelect"
         );
 
 
-    if (!selector)
-        return;
-
-
     const valor =
-        Number(
-            selector.value
-        );
+        select
+            ?
+            Number(
+                select.value
+            )
+            :
+            CONFIG.INTERVALO;
 
 
     temporizador =
@@ -4966,12 +6912,6 @@ function configurarTemporizador() {
 
         );
 
-
-    actualizarEstado(
-        `⏱️ Actualización cada ` +
-        `${valor / 60000} minutos`
-    );
-
 }
 
 
@@ -4982,33 +6922,105 @@ function configurarTemporizador() {
 setInterval(
     () => {
 
+
         const ahora =
             new Date();
 
 
-        setText(
-            "fechaPeru",
-            fechaPeru()
-        );
-
-
-        setText(
-            "horaPeru",
-            horaPeru(
-                ahora
-            )
-        );
-
-
-        setText(
-            "horaUTC",
-            horaUTC(
-                ahora
+        const fecha =
+            document.getElementById(
+                "fechaPeru"
             );
+
+
+        const hora =
+            document.getElementById(
+                "horaPeru"
+            );
+
+
+        const utc =
+            document.getElementById(
+                "horaUTC"
+            );
+
+
+        if (fecha)
+            fecha.textContent =
+                fechaPeru();
+
+
+        if (hora)
+            hora.textContent =
+                horaPeru(
+                    ahora
+                );
+
+
+        if (utc)
+            utc.textContent =
+                horaUTC(
+                    ahora
+                );
+
 
     },
     1000
 );
+
+
+/* =====================================================
+   EVENTO INTERVALO
+===================================================== */
+
+document
+    .getElementById(
+        "intervaloSelect"
+    )
+    .addEventListener(
+        "change",
+        configurarTemporizador
+    );
+
+
+/* =====================================================
+   ENTER EN COORDENADAS
+===================================================== */
+
+document
+    .getElementById(
+        "latitudInput"
+    )
+    .addEventListener(
+        "keydown",
+        e => {
+
+            if (
+                e.key ===
+                "Enter"
+            )
+                irACoordenada();
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "longitudInput"
+    )
+    .addEventListener(
+        "keydown",
+        e => {
+
+            if (
+                e.key ===
+                "Enter"
+            )
+                irACoordenada();
+
+        }
+    );
 
 
 /* =====================================================
@@ -5017,18 +7029,11 @@ setInterval(
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    async () => {
 
-        /*
-         * 1. Inicializar mapa inmediatamente.
-         */
 
         iniciarMapa();
 
-
-        /*
-         * 2. Recuperar MAP_KEY.
-         */
 
         const savedKey =
             localStorage.getItem(
@@ -5036,46 +7041,19 @@ document.addEventListener(
             );
 
 
-        if (savedKey) {
-
-            const input =
-                document.getElementById(
-                    "mapKey"
-                );
-
-
-            if (input)
-                input.value =
-                    savedKey;
-
-        }
-
-
-        /*
-         * 3. Inicializar estadísticas.
-         */
-
-        actualizarEstadisticas(
-            []
-        );
-
-
-        /*
-         * 4. Temporizador.
-         */
-
-        const selector =
+        const mapKey =
             document.getElementById(
-                "intervaloSelect"
+                "mapKey"
             );
 
 
-        if (selector) {
+        if (
+            savedKey &&
+            mapKey
+        ) {
 
-            selector.addEventListener(
-                "change",
-                configurarTemporizador
-            );
+            mapKey.value =
+                savedKey;
 
         }
 
@@ -5083,34 +7061,38 @@ document.addEventListener(
         configurarTemporizador();
 
 
-        /*
-         * 5. El mapa ya está disponible.
-         */
+        actualizarEstadisticas(
+            []
+        );
+
 
         actualizarEstado(
+
             savedKey
-                ? "Mapa listo — consultando FIRMS..."
-                : "Mapa listo — esperando MAP_KEY..."
+                ?
+                "Consultando FIRMS..."
+                :
+                "Esperando MAP_KEY..."
+
         );
 
 
         /*
-         * 6. Esperar un momento para que
-         * el navegador pinte el mapa antes
-         * de comenzar las consultas.
+         * IMPORTANTE:
+         *
+         * SERFOR NO SE CONSULTA AL INICIO.
+         *
+         * Solo se consulta cuando
+         * el usuario activa la capa.
          */
 
-        if (savedKey) {
 
-            setTimeout(
-                () => {
+        if (
+            savedKey
+        ) {
 
-                    actualizarIncendios(
-                        false
-                    );
-
-                },
-                300
+            await actualizarIncendios(
+                false
             );
 
         }

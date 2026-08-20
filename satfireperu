@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -418,6 +418,36 @@ html,body{
     }
 }
 
+</style>
+
+<style>
+.popup-sensor-detalle{
+    min-width:320px;
+    max-width:430px;
+}
+.sensor-identificacion{
+    padding:8px 10px;
+    border-radius:8px;
+    background:rgba(0,0,0,.06);
+    line-height:1.7;
+}
+.popup-sensor-grid{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+.popup-sensor-row{
+    display:grid;
+    grid-template-columns:minmax(120px, 1fr) minmax(120px, 1.4fr);
+    gap:8px;
+    padding:5px 0;
+    border-bottom:1px solid rgba(128,128,128,.18);
+    font-size:12px;
+}
+.popup-sensor-row span:last-child{
+    text-align:right;
+    word-break:break-word;
+}
 </style>
 </head>
 
@@ -997,19 +1027,14 @@ const CONFIG = {
     },
 
     SERFOR: {
-
         REST:
-        "https://geo.serfor.gob.pe/geoservicios/rest/services/Servicios_OGC/Unidad_Monitoreo_Satelital/MapServer",
-
+        "https://geo.serfor.gob.pe/geoservicios/rest/services/UFMS/Incendios_SAMI/MapServer",
         WMS:
-        "https://geo.serfor.gob.pe/geoservicios/services/Servicios_OGC/Unidad_Monitoreo_Satelital/MapServer/WMSServer",
-
+        "https://geo.serfor.gob.pe/geoservicios/services/UFMS/Incendios_SAMI/MapServer/WMSServer",
         FOCOS:
         0,
-
         ALERTAS:
-        1
-
+        2
     },
 
     CORROBORACION: {
@@ -1548,6 +1573,150 @@ function normalizarSensor(d,tipo){
 }
 
 /* =========================================================
+   DETALLE COMPLETO DEL SENSOR / REGISTRO FIRMS
+========================================================= */
+
+function escHtmlSensor(v){
+
+    return String(v ?? "N/D")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function valorSensor(v){
+
+    if(v === null || v === undefined || v === "")
+        return "N/D";
+
+    if(Array.isArray(v))
+        return v.join(", ");
+
+    if(typeof v === "object")
+        return JSON.stringify(v);
+
+    return String(v);
+
+}
+
+function etiquetaSensor(k){
+
+    const etiquetas = {
+        satellite:"Satélite",
+        instrument:"Sensor / instrumento",
+        sensorLabel:"Identificación del sensor",
+        source:"Producto / fuente",
+        latitude:"Latitud",
+        longitude:"Longitud",
+        frp:"FRP",
+        acq_date:"Fecha de adquisición",
+        acq_time:"Hora de adquisición (UTC)",
+        confidence:"Confianza",
+        bright_ti4:"Temperatura de brillo T4",
+        bright_ti5:"Temperatura de brillo T5",
+        t4:"Temperatura T4",
+        t5:"Temperatura T5",
+        deltaT:"ΔT (T4 - T5)",
+        version:"Versión",
+        daynight:"Día / noche",
+        scan:"Barrido",
+        track:"Pista",
+        type:"Tipo",
+        fire_type:"Tipo de fuego",
+        bright_t31:"Temperatura de brillo T31",
+        frp_uncertainty:"Incertidumbre FRP",
+        satellite_zenith:"Ángulo cenital del satélite",
+        instrument_zenith:"Ángulo cenital del instrumento"
+    };
+
+    return etiquetas[k] || k.replace(/_/g," ");
+
+}
+
+function htmlDetalleSensor(d,titulo,icono,col){
+
+    const prioridad = [
+        "satellite",
+        "instrument",
+        "sensorLabel",
+        "source",
+        "latitude",
+        "longitude",
+        "frp",
+        "acq_date",
+        "acq_time"
+    ];
+
+    const claves = Object.keys(d || {})
+        .filter(k =>
+            !k.startsWith("_") &&
+            d[k] !== undefined &&
+            d[k] !== null &&
+            d[k] !== ""
+        );
+
+    claves.sort((a,b) => {
+        const ia = prioridad.indexOf(a);
+        const ib = prioridad.indexOf(b);
+        if(ia !== -1 && ib !== -1) return ia-ib;
+        if(ia !== -1) return -1;
+        if(ib !== -1) return 1;
+        return a.localeCompare(b);
+    });
+
+    const filas = claves.map(k => {
+        let v = d[k];
+
+        if(k === "acq_time")
+            v = horaF(v);
+
+        if(k === "frp" || k === "t4" || k === "t5" || k === "deltaT"){
+            const n = Number(v);
+            if(Number.isFinite(n))
+                v = n.toFixed(2);
+        }
+
+        const unidad =
+            k === "frp" ? " MW" :
+            ["t4","t5","deltaT","bright_ti4","bright_ti5","bright_t31"].includes(k)
+            ? " K" : "";
+
+        return `
+            <div class="popup-sensor-row">
+                <span><b>${escHtmlSensor(etiquetaSensor(k))}:</b></span>
+                <span>${escHtmlSensor(valorSensor(v))}${unidad}</span>
+            </div>
+        `;
+    }).join("");
+
+    return `
+        <div class="popup-incendio popup-sensor-detalle">
+            <h3 style="color:${col}">
+                ${icono} ${escHtmlSensor(titulo)}
+            </h3>
+
+            <div class="sensor-identificacion">
+                <b>🛰️ SATÉLITE:</b>
+                ${escHtmlSensor(d.satellite || "N/D")}
+                <br>
+                <b>📡 SENSOR:</b>
+                ${escHtmlSensor(d.instrument || "N/D")}
+            </div>
+
+            <hr>
+
+            <div class="popup-sensor-grid">
+                ${filas}
+            </div>
+        </div>
+    `;
+
+}
+
+/* =========================================================
    VIIRS
 ========================================================= */
 
@@ -1789,92 +1958,67 @@ function dh(a,b){
 
 function hacerClusters(ds){
 
-    const used =
-        new Set();
+    /* Índice espacial: evita comparar cada punto contra todos los demás. */
+    const radio = CONFIG.VIIRS.CLUSTER_RADIO_M;
+    const latCell = radio / 111000;
+    const grid = new Map();
 
+    const key = (lat, lon) => {
+        const y = Math.floor(lat / latCell);
+        const x = Math.floor(lon / (latCell / Math.max(0.2, Math.cos(lat * Math.PI / 180))));
+        return `${y}:${x}`;
+    };
+
+    ds.forEach((d,i) => {
+        if(!Number.isFinite(d.latitude) || !Number.isFinite(d.longitude)) return;
+        const k = key(d.latitude,d.longitude);
+        if(!grid.has(k)) grid.set(k,[]);
+        grid.get(k).push(i);
+    });
+
+    const used = new Set();
     const out = [];
 
-    for(
-        let i=0;
-        i<ds.length;
-        i++
-    ){
-
-        if(
-            used.has(i)
-        )
+    for(let i=0;i<ds.length;i++){
+        if(used.has(i)) continue;
+        const first = ds[i];
+        if(!Number.isFinite(first.latitude) || !Number.isFinite(first.longitude)){
+            used.add(i);
             continue;
+        }
 
-        const g =
-            [ds[i]];
-
+        const g = [first];
         used.add(i);
+        const queue = [i];
 
-        let c = true;
+        while(queue.length){
+            const pi = queue.pop();
+            const p = ds[pi];
+            const y = Math.floor(p.latitude / latCell);
+            const x = Math.floor(p.longitude / (latCell / Math.max(0.2, Math.cos(p.latitude * Math.PI / 180))));
 
-        while(c){
-
-            c = false;
-
-            for(
-                let j=0;
-                j<ds.length;
-                j++
-            ){
-
-                if(
-                    used.has(j)
-                )
-                    continue;
-
-                if(
-                    g.some(
-                        p =>
-                        dist(
-                            p.latitude,
-                            p.longitude,
-                            ds[j].latitude,
-                            ds[j].longitude
-                        )
-                        <=
-                        CONFIG.VIIRS.CLUSTER_RADIO_M
-                        &&
-                        dh(
-                            p,
-                            ds[j]
-                        )
-                        <=
-                        CONFIG.VIIRS.CLUSTER_VENTANA_H
-                    )
-                ){
-
-                    g.push(
-                        ds[j]
-                    );
-
-                    used.add(j);
-
-                    c = true;
-
+            for(let dy=-1;dy<=1;dy++){
+                for(let dx=-1;dx<=1;dx++){
+                    const candidates = grid.get(`${y+dy}:${x+dx}`);
+                    if(!candidates) continue;
+                    for(const j of candidates){
+                        if(used.has(j)) continue;
+                        const q = ds[j];
+                        if(dh(p,q) <= CONFIG.VIIRS.CLUSTER_VENTANA_H &&
+                           dist(p.latitude,p.longitude,q.latitude,q.longitude) <= radio){
+                            used.add(j);
+                            g.push(q);
+                            queue.push(j);
+                        }
+                    }
                 }
-
             }
-
         }
 
-        if(
-            g.length >=
-            CONFIG.VIIRS.CLUSTER_MIN
-        ){
-
-            out.push(g);
-
-        }
-
+        if(g.length >= CONFIG.VIIRS.CLUSTER_MIN) out.push(g);
     }
 
     return out;
-
 }
 
 /* =========================================================
@@ -2292,7 +2436,9 @@ function iniciarMapa(){
                 center:
                     PERU_CENTER,
                 zoom:
-                    5
+                    5,
+                preferCanvas:
+                    true
             }
         );
 
@@ -2696,63 +2842,12 @@ function dibujarVIIRS(ds){
             )
             .bindPopup(
 
-                `
-
-                <div class="popup-incendio">
-
-                <h3 style="color:${col}">
-                🔥 VIIRS
-                </h3>
-
-                <b>Satélite:</b>
-                ${d.satellite}
-                <br>
-
-                <b>Sensor:</b>
-                ${d.instrument}
-                <br>
-
-                <b>Fuente:</b>
-                ${d.source}
-                <br>
-
-                <b>FRP:</b>
-                ${(d.frp||0).toFixed(2)}
-                MW
-                <br>
-
-                <b>Temperatura T4:</b>
-                ${
-                    Number.isFinite(d.t4)
-                    ? d.t4.toFixed(2)
-                    : "N/D"
-                }
-                K
-                <br>
-
-                <b>ΔT:</b>
-                ${
-                    Number.isFinite(d.deltaT)
-                    ? d.deltaT.toFixed(2)
-                    : "N/D"
-                }
-                K
-                <br>
-
-                <b>Confianza:</b>
-                ${d.confidence || "N/D"}
-                <br>
-
-                <b>Fecha:</b>
-                ${d.acq_date || "N/D"}
-                <br>
-
-                <b>Hora UTC:</b>
-                ${horaF(d.acq_time)}
-
-                </div>
-
-                `
+                htmlDetalleSensor(
+                    d,
+                    "VIIRS — DETECCIÓN",
+                    "🔥",
+                    col
+                )
 
             )
             .addTo(capa);
@@ -2797,36 +2892,15 @@ function dibujarDesc(ds){
             )
             .bindPopup(
 
-                `
-
-                <div class="popup-incendio">
-
-                <h3>
-                ⚪ VIIRS DESCARTADO
-                </h3>
-
-                <b>Satélite:</b>
-                ${d.satellite}
-                <br>
-
-                <b>Sensor:</b>
-                ${d.instrument}
-                <br>
-
-                <b>FRP:</b>
-                ${(d.frp||0).toFixed(2)}
-                MW
-
-                <hr>
-
-                ${
-                    d._razonesDescarte
-                    .join("<br>")
-                }
-
-                </div>
-
-                `
+                htmlDetalleSensor(
+                    d,
+                    "VIIRS — DETECCIÓN DESCARTADA",
+                    "⚪",
+                    "#616161"
+                ) +
+                `<hr><b>Motivos del descarte:</b><br>${
+                    (d._razonesDescarte || []).map(escHtmlSensor).join("<br>")
+                }`
 
             )
             .addTo(
@@ -2889,37 +2963,12 @@ function dibujarMODIS(ds){
             )
             .bindPopup(
 
-                `
-
-                <div class="popup-incendio">
-
-                <h3 style="color:${col}">
-                🛰️ MODIS
-                </h3>
-
-                <b>Satélite:</b>
-                ${d.satellite}
-                <br>
-
-                <b>Sensor:</b>
-                ${d.instrument}
-                <br>
-
-                <b>FRP:</b>
-                ${(d.frp||0).toFixed(2)}
-                MW
-                <br>
-
-                <b>Fecha:</b>
-                ${d.acq_date || "N/D"}
-                <br>
-
-                <b>Hora UTC:</b>
-                ${horaF(d.acq_time)}
-
-                </div>
-
-                `
+                htmlDetalleSensor(
+                    d,
+                    "MODIS — DETECCIÓN",
+                    "🛰️",
+                    col
+                )
 
             )
             .addTo(capa);
@@ -2991,41 +3040,12 @@ function dibujarGOES(ds){
             )
             .bindPopup(
 
-                `
-
-                <div class="popup-incendio">
-
-                <h3 style="color:${col}">
-                🛰️ GOES
-                </h3>
-
-                <b>Satélite:</b>
-                ${d.satellite}
-                <br>
-
-                <b>Sensor:</b>
-                ${d.instrument}
-                <br>
-
-                <b>Producto:</b>
-                ${d.source || "GOES_NRT"}
-                <br>
-
-                <b>FRP:</b>
-                ${(d.frp||0).toFixed(2)}
-                MW
-                <br>
-
-                <b>Fecha:</b>
-                ${d.acq_date || "N/D"}
-                <br>
-
-                <b>Hora UTC:</b>
-                ${horaF(d.acq_time)}
-
-                </div>
-
-                `
+                htmlDetalleSensor(
+                    d,
+                    "GOES — DETECCIÓN",
+                    "🛰️",
+                    col
+                )
 
             )
             .addTo(capa);
@@ -3146,6 +3166,7 @@ async function serfor(id){
             `&outFields=*` +
             `&returnGeometry=true` +
             `&outSR=4326` +
+            `&resultRecordCount=5000` +
             `&f=geojson`,
 
             {
@@ -3772,71 +3793,27 @@ async function actualizarIncendios(){
            VIIRS POR SATÉLITE
         ============================ */
 
-        for(
-            const s of CONFIG.FIRMS.SOURCES
-        ){
+        /* Las 3 consultas VIIRS se hacen en paralelo. */
+        const viirsResultados = await Promise.all(
+            CONFIG.FIRMS.SOURCES.map(async s => {
+                try{
+                    const raw = await firms(s.id);
+                    return raw.map(d => viirs(d,s)).filter(d => {
+                        const x = fechaD(d);
+                        return x && new Intl.DateTimeFormat("en-CA", {
+                            timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit"
+                        }).format(x) === fecha();
+                    });
+                }
+                catch(e){
+                    console.error(`Error ${s.id}`,e);
+                    err++;
+                    return [];
+                }
+            })
+        );
 
-            try{
-
-                mostrarCarga(
-                    true,
-                    `Consultando ${s.nombre} / ${s.sensor}...`
-                );
-
-                const raw =
-                    await firms(
-                        s.id
-                    );
-
-                const normalizados =
-                    raw
-                    .map(
-                        d =>
-                        viirs(
-                            d,
-                            s
-                        )
-                    )
-                    .filter(
-                        d => {
-
-                            const x =
-                                fechaD(d);
-
-                            return x &&
-                                new Intl.DateTimeFormat(
-                                    "en-CA",
-                                    {
-                                        timeZone:"America/Lima",
-                                        year:"numeric",
-                                        month:"2-digit",
-                                        day:"2-digit"
-                                    }
-                                )
-                                .format(x)
-                                ===
-                                fecha();
-
-                        }
-                    );
-
-                all.push(
-                    ...normalizados
-                );
-
-            }
-            catch(e){
-
-                console.error(
-                    `Error ${s.id}`,
-                    e
-                );
-
-                err++;
-
-            }
-
-        }
+        for(const grupo of viirsResultados) all.push(...grupo);
 
         datosVIIRSOriginales =
             all;
@@ -4560,4 +4537,3 @@ document.addEventListener(
 
 </body>
 </html>
-```

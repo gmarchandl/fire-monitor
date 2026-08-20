@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -77,7 +78,7 @@ html,body{
     position:absolute;
     top:68px;
     left:12px;
-    width:390px;
+    width:410px;
     max-height:calc(100vh - 82px);
     overflow-y:auto;
     background:rgba(10,18,25,.96);
@@ -126,21 +127,10 @@ html,body{
     font-weight:bold
 }
 
-.btn-verde{
-    background:#087f5b
-}
-
-.btn-azul{
-    background:#1565c0
-}
-
-.btn-gris{
-    background:#455a64
-}
-
-.btn-naranja{
-    background:#ef6c00
-}
+.btn-verde{background:#087f5b}
+.btn-azul{background:#1565c0}
+.btn-gris{background:#455a64}
+.btn-naranja{background:#ef6c00}
 
 .capa-operativa{
     display:flex;
@@ -217,20 +207,13 @@ html,body{
     width:9px;
     height:9px;
     border-radius:50%;
-    display:inline-block
+    display:inline-block;
+    flex-shrink:0
 }
 
-.sensor-ok{
-    color:#00e676!important
-}
-
-.sensor-error{
-    color:#ff5252!important
-}
-
-.sensor-info{
-    color:#ffb300!important
-}
+.sensor-ok{color:#00e676!important}
+.sensor-error{color:#ff5252!important}
+.sensor-info{color:#ffb300!important}
 
 .criterio{
     background:#101a22;
@@ -241,9 +224,7 @@ html,body{
     font-size:11px
 }
 
-.criterio b{
-    color:#fff
-}
+.criterio b{color:#fff}
 
 .nota{
     font-size:10px;
@@ -259,12 +240,32 @@ html,body{
 .popup-incendio{
     color:#111;
     min-width:300px;
-    max-width:460px;
+    max-width:480px;
     font-size:13px
 }
 
 .popup-incendio h3{
     margin:0 0 8px
+}
+
+.popup-sensor{
+    margin-top:6px;
+    background:#f3f5f7;
+    border:1px solid #ddd;
+    border-radius:5px;
+    padding:6px
+}
+
+.popup-sensor-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    border-bottom:1px solid #ddd;
+    padding:4px 0
+}
+
+.popup-sensor-row:last-child{
+    border-bottom:0
 }
 
 .badge{
@@ -276,21 +277,10 @@ html,body{
     font-weight:bold
 }
 
-.badge-alto{
-    background:#d50000
-}
-
-.badge-medio{
-    background:#ef6c00
-}
-
-.badge-bajo{
-    background:#1565c0
-}
-
-.badge-descartado{
-    background:#616161
-}
+.badge-alto{background:#d50000}
+.badge-medio{background:#ef6c00}
+.badge-bajo{background:#1565c0}
+.badge-descartado{background:#616161}
 
 .icono-foco-serfor{
     width:18px;
@@ -377,19 +367,11 @@ html,body{
     cursor:pointer
 }
 
-.legend-item input{
-    cursor:pointer
-}
-
 .legend-dot{
     width:10px;
     height:10px;
     border-radius:50%;
     display:inline-block
-}
-
-.legend-fire{
-    font-size:15px
 }
 
 #cargando{
@@ -422,20 +404,14 @@ html,body{
 }
 
 @keyframes spin{
-    to{
-        transform:rotate(360deg)
-    }
+    to{transform:rotate(360deg)}
 }
 
 @media(max-width:700px){
 
-    #header h1{
-        font-size:14px
-    }
+    #header h1{font-size:14px}
 
-    #estado{
-        display:none
-    }
+    #estado{display:none}
 
     #panel{
         width:calc(100vw - 24px);
@@ -454,9 +430,7 @@ html,body{
 
 <h1>🔥 MONITOR DE INCENDIOS — PERÚ</h1>
 
-<span id="estado">
-Inicializando...
-</span>
+<span id="estado">Inicializando...</span>
 
 <button id="btnActualizar"
         onclick="actualizarIncendios(true)">
@@ -465,11 +439,9 @@ Actualizar
 
 </header>
 
-
 <div id="panel">
 
 <h2>Configuración y resultados</h2>
-
 
 <div class="grupo">
 
@@ -489,7 +461,6 @@ Guardar MAP_KEY
 
 </div>
 
-
 <div class="grupo">
 
 <label>📍 Ir a coordenadas</label>
@@ -507,744 +478,430 @@ Guardar MAP_KEY
     placeholder="Longitud, ej. -75.015200"
     style="margin-top:5px">
 
-<button
-    class="btn btn-azul"
-    onclick="irACoordenada()">
+<button class="btn btn-azul"
+        onclick="irACoordenada()">
 📍 Ir a coordenada
 </button>
 
-<button
-    class="btn btn-verde"
-    onclick="agregarCoordenada()">
+<button class="btn btn-verde"
+        onclick="agregarCoordenada()">
 ➕ Agregar punto
 </button>
 
-<button
-    class="btn btn-gris"
-    onclick="limpiarCoordenada()">
+<button class="btn btn-gris"
+        onclick="limpiarCoordenada()">
 🧹 Limpiar punto
 </button>
 
 </div>
 
-
 <div class="grupo">
 
 <h2>🛰️ Capas operativas</h2>
 
-
 <label class="capa-operativa">
-
-<input
-    type="checkbox"
-    id="chkVIIRS"
-    onchange="alternarCapa('viirs')">
-
-<span
-    class="capa-icono"
-    style="color:#00e5ff">
-●
-</span>
-
-<span class="capa-nombre">
-VIIRS válidos
-</span>
-
+<input type="checkbox"
+       id="chkVIIRS"
+       onchange="alternarCapa('viirs')">
+<span class="capa-icono" style="color:#00e5ff">●</span>
+<span class="capa-nombre">VIIRS — todos</span>
 </label>
 
-
 <label class="capa-operativa">
-
-<input
-    type="checkbox"
-    id="chkVIIRSDescartados"
-    onchange="alternarCapa('descartados')">
-
-<span
-    class="capa-icono"
-    style="color:#777">
-●
-</span>
-
-<span class="capa-nombre">
-VIIRS descartados
-</span>
-
+<input type="checkbox"
+       id="chkSuomi"
+       onchange="alternarCapa('suomi')">
+<span class="capa-icono" style="color:#00e5ff">●</span>
+<span class="capa-nombre">Suomi-NPP / VIIRS</span>
 </label>
 
-
 <label class="capa-operativa">
-
-<input
-    type="checkbox"
-    id="chkMODIS"
-    onchange="alternarCapa('modis')">
-
-<span
-    class="capa-icono"
-    style="color:#ffeb3b">
-●
-</span>
-
-<span class="capa-nombre">
-MODIS
-</span>
-
+<input type="checkbox"
+       id="chkNOAA20"
+       onchange="alternarCapa('noaa20')">
+<span class="capa-icono" style="color:#ff1744">●</span>
+<span class="capa-nombre">NOAA-20 / VIIRS</span>
 </label>
 
-
 <label class="capa-operativa">
-
-<input
-    type="checkbox"
-    id="chkGOES"
-    onchange="alternarCapa('goes')">
-
-<span
-    class="capa-icono"
-    style="color:#ff9800">
-●
-</span>
-
-<span class="capa-nombre">
-GOES — todos los satélites
-</span>
-
+<input type="checkbox"
+       id="chkNOAA21"
+       onchange="alternarCapa('noaa21')">
+<span class="capa-icono" style="color:#ff6d00">●</span>
+<span class="capa-nombre">NOAA-21 / VIIRS</span>
 </label>
 
-
 <label class="capa-operativa">
-
-<input
-    type="checkbox"
-    id="chkSERFORWMS"
-    onchange="alternarSERFORWMS()">
-
-<span
-    class="capa-icono"
-    style="color:#ab47bc">
-▦
-</span>
-
-<span class="capa-nombre">
-SERFOR WMS
-</span>
-
+<input type="checkbox"
+       id="chkVIIRSDescartados"
+       onchange="alternarCapa('descartados')">
+<span class="capa-icono" style="color:#777">●</span>
+<span class="capa-nombre">VIIRS descartados</span>
 </label>
 
-
 <label class="capa-operativa">
-
-<input
-    type="checkbox"
-    id="chkClusters"
-    onchange="alternarCapa('clusters')">
-
-<span
-    class="capa-icono"
-    style="color:#d50000">
-🔥
-</span>
-
-<span class="capa-nombre">
-Clusters / incendios clasificados
-</span>
-
+<input type="checkbox"
+       id="chkMODIS"
+       onchange="alternarCapa('modis')">
+<span class="capa-icono" style="color:#ffeb3b">●</span>
+<span class="capa-nombre">MODIS — todos</span>
 </label>
 
-
 <label class="capa-operativa">
-
-<input
-    type="checkbox"
-    id="chkFocosSERFOR"
-    onchange="alternarFocosSERFOR()">
-
-<span
-    class="capa-icono"
-    style="color:#8B1E3F">
-●
-</span>
-
-<span class="capa-nombre">
-Focos de calor SERFOR
-</span>
-
+<input type="checkbox"
+       id="chkTerra"
+       onchange="alternarCapa('terra')">
+<span class="capa-icono" style="color:#ffeb3b">●</span>
+<span class="capa-nombre">Terra / MODIS</span>
 </label>
 
+<label class="capa-operativa">
+<input type="checkbox"
+       id="chkAqua"
+       onchange="alternarCapa('aqua')">
+<span class="capa-icono" style="color:#00e676">●</span>
+<span class="capa-nombre">Aqua / MODIS</span>
+</label>
 
 <label class="capa-operativa">
+<input type="checkbox"
+       id="chkGOES"
+       onchange="alternarCapa('goes')">
+<span class="capa-icono" style="color:#ff9800">●</span>
+<span class="capa-nombre">GOES — todos</span>
+</label>
 
-<input
-    type="checkbox"
-    id="chkAlertasSERFOR"
-    onchange="alternarAlertasSERFOR()">
+<label class="capa-operativa">
+<input type="checkbox"
+       id="chkGOES18"
+       onchange="alternarCapa('goes18')">
+<span class="capa-icono" style="color:#ff9800">●</span>
+<span class="capa-nombre">GOES-18 / ABI</span>
+</label>
 
-<span
-    class="capa-icono"
-    style="color:#d50000">
-🔥
-</span>
+<label class="capa-operativa">
+<input type="checkbox"
+       id="chkGOES19"
+       onchange="alternarCapa('goes19')">
+<span class="capa-icono" style="color:#e040fb">●</span>
+<span class="capa-nombre">GOES-19 / ABI</span>
+</label>
 
-<span class="capa-nombre">
-Incendios Forestales SERFOR
-</span>
+<label class="capa-operativa">
+<input type="checkbox"
+       id="chkSERFORWMS"
+       onchange="alternarSERFORWMS()">
+<span class="capa-icono" style="color:#ab47bc">▦</span>
+<span class="capa-nombre">SERFOR WMS</span>
+</label>
 
+<label class="capa-operativa">
+<input type="checkbox"
+       id="chkClusters"
+       onchange="alternarCapa('clusters')">
+<span class="capa-icono" style="color:#d50000">🔥</span>
+<span class="capa-nombre">Clusters / incendios clasificados</span>
+</label>
+
+<label class="capa-operativa">
+<input type="checkbox"
+       id="chkFocosSERFOR"
+       onchange="alternarFocosSERFOR()">
+<span class="capa-icono" style="color:#8B1E3F">●</span>
+<span class="capa-nombre">Focos de calor SERFOR</span>
+</label>
+
+<label class="capa-operativa">
+<input type="checkbox"
+       id="chkAlertasSERFOR"
+       onchange="alternarAlertasSERFOR()">
+<span class="capa-icono" style="color:#d50000">🔥</span>
+<span class="capa-nombre">Incendios Forestales SERFOR</span>
 </label>
 
 </div>
 
-
 <div class="grupo">
 
-<label>
-Intervalo automático
-</label>
+<label>Intervalo automático</label>
 
-<select
-    id="intervaloSelect"
-    onchange="configurarTemporizador()">
+<select id="intervaloSelect"
+        onchange="configurarTemporizador()">
 
-<option value="900000" selected>
-15 minutos
-</option>
-
-<option value="1800000">
-30 minutos
-</option>
-
-<option value="3600000">
-60 minutos
-</option>
+<option value="900000" selected>15 minutos</option>
+<option value="1800000">30 minutos</option>
+<option value="3600000">60 minutos</option>
 
 </select>
 
 </div>
 
-
-<!-- ================================================= -->
-<!-- ESTADÍSTICA -->
-<!-- ================================================= -->
-
 <h2>📊 Estadística</h2>
 
 <div id="estadisticas">
-
 
 <div class="stat">
 <span>Fecha Perú</span>
 <span id="fechaPeru">---</span>
 </div>
 
-
 <div class="stat">
 <span>Hora Perú</span>
 <span id="horaPeru">---</span>
 </div>
-
 
 <div class="stat">
 <span>Hora UTC</span>
 <span id="horaUTC">---</span>
 </div>
 
-
 <hr>
 
-
-<!-- ================= VIIRS ================= -->
-
 <div class="stat-grupo">
-🔥 VIIRS — SATÉLITE / SENSOR
+🔥 VIIRS — SENSOR
 </div>
-
 
 <div class="stat">
 <span class="stat-satelite">
-<span
-class="sensor-punto"
-style="background:#00e5ff">
-</span>
+<span class="sensor-punto" style="background:#00e5ff"></span>
 Suomi-NPP / VIIRS
 </span>
-
 <span id="totalSuomi">0</span>
 </div>
 
-
 <div class="stat">
 <span class="stat-satelite">
-<span
-class="sensor-punto"
-style="background:#ff1744">
-</span>
+<span class="sensor-punto" style="background:#ff1744"></span>
 NOAA-20 / VIIRS
 </span>
-
 <span id="totalNOAA20">0</span>
 </div>
 
-
 <div class="stat">
 <span class="stat-satelite">
-<span
-class="sensor-punto"
-style="background:#ff6d00">
-</span>
+<span class="sensor-punto" style="background:#ff6d00"></span>
 NOAA-21 / VIIRS
 </span>
-
 <span id="totalNOAA21">0</span>
 </div>
 
-
 <div class="stat">
-
-<span>
-Otros / VIIRS
-</span>
-
-<span id="totalVIIRSOtros">
-0
-</span>
-
+<span>Otros / VIIRS</span>
+<span id="totalVIIRSOtros">0</span>
 </div>
-
 
 <div class="stat stat-total">
-
-<span>
-<b>Total VIIRS válidos</b>
-</span>
-
-<span id="totalVIIRSValidos">
-0
-</span>
-
+<span><b>Total VIIRS válidos</b></span>
+<span id="totalVIIRSValidos">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-VIIRS originales
-</span>
-
-<span id="totalVIIRSOriginales">
-0
-</span>
-
+<span>VIIRS originales</span>
+<span id="totalVIIRSOriginales">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-VIIRS descartados
-</span>
-
-<span id="totalVIIRSDescartados">
-0
-</span>
-
+<span>VIIRS descartados</span>
+<span id="totalVIIRSDescartados">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Estado VIIRS
-</span>
-
-<span id="estadoVIIRS">
----
-</span>
-
+<span>Estado VIIRS</span>
+<span id="estadoVIIRS">---</span>
 </div>
 
-
-<!-- ================= MODIS ================= -->
-
-<div class="stat-grupo"
-style="border-left-color:#ffeb3b">
-
-🔥 MODIS — SATÉLITE / SENSOR
-
+<div class="stat-grupo" style="border-left-color:#ffeb3b">
+🔥 MODIS — SENSOR
 </div>
-
 
 <div class="stat">
-
 <span class="stat-satelite">
-
-<span
-class="sensor-punto"
-style="background:#ffeb3b">
-</span>
-
+<span class="sensor-punto" style="background:#ffeb3b"></span>
 Terra / MODIS
-
 </span>
-
-<span id="totalMODISTerra">
-0
-</span>
-
+<span id="totalMODISTerra">0</span>
 </div>
 
-
 <div class="stat">
-
 <span class="stat-satelite">
-
-<span
-class="sensor-punto"
-style="background:#00e676">
-</span>
-
+<span class="sensor-punto" style="background:#00e676"></span>
 Aqua / MODIS
-
 </span>
-
-<span id="totalMODISAqua">
-0
-</span>
-
+<span id="totalMODISAqua">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Otros / MODIS
-</span>
-
-<span id="totalMODISOtros">
-0
-</span>
-
+<span>Otros / MODIS</span>
+<span id="totalMODISOtros">0</span>
 </div>
-
 
 <div class="stat stat-total">
-
-<span>
-<b>Total MODIS</b>
-</span>
-
-<span id="totalMODIS">
-0
-</span>
-
+<span><b>Total MODIS</b></span>
+<span id="totalMODIS">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Estado MODIS
-</span>
-
-<span id="estadoMODIS">
----
-</span>
-
+<span>Estado MODIS</span>
+<span id="estadoMODIS">---</span>
 </div>
 
-
-<!-- ================= GOES ================= -->
-
-<div class="stat-grupo"
-style="border-left-color:#ff9800">
-
-🔥 GOES — SATÉLITE / SENSOR
-
+<div class="stat-grupo" style="border-left-color:#ff9800">
+🔥 GOES — SENSOR
 </div>
-
 
 <div class="stat">
-
 <span class="stat-satelite">
-
-<span
-class="sensor-punto"
-style="background:#ff9800">
-</span>
-
+<span class="sensor-punto" style="background:#ff9800"></span>
 GOES-18 / ABI
-
 </span>
-
-<span id="totalGOES18">
-0
-</span>
-
+<span id="totalGOES18">0</span>
 </div>
 
-
 <div class="stat">
-
 <span class="stat-satelite">
-
-<span
-class="sensor-punto"
-style="background:#e040fb">
-</span>
-
+<span class="sensor-punto" style="background:#e040fb"></span>
 GOES-19 / ABI
-
 </span>
-
-<span id="totalGOES19">
-0
-</span>
-
+<span id="totalGOES19">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Otros / ABI
-</span>
-
-<span id="totalGOESOtros">
-0
-</span>
-
+<span>Otros / ABI</span>
+<span id="totalGOESOtros">0</span>
 </div>
-
 
 <div class="stat stat-total">
-
-<span>
-<b>Total GOES</b>
-</span>
-
-<span id="totalGOES">
-0
-</span>
-
+<span><b>Total GOES</b></span>
+<span id="totalGOES">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Estado GOES
-</span>
-
-<span id="estadoGOES">
----
-</span>
-
+<span>Estado GOES</span>
+<span id="estadoGOES">---</span>
 </div>
 
+<div class="stat-grupo" style="border-left-color:#00bcd4">
+📡 DETALLE GENERAL POR SENSOR
+</div>
 
-<!-- ================= SERFOR ================= -->
+<div id="estadisticaSensores">
+<div class="stat">
+<span>Sin datos</span>
+<span>0</span>
+</div>
+</div>
 
-<div class="stat-grupo"
-style="border-left-color:#8B1E3F">
-
+<div class="stat-grupo" style="border-left-color:#8B1E3F">
 🌲 SERFOR
-
 </div>
-
 
 <div class="stat">
-
-<span>
-Focos SERFOR
-</span>
-
-<span id="totalFocosSERFOR">
-0
-</span>
-
+<span>Focos SERFOR</span>
+<span id="totalFocosSERFOR">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Alertas SERFOR
-</span>
-
-<span id="totalAlertasSERFOR">
-0
-</span>
-
+<span>Alertas SERFOR</span>
+<span id="totalAlertasSERFOR">0</span>
 </div>
 
-
-<!-- ================= CLUSTERS ================= -->
-
-<div class="stat-grupo"
-style="border-left-color:#d50000">
-
+<div class="stat-grupo" style="border-left-color:#d50000">
 🔥 CLUSTERS VIIRS
-
 </div>
-
 
 <div class="stat">
-
-<span>
-Clusters VIIRS
-</span>
-
-<span id="totalClusters">
-0
-</span>
-
+<span>Clusters VIIRS</span>
+<span id="totalClusters">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Incendios ALTO
-</span>
-
-<span id="totalAlto">
-0
-</span>
-
+<span>Incendios ALTO</span>
+<span id="totalAlto">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Incendios MEDIO
-</span>
-
-<span id="totalMedio">
-0
-</span>
-
+<span>Incendios MEDIO</span>
+<span id="totalMedio">0</span>
 </div>
-
 
 <div class="stat">
-
-<span>
-Incendios BAJO
-</span>
-
-<span id="totalBajo">
-0
-</span>
-
+<span>Incendios BAJO</span>
+<span id="totalBajo">0</span>
 </div>
 
-
 </div>
-
 
 <hr>
 
-
-<h2>
-Criterios VIIRS iniciales
-</h2>
-
+<h2>Criterios VIIRS iniciales</h2>
 
 <div class="criterio">
-<b>Coordenadas:</b>
-latitud y longitud válidas.
+<b>Coordenadas:</b> latitud y longitud válidas.
 </div>
-
 
 <div class="criterio">
-<b>FRP:</b>
-FRP ≥ 1 MW.
+<b>FRP:</b> FRP ≥ 1 MW.
 </div>
-
 
 <div class="criterio">
-<b>Confianza:</b>
-se descarta confianza baja.
+<b>Confianza:</b> se descarta confianza baja.
 </div>
-
 
 <div class="criterio">
-<b>Cluster:</b>
-≥ 3 detecciones VIIRS dentro de ≤ 1000 m.
+<b>Cluster:</b> ≥ 3 detecciones VIIRS dentro de ≤ 1000 m.
 </div>
-
 
 <div class="criterio">
-<b>Tiempo:</b>
-ventana de 6 horas.
+<b>Tiempo:</b> ventana de 6 horas.
 </div>
-
 
 <div class="criterio">
-<b>Corroboración:</b>
-MODIS ≤ 3 km y GOES ≤ 10 km.
+<b>Corroboración:</b> MODIS ≤ 3 km y GOES ≤ 10 km.
 </div>
-
 
 <p class="nota">
 Los umbrales VIIRS son criterios operativos iniciales del monitor.
 </p>
 
-
 <hr>
 
-
-<h2>
-Clasificación
-</h2>
-
+<h2>Clasificación</h2>
 
 <div class="stat">
 <span>ALTO</span>
 <span>Score ≥ 12</span>
 </div>
 
-
 <div class="stat">
 <span>MEDIO</span>
 <span>Score 7–11</span>
 </div>
-
 
 <div class="stat">
 <span>BAJO</span>
 <span>Score &lt; 7</span>
 </div>
 
-
-<button
-class="btn btn-verde"
-onclick="descargarCSV()">
+<button class="btn btn-verde"
+        onclick="descargarCSV()">
 📥 Descargar CSV
 </button>
 
-
-<button
-class="btn btn-gris"
-onclick="centrarPeru()">
+<button class="btn btn-gris"
+        onclick="centrarPeru()">
 🇵🇪 Centrar Perú
 </button>
 
-
-<button
-class="btn btn-naranja"
-onclick="limpiarDatos()">
+<button class="btn btn-naranja"
+        onclick="limpiarDatos()">
 🧹 Limpiar detecciones
 </button>
 
-
 </div>
-
 
 <div id="map"></div>
 
 </div>
-
 
 <div id="cargando">
 
@@ -1252,25 +909,21 @@ onclick="limpiarDatos()">
 
 <div class="spinner"></div>
 
-<b>
-🔥 Procesando detecciones
-</b>
+<b>🔥 Procesando detecciones</b>
 
 <br><br>
 
 <span id="textoCarga">
-Consultando FIRMS...
+Consultando FIRMS por sensor...
 </span>
 
 </div>
 
 </div>
 
-
 <script>
 
 "use strict";
-
 
 /* =========================================================
    CONFIGURACIÓN
@@ -1322,7 +975,6 @@ const CONFIG = {
 
     },
 
-
     VIIRS: {
 
         FRP_MIN_VALIDO:
@@ -1345,7 +997,6 @@ const CONFIG = {
 
     },
 
-
     SERFOR: {
 
         REST:
@@ -1362,7 +1013,6 @@ const CONFIG = {
 
     },
 
-
     CORROBORACION: {
 
         MODIS_M:
@@ -1375,7 +1025,6 @@ const CONFIG = {
 
 };
 
-
 /* =========================================================
    VARIABLES
 ========================================================= */
@@ -1386,61 +1035,38 @@ const PERU_CENTER =
     -75.0152
 ];
 
-
 let map;
-
 let temporizador;
-
 let actualizando = false;
-
 
 let clustersGlobal = [];
 
-
 let datosVIIRS = [];
-
 let datosVIIRSOriginales = [];
-
 let datosVIIRSDescartados = [];
 
-
 let datosSuomi = [];
-
 let datosNOAA20 = [];
-
 let datosNOAA21 = [];
-
 let datosVIIRSOtros = [];
 
-
 let datosMODIS = [];
-
 let datosMODISTerra = [];
-
 let datosMODISAqua = [];
-
 let datosMODISOtros = [];
 
-
 let datosGOES = [];
-
 let datosGOES18 = [];
-
 let datosGOES19 = [];
-
 let datosGOESOtros = [];
 
-
 let datosFocosSERFOR = [];
-
 let datosAlertasSERFOR = [];
-
 
 let wmsSERFOR;
 
-
 /* =========================================================
-   CAPAS
+   CAPAS GENERALES
 ========================================================= */
 
 let capaVIIRS =
@@ -1467,6 +1093,30 @@ let capaAlertasSERFOR =
 let capaCoordenada =
     L.layerGroup();
 
+/* =========================================================
+   CAPAS POR SENSOR
+========================================================= */
+
+let capaSuomi =
+    L.layerGroup();
+
+let capaNOAA20 =
+    L.layerGroup();
+
+let capaNOAA21 =
+    L.layerGroup();
+
+let capaTerra =
+    L.layerGroup();
+
+let capaAqua =
+    L.layerGroup();
+
+let capaGOES18 =
+    L.layerGroup();
+
+let capaGOES19 =
+    L.layerGroup();
 
 /* =========================================================
    UTILIDADES
@@ -1475,7 +1125,6 @@ let capaCoordenada =
 const $ =
     id => document.getElementById(id);
 
-
 const txt =
     (id,v) => {
 
@@ -1483,7 +1132,6 @@ const txt =
             $(id).textContent = v;
 
     };
-
 
 function estado(t){
 
@@ -1494,12 +1142,9 @@ function estado(t){
 
 }
 
-
 function sensorEstado(id,t,c){
 
-    if(!$(
-        id
-    ))
+    if(!$(id))
         return;
 
     $(id).textContent =
@@ -1513,7 +1158,6 @@ function sensorEstado(id,t,c){
         : "sensor-info";
 
 }
-
 
 function fecha(){
 
@@ -1531,7 +1175,6 @@ function fecha(){
 
 }
 
-
 function hora(d,tz){
 
     return new Intl.DateTimeFormat(
@@ -1547,13 +1190,11 @@ function hora(d,tz){
 
 }
 
-
 function mapKey(){
 
     return $("mapKey").value.trim();
 
 }
-
 
 function guardarMapKey(){
 
@@ -1576,7 +1217,6 @@ function guardarMapKey(){
 
 }
 
-
 function mostrarCarga(v,t){
 
     $("cargando").style.display =
@@ -1591,7 +1231,6 @@ function mostrarCarga(v,t){
         );
 
 }
-
 
 function horaF(v){
 
@@ -1608,7 +1247,6 @@ function horaF(v){
         : "N/D";
 
 }
-
 
 function fechaD(d){
 
@@ -1634,9 +1272,8 @@ function fechaD(d){
 
 }
 
-
 /* =========================================================
-   CSV FIRMS
+   CSV
 ========================================================= */
 
 function csv(t){
@@ -1650,15 +1287,11 @@ function csv(t){
     if(l.length < 2)
         return [];
 
-
     function p(x){
 
         let a = [];
-
         let v = "";
-
         let q = false;
-
 
         for(
             let i=0;
@@ -1669,7 +1302,6 @@ function csv(t){
             const c =
                 x[i];
 
-
             if(c === '"'){
 
                 if(
@@ -1678,7 +1310,6 @@ function csv(t){
                 ){
 
                     v += '"';
-
                     i++;
 
                 }
@@ -1709,16 +1340,13 @@ function csv(t){
 
         }
 
-
         a.push(
             v.trim()
         );
 
-
         return a;
 
     }
-
 
     const h =
         p(l[0])
@@ -1726,7 +1354,6 @@ function csv(t){
             x =>
             x.toLowerCase()
         );
-
 
     return l
         .slice(1)
@@ -1740,8 +1367,7 @@ function csv(t){
                 p(x).map(
                     (v,i) =>
                     [
-                        h[i] ??
-                        `c${i}`,
+                        h[i] ?? `c${i}`,
                         v
                     ]
                 )
@@ -1750,9 +1376,8 @@ function csv(t){
 
 }
 
-
 /* =========================================================
-   CONSULTA FIRMS
+   FIRMS
 ========================================================= */
 
 async function firms(s){
@@ -1769,16 +1394,13 @@ async function firms(s){
             }
         );
 
-
     if(!r.ok)
         throw Error(
             `FIRMS HTTP ${r.status}`
         );
 
-
     const t =
         await r.text();
-
 
     if(
         t
@@ -1791,42 +1413,29 @@ async function firms(s){
             "MAP_KEY inválida"
         );
 
-
     return csv(t);
 
 }
 
-
 /* =========================================================
-   NORMALIZACIÓN DE SATÉLITE / SENSOR
+   NORMALIZACIÓN SENSOR
 ========================================================= */
 
-function normalizarSensor(
-    d,
-    tipo
-){
+function normalizarSensor(d,tipo){
 
     let satellite =
         String(
-            d.satellite ??
-            ""
+            d.satellite ?? ""
         )
         .trim()
         .toUpperCase();
-
 
     let instrument =
         String(
-            d.instrument ??
-            ""
+            d.instrument ?? ""
         )
         .trim()
         .toUpperCase();
-
-
-    /* -------------------------
-       VIIRS
-    ------------------------- */
 
     if(tipo === "VIIRS"){
 
@@ -1836,8 +1445,7 @@ function normalizarSensor(
             satellite.includes("SUOMI")
         ){
 
-            satellite =
-                "Suomi-NPP";
+            satellite = "Suomi-NPP";
 
         }
         else if(
@@ -1846,8 +1454,7 @@ function normalizarSensor(
             satellite.includes("N20")
         ){
 
-            satellite =
-                "NOAA-20";
+            satellite = "NOAA-20";
 
         }
         else if(
@@ -1856,21 +1463,13 @@ function normalizarSensor(
             satellite.includes("N21")
         ){
 
-            satellite =
-                "NOAA-21";
+            satellite = "NOAA-21";
 
         }
 
-
-        instrument =
-            "VIIRS";
+        instrument = "VIIRS";
 
     }
-
-
-    /* -------------------------
-       MODIS
-    ------------------------- */
 
     if(tipo === "MODIS"){
 
@@ -1878,29 +1477,20 @@ function normalizarSensor(
             satellite.includes("TERRA")
         ){
 
-            satellite =
-                "Terra";
+            satellite = "Terra";
 
         }
         else if(
             satellite.includes("AQUA")
         ){
 
-            satellite =
-                "Aqua";
+            satellite = "Aqua";
 
         }
 
-
-        instrument =
-            "MODIS";
+        instrument = "MODIS";
 
     }
-
-
-    /* -------------------------
-       GOES
-    ------------------------- */
 
     if(tipo === "GOES"){
 
@@ -1908,51 +1498,40 @@ function normalizarSensor(
             satellite.includes("19")
         ){
 
-            satellite =
-                "GOES-19";
+            satellite = "GOES-19";
 
         }
         else if(
             satellite.includes("18")
         ){
 
-            satellite =
-                "GOES-18";
+            satellite = "GOES-18";
 
         }
         else if(
             satellite.includes("17")
         ){
 
-            satellite =
-                "GOES-17";
+            satellite = "GOES-17";
 
         }
         else if(
             satellite.includes("16")
         ){
 
-            satellite =
-                "GOES-16";
+            satellite = "GOES-16";
 
         }
 
-
-        instrument =
-            "ABI";
+        instrument = "ABI";
 
     }
 
-
     if(!satellite)
-        satellite =
-            "N/D";
-
+        satellite = "N/D";
 
     if(!instrument)
-        instrument =
-            tipo || "N/D";
-
+        instrument = tipo || "N/D";
 
     return {
 
@@ -1963,12 +1542,11 @@ function normalizarSensor(
         instrument,
 
         sensorLabel:
-            `${satellite} — ${instrument}`
+            `${satellite} / ${instrument}`
 
     };
 
 }
-
 
 /* =========================================================
    VIIRS
@@ -1985,7 +1563,6 @@ function viirs(d,s){
         Number(
             d.bright_ti5
         );
-
 
     const x = {
 
@@ -2007,7 +1584,6 @@ function viirs(d,s){
             ),
 
         t4,
-
         t5,
 
         deltaT:
@@ -2025,14 +1601,12 @@ function viirs(d,s){
 
     };
 
-
     return normalizarSensor(
         x,
         "VIIRS"
     );
 
 }
-
 
 /* =========================================================
    SENSOR GENÉRICO
@@ -2071,7 +1645,6 @@ function sensorDato(d,n){
 
 }
 
-
 /* =========================================================
    VALIDACIÓN VIIRS
 ========================================================= */
@@ -2079,15 +1652,12 @@ function sensorDato(d,n){
 function validar(ds){
 
     const v = [];
-
     const x = [];
-
 
     ds.forEach(
         d => {
 
             const r = [];
-
 
             if(
                 !Number.isFinite(
@@ -2104,12 +1674,11 @@ function validar(ds){
 
             }
 
-
             if(
                 !Number.isFinite(
                     d.frp
                 ) ||
-                d.frp < 1
+                d.frp < CONFIG.VIIRS.FRP_MIN_VALIDO
             ){
 
                 r.push(
@@ -2117,7 +1686,6 @@ function validar(ds){
                 );
 
             }
-
 
             if(
                 [
@@ -2135,10 +1703,8 @@ function validar(ds){
 
             }
 
-
             d._razonesDescarte =
                 r;
-
 
             (
                 r.length
@@ -2150,7 +1716,6 @@ function validar(ds){
         }
     );
 
-
     return {
         v,
         x
@@ -2158,17 +1723,13 @@ function validar(ds){
 
 }
 
-
 /* =========================================================
    DISTANCIA
 ========================================================= */
 
-function dist(
-    a,b,c,d
-){
+function dist(a,b,c,d){
 
-    const R =
-        6371000;
+    const R = 6371000;
 
     const p =
         a *
@@ -2196,7 +1757,6 @@ function dist(
         Math.cos(q) *
         Math.sin(dl/2)**2;
 
-
     return 2 *
         R *
         Math.atan2(
@@ -2205,7 +1765,6 @@ function dist(
         );
 
 }
-
 
 /* =========================================================
    DIFERENCIA HORARIA
@@ -2219,15 +1778,11 @@ function dh(a,b){
     const y =
         fechaD(b);
 
-
     return x && y
-        ? Math.abs(
-            x-y
-        ) / 3600000
+        ? Math.abs(x-y) / 3600000
         : Infinity;
 
 }
-
 
 /* =========================================================
    CLUSTERS
@@ -2238,9 +1793,7 @@ function hacerClusters(ds){
     const used =
         new Set();
 
-    const out =
-        [];
-
+    const out = [];
 
     for(
         let i=0;
@@ -2253,23 +1806,16 @@ function hacerClusters(ds){
         )
             continue;
 
-
         const g =
-            [
-                ds[i]
-            ];
-
+            [ds[i]];
 
         used.add(i);
 
-
         let c = true;
-
 
         while(c){
 
             c = false;
-
 
             for(
                 let j=0;
@@ -2281,7 +1827,6 @@ function hacerClusters(ds){
                     used.has(j)
                 )
                     continue;
-
 
                 if(
                     g.some(
@@ -2318,7 +1863,6 @@ function hacerClusters(ds){
 
         }
 
-
         if(
             g.length >=
             CONFIG.VIIRS.CLUSTER_MIN
@@ -2330,34 +1874,85 @@ function hacerClusters(ds){
 
     }
 
-
     return out;
 
 }
 
+/* =========================================================
+   RESUMEN POR SENSOR
+========================================================= */
+
+function resumenPorSensor(ds){
+
+    const r = {};
+
+    ds.forEach(
+        d => {
+
+            const clave =
+                d.sensorLabel ||
+                `${d.satellite || "N/D"} / ${d.instrument || "N/D"}`;
+
+            if(!r[clave]){
+
+                r[clave] = {
+
+                    satelite:
+                        d.satellite ||
+                        "N/D",
+
+                    sensor:
+                        d.instrument ||
+                        "N/D",
+
+                    total:
+                        0,
+
+                    frpTotal:
+                        0,
+
+                    frpMax:
+                        0
+
+                };
+
+            }
+
+            r[clave].total++;
+
+            r[clave].frpTotal +=
+                Number(d.frp) || 0;
+
+            r[clave].frpMax =
+                Math.max(
+                    r[clave].frpMax,
+                    Number(d.frp) || 0
+                );
+
+        }
+    );
+
+    return r;
+
+}
 
 /* =========================================================
-   ESTADÍSTICA DEL CLUSTER
+   ESTADÍSTICA CLUSTER
 ========================================================= */
 
 function stats(g){
 
     let lat = 0;
-
     let lon = 0;
-
     let total = 0;
-
     let max = 0;
-
     let alta = 0;
-
     let nom = 0;
-
 
     const sats =
         new Set();
 
+    const sensores = {};
 
     g.forEach(
         d => {
@@ -2377,7 +1972,6 @@ function stats(g){
                     d.frp || 0
                 );
 
-
             if(
                 [
                     "h",
@@ -2386,12 +1980,8 @@ function stats(g){
                 .includes(
                     d.confidenceNormalizada
                 )
-            ){
-
+            )
                 alta++;
-
-            }
-
 
             if(
                 [
@@ -2401,27 +1991,56 @@ function stats(g){
                 .includes(
                     d.confidenceNormalizada
                 )
-            ){
-
+            )
                 nom++;
-
-            }
-
 
             sats.add(
                 d.satellite
             );
 
+            const clave =
+                d.sensorLabel ||
+                `${d.satellite} / ${d.instrument}`;
+
+            if(!sensores[clave]){
+
+                sensores[clave] = {
+
+                    satelite:
+                        d.satellite,
+
+                    sensor:
+                        d.instrument,
+
+                    total:
+                        0,
+
+                    frpTotal:
+                        0,
+
+                    frpMax:
+                        0
+
+                };
+
+            }
+
+            sensores[clave].total++;
+
+            sensores[clave].frpTotal +=
+                Number(d.frp) || 0;
+
+            sensores[clave].frpMax =
+                Math.max(
+                    sensores[clave].frpMax,
+                    Number(d.frp) || 0
+                );
+
         }
     );
 
-
-    lat /=
-        g.length;
-
-    lon /=
-        g.length;
-
+    lat /= g.length;
+    lon /= g.length;
 
     return {
 
@@ -2447,9 +2066,11 @@ function stats(g){
             nom,
 
         satelites:
-            [
-                ...sats
-            ],
+            [...sats],
+
+        sensores:
+
+            sensores,
 
         radioMax:
             Math.max(
@@ -2468,16 +2089,11 @@ function stats(g){
 
 }
 
-
 /* =========================================================
    DETECCIONES CERCANAS
 ========================================================= */
 
-function cercanos(
-    ds,
-    c,
-    m
-){
+function cercanos(ds,c,m){
 
     return ds
         .map(
@@ -2502,7 +2118,6 @@ function cercanos(
 
 }
 
-
 /* =========================================================
    SCORE
 ========================================================= */
@@ -2512,112 +2127,70 @@ function score(c){
     let s = 3;
 
     let r =
-        [
-            "≥3 VIIRS"
-        ];
+        ["≥3 VIIRS"];
 
-
-    if(
-        c.size >= 5
-    ){
+    if(c.size >= 5){
 
         s += 2;
 
-        r.push(
-            "≥5 VIIRS"
-        );
+        r.push("≥5 VIIRS");
 
     }
 
-
-    if(
-        c.frpMax >= 10
-    ){
+    if(c.frpMax >= 10){
 
         s += 2;
 
-        r.push(
-            "FRP ≥10 MW"
-        );
+        r.push("FRP ≥10 MW");
 
     }
 
-
-    if(
-        c.frpMax >= 30
-    ){
+    if(c.frpMax >= 30){
 
         s += 2;
 
-        r.push(
-            "FRP ≥30 MW"
-        );
+        r.push("FRP ≥30 MW");
 
     }
 
-
-    if(
-        c.confianzaAlta
-    ){
+    if(c.confianzaAlta){
 
         s += 3;
 
-        r.push(
-            "Confianza alta"
-        );
+        r.push("Confianza alta");
 
     }
-    else if(
-        c.confianzaNominal
-    ){
+    else if(c.confianzaNominal){
 
         s++;
 
-        r.push(
-            "Confianza nominal"
-        );
+        r.push("Confianza nominal");
 
     }
 
-
-    if(
-        c.satelites.length >= 2
-    ){
+    if(c.satelites.length >= 2){
 
         s += 2;
 
-        r.push(
-            "≥2 satélites VIIRS"
-        );
+        r.push("≥2 satélites VIIRS");
 
     }
 
-
-    if(
-        c.modisCercanos.length
-    ){
+    if(c.modisCercanos.length){
 
         s += 2;
 
-        r.push(
-            "MODIS ≤3 km"
-        );
+        r.push("MODIS ≤3 km");
 
     }
 
-
-    if(
-        c.goesCercanos.length
-    ){
+    if(c.goesCercanos.length){
 
         s += 2;
 
-        r.push(
-            "GOES ≤10 km"
-        );
+        r.push("GOES ≤10 km");
 
     }
-
 
     return {
 
@@ -2638,9 +2211,8 @@ function score(c){
 
 }
 
-
 /* =========================================================
-   COLOR DEL SENSOR
+   COLOR SENSOR
 ========================================================= */
 
 function colorSensor(d){
@@ -2654,23 +2226,19 @@ function colorSensor(d){
         )
             return "#00e5ff";
 
-
         if(
             d.satellite === "NOAA-20"
         )
             return "#ff1744";
-
 
         if(
             d.satellite === "NOAA-21"
         )
             return "#ff6d00";
 
-
         return "#b388ff";
 
     }
-
 
     if(
         d.instrument === "MODIS"
@@ -2681,17 +2249,14 @@ function colorSensor(d){
         )
             return "#ffeb3b";
 
-
         if(
             d.satellite === "Aqua"
         )
             return "#00e676";
 
-
         return "#ffffff";
 
     }
-
 
     if(
         d.instrument === "ABI"
@@ -2702,25 +2267,21 @@ function colorSensor(d){
         )
             return "#ff9800";
 
-
         if(
             d.satellite === "GOES-19"
         )
             return "#e040fb";
 
-
         return "#ffffff";
 
     }
-
 
     return "#ffffff";
 
 }
 
-
 /* =========================================================
-   INICIAR MAPA
+   MAPA
 ========================================================= */
 
 function iniciarMapa(){
@@ -2736,7 +2297,6 @@ function iniciarMapa(){
             }
         );
 
-
     const osm =
         L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -2747,7 +2307,6 @@ function iniciarMapa(){
         )
         .addTo(map);
 
-
     const sat =
         L.tileLayer(
             "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -2757,110 +2316,77 @@ function iniciarMapa(){
             }
         );
 
-
     const et =
         L.tileLayer(
             "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
             {
-                opacity:
-                    .95
+                opacity:.95
             }
         );
 
-
     const hy =
         L.layerGroup(
-            [
-                sat,
-                et
-            ]
+            [sat,et]
         );
-
 
     wmsSERFOR =
         L.tileLayer.wms(
             CONFIG.SERFOR.WMS,
             {
-                layers:
-                    "0,1",
-
-                format:
-                    "image/png",
-
-                transparent:
-                    true,
-
-                opacity:
-                    .55,
-
-                attribution:
-                    "© SERFOR"
+                layers:"0,1",
+                format:"image/png",
+                transparent:true,
+                opacity:.55,
+                attribution:"© SERFOR"
             }
         );
-
 
     L.control.layers(
 
         {
-
-            "🗺️ OpenStreetMap":
-                osm,
-
-            "🛰️ Satélite":
-                sat,
-
-            "🛰️ Híbrido":
-                hy
-
+            "🗺️ OpenStreetMap":osm,
+            "🛰️ Satélite":sat,
+            "🛰️ Híbrido":hy
         },
 
         {
 
-            VIIRS:
-                capaVIIRS,
+            "VIIRS — todos":capaVIIRS,
+            "Suomi-NPP / VIIRS":capaSuomi,
+            "NOAA-20 / VIIRS":capaNOAA20,
+            "NOAA-21 / VIIRS":capaNOAA21,
 
             "VIIRS descartados":
                 capaVIIRSDescartados,
 
-            MODIS:
-                capaMODIS,
+            "MODIS — todos":capaMODIS,
+            "Terra / MODIS":capaTerra,
+            "Aqua / MODIS":capaAqua,
 
-            GOES:
-                capaGOES,
+            "GOES — todos":capaGOES,
+            "GOES-18 / ABI":capaGOES18,
+            "GOES-19 / ABI":capaGOES19,
 
-            "SERFOR WMS":
-                wmsSERFOR,
-
-            Clusters:
-                capaClusters,
-
-            Coordenada:
-                capaCoordenada,
-
-            "Focos SERFOR":
-                capaFocosSERFOR,
-
-            "Alertas SERFOR":
-                capaAlertasSERFOR
+            "SERFOR WMS":wmsSERFOR,
+            "Clusters":capaClusters,
+            "Coordenada":capaCoordenada,
+            "Focos SERFOR":capaFocosSERFOR,
+            "Alertas SERFOR":capaAlertasSERFOR
 
         },
 
         {
-            collapsed:
-                false
+            collapsed:false
         }
 
-    )
-    .addTo(map);
-
+    ).addTo(map);
 
     leyenda();
 
 }
 
-
 /* =========================================================
-   LEYENDA DERECHA
+   LEYENDA
 ========================================================= */
 
 function leyenda(){
@@ -2868,11 +2394,9 @@ function leyenda(){
     const l =
         L.control(
             {
-                position:
-                    "bottomright"
+                position:"bottomright"
             }
         );
-
 
     l.onAdd =
         function(){
@@ -2883,91 +2407,117 @@ function leyenda(){
                     "legend"
                 );
 
-
             d.innerHTML = `
 
                 <div class="legend-title">
-                    🔥 MONITOR — SATÉLITE / SENSOR
+                    🔥 SATÉLITE / SENSOR
                 </div>
 
                 <div class="legend-item">
-                    <span
-                    class="legend-dot"
-                    style="background:#00e5ff">
-                    </span>
+                    <span class="legend-dot"
+                          style="background:#00e5ff"></span>
                     Suomi-NPP / VIIRS
                 </div>
 
                 <div class="legend-item">
-                    <span
-                    class="legend-dot"
-                    style="background:#ff1744">
-                    </span>
+                    <span class="legend-dot"
+                          style="background:#ff1744"></span>
                     NOAA-20 / VIIRS
                 </div>
 
                 <div class="legend-item">
-                    <span
-                    class="legend-dot"
-                    style="background:#ff6d00">
-                    </span>
+                    <span class="legend-dot"
+                          style="background:#ff6d00"></span>
                     NOAA-21 / VIIRS
                 </div>
 
                 <div class="legend-item">
-                    <span
-                    class="legend-dot"
-                    style="background:#ffeb3b">
-                    </span>
+                    <span class="legend-dot"
+                          style="background:#ffeb3b"></span>
                     Terra / MODIS
                 </div>
 
                 <div class="legend-item">
-                    <span
-                    class="legend-dot"
-                    style="background:#00e676">
-                    </span>
+                    <span class="legend-dot"
+                          style="background:#00e676"></span>
                     Aqua / MODIS
                 </div>
 
                 <div class="legend-item">
-                    <span
-                    class="legend-dot"
-                    style="background:#ff9800">
-                    </span>
+                    <span class="legend-dot"
+                          style="background:#ff9800"></span>
                     GOES-18 / ABI
                 </div>
 
                 <div class="legend-item">
-                    <span
-                    class="legend-dot"
-                    style="background:#e040fb">
-                    </span>
+                    <span class="legend-dot"
+                          style="background:#e040fb"></span>
                     GOES-19 / ABI
                 </div>
 
                 <hr>
 
-                <div>
-                    🌲 Focos SERFOR
-                </div>
-
-                <div>
-                    🔥 Alertas SERFOR
-                </div>
+                <div>🌲 Focos SERFOR</div>
+                <div>🔥 Alertas SERFOR</div>
 
             `;
-
 
             return d;
 
         };
 
-
     l.addTo(map);
 
 }
 
+/* =========================================================
+   CAPA POR SENSOR
+========================================================= */
+
+function obtenerCapaSensor(d,tipo){
+
+    if(tipo === "VIIRS"){
+
+        if(d.satellite === "Suomi-NPP")
+            return capaSuomi;
+
+        if(d.satellite === "NOAA-20")
+            return capaNOAA20;
+
+        if(d.satellite === "NOAA-21")
+            return capaNOAA21;
+
+        return capaVIIRS;
+
+    }
+
+    if(tipo === "MODIS"){
+
+        if(d.satellite === "Terra")
+            return capaTerra;
+
+        if(d.satellite === "Aqua")
+            return capaAqua;
+
+        return capaMODIS;
+
+    }
+
+    if(tipo === "GOES"){
+
+        if(d.satellite === "GOES-18")
+            return capaGOES18;
+
+        if(d.satellite === "GOES-19")
+            return capaGOES19;
+
+        return capaGOES;
+
+    }
+
+    return null;
+
+}
 
 /* =========================================================
    ALTERNAR CAPAS
@@ -2977,58 +2527,61 @@ function alternarCapa(t){
 
     const m = {
 
-        viirs:
-            capaVIIRS,
+        viirs:capaVIIRS,
+        suomi:capaSuomi,
+        noaa20:capaNOAA20,
+        noaa21:capaNOAA21,
 
-        descartados:
-            capaVIIRSDescartados,
+        descartados:capaVIIRSDescartados,
 
-        modis:
-            capaMODIS,
+        modis:capaMODIS,
+        terra:capaTerra,
+        aqua:capaAqua,
 
-        goes:
-            capaGOES,
+        goes:capaGOES,
+        goes18:capaGOES18,
+        goes19:capaGOES19,
 
-        clusters:
-            capaClusters
+        clusters:capaClusters
 
     }[t];
-
 
     const i = {
 
-        viirs:
-            "chkVIIRS",
+        viirs:"chkVIIRS",
+        suomi:"chkSuomi",
+        noaa20:"chkNOAA20",
+        noaa21:"chkNOAA21",
 
-        descartados:
-            "chkVIIRSDescartados",
+        descartados:"chkVIIRSDescartados",
 
-        modis:
-            "chkMODIS",
+        modis:"chkMODIS",
+        terra:"chkTerra",
+        aqua:"chkAqua",
 
-        goes:
-            "chkGOES",
+        goes:"chkGOES",
+        goes18:"chkGOES18",
+        goes19:"chkGOES19",
 
-        clusters:
-            "chkClusters"
+        clusters:"chkClusters"
 
     }[t];
 
-
     if(!m)
         return;
-
 
     if(
         $(i).checked
     )
         m.addTo(map);
-
     else
         map.removeLayer(m);
 
 }
 
+/* =========================================================
+   SERFOR WMS
+========================================================= */
 
 function alternarSERFORWMS(){
 
@@ -3036,14 +2589,61 @@ function alternarSERFORWMS(){
         $("chkSERFORWMS").checked
     )
         wmsSERFOR.addTo(map);
-
     else
-        map.removeLayer(
-            wmsSERFOR
-        );
+        map.removeLayer(wmsSERFOR);
 
 }
 
+/* =========================================================
+   POPUP SENSOR
+========================================================= */
+
+function htmlSensorDetalle(sensores){
+
+    const arr =
+        Object.values(
+            sensores || {}
+        );
+
+    if(!arr.length)
+        return "N/D";
+
+    return `
+
+        <div class="popup-sensor">
+
+        ${
+            arr
+            .sort(
+                (a,b) =>
+                b.total - a.total
+            )
+            .map(
+                s => `
+
+                <div class="popup-sensor-row">
+
+                    <span>
+                        ● ${s.satelite} /
+                        ${s.sensor}
+                    </span>
+
+                    <b>
+                        ${s.total}
+                    </b>
+
+                </div>
+
+                `
+            )
+            .join("")
+        }
+
+        </div>
+
+    `;
+
+}
 
 /* =========================================================
    DIBUJAR VIIRS
@@ -3051,26 +2651,34 @@ function alternarSERFORWMS(){
 
 function dibujarVIIRS(ds){
 
-    capaVIIRS.clearLayers();
-
+    [
+        capaVIIRS,
+        capaSuomi,
+        capaNOAA20,
+        capaNOAA21
+    ]
+    .forEach(
+        c =>
+        c.clearLayers()
+    );
 
     ds.forEach(
         d => {
 
             if(
-                !Number.isFinite(
-                    d.latitude
-                ) ||
-                !Number.isFinite(
-                    d.longitude
-                )
+                !Number.isFinite(d.latitude) ||
+                !Number.isFinite(d.longitude)
             )
                 return;
-
 
             const col =
                 colorSensor(d);
 
+            const capa =
+                obtenerCapaSensor(
+                    d,
+                    "VIIRS"
+                );
 
             L.circleMarker(
 
@@ -3080,19 +2688,10 @@ function dibujarVIIRS(ds){
                 ],
 
                 {
-
-                    radius:
-                        5,
-
-                    color:
-                        col,
-
-                    fillColor:
-                        col,
-
-                    fillOpacity:
-                        .9
-
+                    radius:5,
+                    color:col,
+                    fillColor:col,
+                    fillOpacity:.9
                 }
 
             )
@@ -3103,7 +2702,7 @@ function dibujarVIIRS(ds){
                 <div class="popup-incendio">
 
                 <h3 style="color:${col}">
-                🔥 VIIRS VÁLIDO
+                🔥 VIIRS
                 </h3>
 
                 <b>Satélite:</b>
@@ -3124,16 +2723,20 @@ function dibujarVIIRS(ds){
                 <br>
 
                 <b>Temperatura T4:</b>
-                ${Number.isFinite(d.t4)
-                ? d.t4.toFixed(2)
-                : "N/D"}
+                ${
+                    Number.isFinite(d.t4)
+                    ? d.t4.toFixed(2)
+                    : "N/D"
+                }
                 K
                 <br>
 
                 <b>ΔT:</b>
-                ${Number.isFinite(d.deltaT)
-                ? d.deltaT.toFixed(2)
-                : "N/D"}
+                ${
+                    Number.isFinite(d.deltaT)
+                    ? d.deltaT.toFixed(2)
+                    : "N/D"
+                }
                 K
                 <br>
 
@@ -3153,15 +2756,12 @@ function dibujarVIIRS(ds){
                 `
 
             )
-            .addTo(
-                capaVIIRS
-            );
+            .addTo(capa);
 
         }
     );
 
 }
-
 
 /* =========================================================
    VIIRS DESCARTADOS
@@ -3171,20 +2771,14 @@ function dibujarDesc(ds){
 
     capaVIIRSDescartados.clearLayers();
 
-
     ds.forEach(
         d => {
 
             if(
-                !Number.isFinite(
-                    d.latitude
-                ) ||
-                !Number.isFinite(
-                    d.longitude
-                )
+                !Number.isFinite(d.latitude) ||
+                !Number.isFinite(d.longitude)
             )
                 return;
-
 
             L.circleMarker(
 
@@ -3194,22 +2788,11 @@ function dibujarDesc(ds){
                 ],
 
                 {
-
-                    radius:
-                        4,
-
-                    color:
-                        "#616161",
-
-                    fillColor:
-                        "#9e9e9e",
-
-                    fillOpacity:
-                        .45,
-
-                    dashArray:
-                        "2 2"
-
+                    radius:4,
+                    color:"#616161",
+                    fillColor:"#9e9e9e",
+                    fillOpacity:.45,
+                    dashArray:"2 2"
                 }
 
             )
@@ -3234,9 +2817,13 @@ function dibujarDesc(ds){
                 <b>FRP:</b>
                 ${(d.frp||0).toFixed(2)}
                 MW
+
                 <hr>
 
-                ${d._razonesDescarte.join("<br>")}
+                ${
+                    d._razonesDescarte
+                    .join("<br>")
+                }
 
                 </div>
 
@@ -3252,33 +2839,39 @@ function dibujarDesc(ds){
 
 }
 
-
 /* =========================================================
    DIBUJAR MODIS
 ========================================================= */
 
 function dibujarMODIS(ds){
 
-    capaMODIS.clearLayers();
-
+    [
+        capaMODIS,
+        capaTerra,
+        capaAqua
+    ]
+    .forEach(
+        c =>
+        c.clearLayers()
+    );
 
     ds.forEach(
         d => {
 
             if(
-                !Number.isFinite(
-                    d.latitude
-                ) ||
-                !Number.isFinite(
-                    d.longitude
-                )
+                !Number.isFinite(d.latitude) ||
+                !Number.isFinite(d.longitude)
             )
                 return;
-
 
             const col =
                 colorSensor(d);
 
+            const capa =
+                obtenerCapaSensor(
+                    d,
+                    "MODIS"
+                );
 
             L.circleMarker(
 
@@ -3288,19 +2881,10 @@ function dibujarMODIS(ds){
                 ],
 
                 {
-
-                    radius:
-                        5,
-
-                    color:
-                        col,
-
-                    fillColor:
-                        col,
-
-                    fillOpacity:
-                        .85
-
+                    radius:5,
+                    color:col,
+                    fillColor:col,
+                    fillOpacity:.85
                 }
 
             )
@@ -3339,15 +2923,12 @@ function dibujarMODIS(ds){
                 `
 
             )
-            .addTo(
-                capaMODIS
-            );
+            .addTo(capa);
 
         }
     );
 
 }
-
 
 /* =========================================================
    DIBUJAR GOES
@@ -3355,26 +2936,33 @@ function dibujarMODIS(ds){
 
 function dibujarGOES(ds){
 
-    capaGOES.clearLayers();
-
+    [
+        capaGOES,
+        capaGOES18,
+        capaGOES19
+    ]
+    .forEach(
+        c =>
+        c.clearLayers()
+    );
 
     ds.forEach(
         d => {
 
             if(
-                !Number.isFinite(
-                    d.latitude
-                ) ||
-                !Number.isFinite(
-                    d.longitude
-                )
+                !Number.isFinite(d.latitude) ||
+                !Number.isFinite(d.longitude)
             )
                 return;
-
 
             const col =
                 colorSensor(d);
 
+            const capa =
+                obtenerCapaSensor(
+                    d,
+                    "GOES"
+                );
 
             const radio =
                 Math.max(
@@ -3386,7 +2974,6 @@ function dibujarGOES(ds){
                     )
                 );
 
-
             L.circleMarker(
 
                 [
@@ -3395,22 +2982,11 @@ function dibujarGOES(ds){
                 ],
 
                 {
-
-                    radius:
-                        radio,
-
-                    color:
-                        col,
-
-                    fillColor:
-                        col,
-
-                    fillOpacity:
-                        .85,
-
-                    weight:
-                        2
-
+                    radius:radio,
+                    color:col,
+                    fillColor:col,
+                    fillOpacity:.85,
+                    weight:2
                 }
 
             )
@@ -3453,15 +3029,12 @@ function dibujarGOES(ds){
                 `
 
             )
-            .addTo(
-                capaGOES
-            );
+            .addTo(capa);
 
         }
     );
 
 }
-
 
 /* =========================================================
    DIBUJAR CLUSTERS
@@ -3470,7 +3043,6 @@ function dibujarGOES(ds){
 function dibujarClusters(cs){
 
     capaClusters.clearLayers();
-
 
     cs.forEach(
         c => {
@@ -3482,7 +3054,6 @@ function dibujarClusters(cs){
                 ? "#ef6c00"
                 : "#1565c0";
 
-
             L.circleMarker(
 
                 [
@@ -3491,22 +3062,11 @@ function dibujarClusters(cs){
                 ],
 
                 {
-
-                    radius:
-                        11,
-
-                    color:
-                        col,
-
-                    fillColor:
-                        col,
-
-                    fillOpacity:
-                        .78,
-
-                    weight:
-                        3
-
+                    radius:11,
+                    color:col,
+                    fillColor:col,
+                    fillOpacity:.78,
+                    weight:3
                 }
 
             )
@@ -3524,7 +3084,7 @@ function dibujarClusters(cs){
                 ${c.fireScore}
                 <br>
 
-                <b>VIIRS:</b>
+                <b>VIIRS total:</b>
                 ${c.size}
                 <br>
 
@@ -3532,8 +3092,19 @@ function dibujarClusters(cs){
                 ${c.satelites.join(", ")}
                 <br>
 
+                <b>Detecciones por sensor:</b>
+
+                ${htmlSensorDetalle(c.sensores)}
+
+                <br>
+
                 <b>FRP máximo:</b>
                 ${c.frpMax.toFixed(2)}
+                MW
+                <br>
+
+                <b>FRP total:</b>
+                ${c.frpTotal.toFixed(2)}
                 MW
                 <br>
 
@@ -3562,7 +3133,6 @@ function dibujarClusters(cs){
 
 }
 
-
 /* =========================================================
    SERFOR
 ========================================================= */
@@ -3580,27 +3150,19 @@ async function serfor(id){
             `&f=geojson`,
 
             {
-                cache:
-                    "no-store"
+                cache:"no-store"
             }
 
         );
-
 
     if(!r.ok)
         throw Error(
             `SERFOR HTTP ${r.status}`
         );
 
-
     return r.json();
 
 }
-
-
-/* =========================================================
-   POPUP SERFOR
-========================================================= */
 
 function popupS(
     f,
@@ -3634,11 +3196,6 @@ function popupS(
 
 }
 
-
-/* =========================================================
-   DIBUJAR SERFOR
-========================================================= */
-
 function dibujarS(
     g,
     layer,
@@ -3649,7 +3206,6 @@ function dibujarS(
 
     layer.clearLayers();
 
-
     (
         g.features || []
     )
@@ -3657,11 +3213,9 @@ function dibujarS(
         f => {
 
             if(
-                f.geometry?.type !==
-                "Point"
+                f.geometry?.type !== "Point"
             )
                 return;
-
 
             const [
                 x,
@@ -3669,13 +3223,9 @@ function dibujarS(
             ] =
                 f.geometry.coordinates;
 
-
             L.marker(
 
-                [
-                    y,
-                    x
-                ],
+                [y,x],
 
                 {
 
@@ -3683,23 +3233,14 @@ function dibujarS(
                         L.divIcon(
                             {
 
-                                className:
-                                    "",
-
-                                html:
-                                    icon,
+                                className:"",
+                                html:icon,
 
                                 iconSize:
-                                    [
-                                        32,
-                                        32
-                                    ],
+                                    [32,32],
 
                                 iconAnchor:
-                                    [
-                                        16,
-                                        16
-                                    ]
+                                    [16,16]
 
                             }
                         )
@@ -3714,19 +3255,12 @@ function dibujarS(
                     color
                 )
             )
-            .addTo(
-                layer
-            );
+            .addTo(layer);
 
         }
     );
 
 }
-
-
-/* =========================================================
-   CARGAR SERFOR
-========================================================= */
 
 async function cargarS(
     id,
@@ -3742,10 +3276,8 @@ async function cargarS(
         const g =
             await serfor(id);
 
-
         const f =
             g.features || [];
-
 
         dibujarS(
             g,
@@ -3755,12 +3287,10 @@ async function cargarS(
             color
         );
 
-
         txt(
             count,
             f.length
         );
-
 
         return f;
 
@@ -3772,17 +3302,11 @@ async function cargarS(
             "ERROR"
         );
 
-
         return [];
 
     }
 
 }
-
-
-/* =========================================================
-   FOCOS SERFOR
-========================================================= */
 
 function alternarFocosSERFOR(){
 
@@ -3790,10 +3314,7 @@ function alternarFocosSERFOR(){
         $("chkFocosSERFOR").checked
     ){
 
-        capaFocosSERFOR.addTo(
-            map
-        );
-
+        capaFocosSERFOR.addTo(map);
 
         if(
             !datosFocosSERFOR.length
@@ -3832,21 +3353,13 @@ function alternarFocosSERFOR(){
 
 }
 
-
-/* =========================================================
-   ALERTAS SERFOR
-========================================================= */
-
 function alternarAlertasSERFOR(){
 
     if(
         $("chkAlertasSERFOR").checked
     ){
 
-        capaAlertasSERFOR.addTo(
-            map
-        );
-
+        capaAlertasSERFOR.addTo(map);
 
         if(
             !datosAlertasSERFOR.length
@@ -3885,6 +3398,101 @@ function alternarAlertasSERFOR(){
 
 }
 
+/* =========================================================
+   ESTADÍSTICA SENSOR
+========================================================= */
+
+function actualizarEstadisticaSensores(){
+
+    const contenedor =
+        $("estadisticaSensores");
+
+    if(!contenedor)
+        return;
+
+    const todos = [
+
+        ...datosVIIRS,
+        ...datosMODIS,
+        ...datosGOES
+
+    ];
+
+    const resumen =
+        resumenPorSensor(
+            todos
+        );
+
+    const sensores =
+        Object.values(
+            resumen
+        );
+
+    if(!sensores.length){
+
+        contenedor.innerHTML = `
+
+            <div class="stat">
+                <span>Sin datos</span>
+                <span>0</span>
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    contenedor.innerHTML =
+
+        sensores
+        .sort(
+            (a,b) =>
+            b.total - a.total
+        )
+        .map(
+            s => {
+
+                const color =
+                    colorSensor({
+
+                        satellite:
+                            s.satelite,
+
+                        instrument:
+                            s.sensor
+
+                    });
+
+                return `
+
+                <div class="stat">
+
+                    <span class="stat-satelite">
+
+                        <span
+                            class="sensor-punto"
+                            style="background:${color}"
+                        ></span>
+
+                        ${s.satelite} /
+                        ${s.sensor}
+
+                    </span>
+
+                    <span>
+                        ${s.total}
+                    </span>
+
+                </div>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
 
 /* =========================================================
    ESTADÍSTICA COMPLETA
@@ -3895,12 +3503,10 @@ function estadistica(cs){
     const a =
         new Date();
 
-
     txt(
         "fechaPeru",
         fecha()
     );
-
 
     txt(
         "horaPeru",
@@ -3910,7 +3516,6 @@ function estadistica(cs){
         )
     );
 
-
     txt(
         "horaUTC",
         hora(
@@ -3919,28 +3524,22 @@ function estadistica(cs){
         )
     );
 
-
-    /* -----------------------------------
-       VIIRS
-    ----------------------------------- */
+    /* VIIRS */
 
     txt(
         "totalVIIRSOriginales",
         datosVIIRSOriginales.length
     );
 
-
     txt(
         "totalVIIRSValidos",
         datosVIIRS.length
     );
 
-
     txt(
         "totalVIIRSDescartados",
         datosVIIRSDescartados.length
     );
-
 
     datosSuomi =
         datosVIIRS.filter(
@@ -3949,7 +3548,6 @@ function estadistica(cs){
             "Suomi-NPP"
         );
 
-
     datosNOAA20 =
         datosVIIRS.filter(
             d =>
@@ -3957,14 +3555,12 @@ function estadistica(cs){
             "NOAA-20"
         );
 
-
     datosNOAA21 =
         datosVIIRS.filter(
             d =>
             d.satellite ===
             "NOAA-21"
         );
-
 
     datosVIIRSOtros =
         datosVIIRS.filter(
@@ -3979,50 +3575,39 @@ function estadistica(cs){
             )
         );
 
-
     txt(
         "totalSuomi",
         datosSuomi.length
     );
-
 
     txt(
         "totalNOAA20",
         datosNOAA20.length
     );
 
-
     txt(
         "totalNOAA21",
         datosNOAA21.length
     );
-
 
     txt(
         "totalVIIRSOtros",
         datosVIIRSOtros.length
     );
 
-
-    /* -----------------------------------
-       MODIS
-    ----------------------------------- */
+    /* MODIS */
 
     datosMODISTerra =
         datosMODIS.filter(
             d =>
-            d.satellite ===
-            "Terra"
+            d.satellite === "Terra"
         );
-
 
     datosMODISAqua =
         datosMODIS.filter(
             d =>
-            d.satellite ===
-            "Aqua"
+            d.satellite === "Aqua"
         );
-
 
     datosMODISOtros =
         datosMODIS.filter(
@@ -4036,50 +3621,39 @@ function estadistica(cs){
             )
         );
 
-
     txt(
         "totalMODISTerra",
         datosMODISTerra.length
     );
-
 
     txt(
         "totalMODISAqua",
         datosMODISAqua.length
     );
 
-
     txt(
         "totalMODISOtros",
         datosMODISOtros.length
     );
-
 
     txt(
         "totalMODIS",
         datosMODIS.length
     );
 
-
-    /* -----------------------------------
-       GOES
-    ----------------------------------- */
+    /* GOES */
 
     datosGOES18 =
         datosGOES.filter(
             d =>
-            d.satellite ===
-            "GOES-18"
+            d.satellite === "GOES-18"
         );
-
 
     datosGOES19 =
         datosGOES.filter(
             d =>
-            d.satellite ===
-            "GOES-19"
+            d.satellite === "GOES-19"
         );
-
 
     datosGOESOtros =
         datosGOES.filter(
@@ -4093,88 +3667,72 @@ function estadistica(cs){
             )
         );
 
-
     txt(
         "totalGOES18",
         datosGOES18.length
     );
-
 
     txt(
         "totalGOES19",
         datosGOES19.length
     );
 
-
     txt(
         "totalGOESOtros",
         datosGOESOtros.length
     );
-
 
     txt(
         "totalGOES",
         datosGOES.length
     );
 
-
-    /* -----------------------------------
-       SERFOR
-    ----------------------------------- */
+    /* SERFOR */
 
     txt(
         "totalFocosSERFOR",
         datosFocosSERFOR.length
     );
 
-
     txt(
         "totalAlertasSERFOR",
         datosAlertasSERFOR.length
     );
 
-
-    /* -----------------------------------
-       CLUSTERS
-    ----------------------------------- */
+    /* CLUSTERS */
 
     txt(
         "totalClusters",
         cs.length
     );
 
-
     txt(
         "totalAlto",
         cs.filter(
             c =>
-            c.nivel ===
-            "ALTO"
+            c.nivel === "ALTO"
         ).length
     );
-
 
     txt(
         "totalMedio",
         cs.filter(
             c =>
-            c.nivel ===
-            "MEDIO"
+            c.nivel === "MEDIO"
         ).length
     );
-
 
     txt(
         "totalBajo",
         cs.filter(
             c =>
-            c.nivel ===
-            "BAJO"
+            c.nivel === "BAJO"
         ).length
     );
 
-}
+    actualizarEstadisticaSensores();
 
+}
 
 /* =========================================================
    ACTUALIZAR INCENDIOS
@@ -4184,7 +3742,6 @@ async function actualizarIncendios(){
 
     if(actualizando)
         return;
-
 
     if(!mapKey()){
 
@@ -4196,19 +3753,15 @@ async function actualizarIncendios(){
 
     }
 
-
     actualizando = true;
-
 
     $("btnActualizar").disabled =
         true;
 
-
     mostrarCarga(
         true,
-        "Consultando FIRMS..."
+        "Consultando FIRMS por sensor..."
     );
-
 
     try{
 
@@ -4216,23 +3769,25 @@ async function actualizarIncendios(){
 
         let err = 0;
 
-
-        /* -----------------------------------
-           VIIRS
-        ----------------------------------- */
+        /* ============================
+           VIIRS POR SATÉLITE
+        ============================ */
 
         for(
-            const s of
-            CONFIG.FIRMS.SOURCES
+            const s of CONFIG.FIRMS.SOURCES
         ){
 
             try{
+
+                mostrarCarga(
+                    true,
+                    `Consultando ${s.nombre} / ${s.sensor}...`
+                );
 
                 const raw =
                     await firms(
                         s.id
                     );
-
 
                 const normalizados =
                     raw
@@ -4249,22 +3804,14 @@ async function actualizarIncendios(){
                             const x =
                                 fechaD(d);
 
-
                             return x &&
                                 new Intl.DateTimeFormat(
                                     "en-CA",
                                     {
-                                        timeZone:
-                                            "America/Lima",
-
-                                        year:
-                                            "numeric",
-
-                                        month:
-                                            "2-digit",
-
-                                        day:
-                                            "2-digit"
+                                        timeZone:"America/Lima",
+                                        year:"numeric",
+                                        month:"2-digit",
+                                        day:"2-digit"
                                     }
                                 )
                                 .format(x)
@@ -4273,7 +3820,6 @@ async function actualizarIncendios(){
 
                         }
                     );
-
 
                 all.push(
                     ...normalizados
@@ -4293,28 +3839,19 @@ async function actualizarIncendios(){
 
         }
 
-
         datosVIIRSOriginales =
             all;
 
-
         const q =
-            validar(
-                all
-            );
-
+            validar(all);
 
         datosVIIRS =
             q.v;
 
-
         datosVIIRSDescartados =
             q.x;
 
-
-        /* -----------------------------------
-           VIIRS POR SATÉLITE
-        ----------------------------------- */
+        /* VIIRS POR SENSOR */
 
         datosSuomi =
             datosVIIRS.filter(
@@ -4323,7 +3860,6 @@ async function actualizarIncendios(){
                 "Suomi-NPP"
             );
 
-
         datosNOAA20 =
             datosVIIRS.filter(
                 d =>
@@ -4331,14 +3867,12 @@ async function actualizarIncendios(){
                 "NOAA-20"
             );
 
-
         datosNOAA21 =
             datosVIIRS.filter(
                 d =>
                 d.satellite ===
                 "NOAA-21"
             );
-
 
         datosVIIRSOtros =
             datosVIIRS.filter(
@@ -4353,7 +3887,6 @@ async function actualizarIncendios(){
                 )
             );
 
-
         sensorEstado(
             "estadoVIIRS",
             err
@@ -4364,12 +3897,16 @@ async function actualizarIncendios(){
             : "ok"
         );
 
-
-        /* -----------------------------------
+        /* ============================
            MODIS
-        ----------------------------------- */
+        ============================ */
 
         try{
+
+            mostrarCarga(
+                true,
+                "Consultando Terra / Aqua — MODIS..."
+            );
 
             datosMODIS =
                 (
@@ -4388,7 +3925,6 @@ async function actualizarIncendios(){
                     )
                 );
 
-
             sensorEstado(
                 "estadoMODIS",
                 "OK",
@@ -4397,6 +3933,11 @@ async function actualizarIncendios(){
 
         }
         catch(e){
+
+            console.error(
+                "MODIS",
+                e
+            );
 
             datosMODIS = [];
 
@@ -4408,12 +3949,16 @@ async function actualizarIncendios(){
 
         }
 
-
-        /* -----------------------------------
+        /* ============================
            GOES
-        ----------------------------------- */
+        ============================ */
 
         try{
+
+            mostrarCarga(
+                true,
+                "Consultando GOES-18 / GOES-19 — ABI..."
+            );
 
             datosGOES =
                 (
@@ -4432,7 +3977,6 @@ async function actualizarIncendios(){
                     )
                 );
 
-
             sensorEstado(
                 "estadoGOES",
                 "OK",
@@ -4441,6 +3985,11 @@ async function actualizarIncendios(){
 
         }
         catch(e){
+
+            console.error(
+                "GOES",
+                e
+            );
 
             datosGOES = [];
 
@@ -4452,37 +4001,31 @@ async function actualizarIncendios(){
 
         }
 
-
-        /* -----------------------------------
-           DIBUJAR CAPAS
-        ----------------------------------- */
+        /* ============================
+           DIBUJAR
+        ============================ */
 
         dibujarVIIRS(
             datosVIIRS
         );
 
-
         dibujarDesc(
             datosVIIRSDescartados
         );
-
 
         dibujarMODIS(
             datosMODIS
         );
 
-
         dibujarGOES(
             datosGOES
         );
 
-
-        /* -----------------------------------
+        /* ============================
            CLUSTERS
-        ----------------------------------- */
+        ============================ */
 
         const cs = [];
-
 
         for(
             const g of
@@ -4495,14 +4038,10 @@ async function actualizarIncendios(){
 
                 ...stats(g),
 
-                modisCercanos:
-                    [],
-
-                goesCercanos:
-                    []
+                modisCercanos:[],
+                goesCercanos:[]
 
             };
-
 
             c.modisCercanos =
                 cercanos(
@@ -4511,7 +4050,6 @@ async function actualizarIncendios(){
                     CONFIG.CORROBORACION.MODIS_M
                 );
 
-
             c.goesCercanos =
                 cercanos(
                     datosGOES,
@@ -4519,37 +4057,27 @@ async function actualizarIncendios(){
                     CONFIG.CORROBORACION.GOES_M
                 );
 
-
             Object.assign(
                 c,
                 score(c)
             );
 
-
-            cs.push(
-                c
-            );
+            cs.push(c);
 
         }
 
-
         clustersGlobal =
             cs;
-
 
         dibujarClusters(
             cs
         );
 
+        /* ============================
+           ESTADÍSTICA
+        ============================ */
 
-        /* -----------------------------------
-           ESTADÍSTICAS
-        ----------------------------------- */
-
-        estadistica(
-            cs
-        );
-
+        estadistica(cs);
 
         estado(
 
@@ -4587,7 +4115,6 @@ async function actualizarIncendios(){
 
 }
 
-
 /* =========================================================
    TEMPORIZADOR
 ========================================================= */
@@ -4598,7 +4125,6 @@ function configurarTemporizador(){
         temporizador
     );
 
-
     temporizador =
         setInterval(
             actualizarIncendios,
@@ -4608,7 +4134,6 @@ function configurarTemporizador(){
         );
 
 }
-
 
 /* =========================================================
    CENTRAR PERÚ
@@ -4623,7 +4148,6 @@ function centrarPeru(){
 
 }
 
-
 /* =========================================================
    COORDENADAS
 ========================================================= */
@@ -4635,12 +4159,10 @@ function irACoordenada(){
             $("coordLat").value
         );
 
-
     const lon =
         Number(
             $("coordLon").value
         );
-
 
     if(
         !Number.isFinite(lat) ||
@@ -4659,16 +4181,11 @@ function irACoordenada(){
 
     }
 
-
     capaCoordenada.clearLayers();
-
 
     L.marker(
 
-        [
-            lat,
-            lon
-        ],
+        [lat,lon],
 
         {
 
@@ -4676,23 +4193,16 @@ function irACoordenada(){
                 L.divIcon(
                     {
 
-                        className:
-                            "",
+                        className:"",
 
                         html:
                             "<div class='icono-coordenada'>📍</div>",
 
                         iconSize:
-                            [
-                                35,
-                                35
-                            ],
+                            [35,35],
 
                         iconAnchor:
-                            [
-                                17,
-                                33
-                            ]
+                            [17,33]
 
                     }
                 )
@@ -4701,31 +4211,23 @@ function irACoordenada(){
 
     )
     .bindPopup(
-
         `📍 ${lat.toFixed(6)}, ${lon.toFixed(6)}`
-
     )
     .addTo(
         capaCoordenada
     )
     .openPopup();
 
-
     capaCoordenada.addTo(
         map
     );
 
-
     map.setView(
-        [
-            lat,
-            lon
-        ],
+        [lat,lon],
         14
     );
 
 }
-
 
 function agregarCoordenada(){
 
@@ -4733,13 +4235,11 @@ function agregarCoordenada(){
 
 }
 
-
 function limpiarCoordenada(){
 
     capaCoordenada.clearLayers();
 
 }
-
 
 /* =========================================================
    LIMPIAR DATOS
@@ -4750,12 +4250,19 @@ function limpiarDatos(){
     [
 
         capaVIIRS,
+        capaSuomi,
+        capaNOAA20,
+        capaNOAA21,
 
         capaVIIRSDescartados,
 
         capaMODIS,
+        capaTerra,
+        capaAqua,
 
         capaGOES,
+        capaGOES18,
+        capaGOES19,
 
         capaClusters
 
@@ -4765,48 +4272,28 @@ function limpiarDatos(){
         c.clearLayers()
     );
 
-
     datosVIIRS = [];
-
     datosVIIRSOriginales = [];
-
     datosVIIRSDescartados = [];
 
-
     datosSuomi = [];
-
     datosNOAA20 = [];
-
     datosNOAA21 = [];
-
     datosVIIRSOtros = [];
 
-
     datosMODIS = [];
-
     datosMODISTerra = [];
-
     datosMODISAqua = [];
-
     datosMODISOtros = [];
 
-
     datosGOES = [];
-
     datosGOES18 = [];
-
     datosGOES19 = [];
-
     datosGOESOtros = [];
-
 
     clustersGlobal = [];
 
-
-    estadistica(
-        []
-    );
-
+    estadistica([]);
 
     estado(
         "Mapa limpiado"
@@ -4814,9 +4301,8 @@ function limpiarDatos(){
 
 }
 
-
 /* =========================================================
-   DESCARGAR CSV
+   CSV
 ========================================================= */
 
 function descargarCSV(){
@@ -4833,64 +4319,135 @@ function descargarCSV(){
 
     }
 
-
     const h =
         "fecha," +
         "latitud," +
         "longitud," +
-        "viirs," +
+        "viirs_total," +
         "satelites_viirs," +
+        "detalle_sensores," +
+        "frp_total," +
         "frp_max," +
         "modis_3km," +
+        "modis_sensores," +
         "goes_10km," +
+        "goes_sensores," +
         "fire_score," +
         "nivel," +
         "razones";
 
-
     const r =
         clustersGlobal.map(
 
-            c => [
+            c => {
 
-                fecha(),
+                const detalleSensores =
+                    Object.values(
+                        c.sensores || {}
+                    )
+                    .map(
+                        s =>
+                        `${s.satelite}/${s.sensor}:${s.total}`
+                    )
+                    .join(" | ");
 
-                c.latitude,
+                const modisSensores =
+                    c.modisCercanos
+                    .reduce(
+                        (acc,d) => {
 
-                c.longitude,
+                            const k =
+                                d.sensorLabel ||
+                                `${d.satellite}/${d.instrument}`;
 
-                c.size,
+                            acc[k] =
+                                (acc[k] || 0) + 1;
 
-                c.satelites.join(" | "),
+                            return acc;
 
-                c.frpMax,
+                        },
+                        {}
+                    );
 
-                c.modisCercanos.length,
+                const goesSensores =
+                    c.goesCercanos
+                    .reduce(
+                        (acc,d) => {
 
-                c.goesCercanos.length,
+                            const k =
+                                d.sensorLabel ||
+                                `${d.satellite}/${d.instrument}`;
 
-                c.fireScore,
+                            acc[k] =
+                                (acc[k] || 0) + 1;
 
-                c.nivel,
+                            return acc;
 
-                c.razones.join(" | ")
+                        },
+                        {}
+                    );
 
-            ]
-            .map(
-                v =>
-                `"${String(v ?? "")
+                const formato =
+                    obj =>
+                    Object.entries(obj)
+                    .map(
+                        ([k,v]) =>
+                        `${k}:${v}`
+                    )
+                    .join(" | ");
+
+                return [
+
+                    fecha(),
+
+                    c.latitude,
+
+                    c.longitude,
+
+                    c.size,
+
+                    c.satelites.join(" | "),
+
+                    detalleSensores,
+
+                    c.frpTotal,
+
+                    c.frpMax,
+
+                    c.modisCercanos.length,
+
+                    formato(
+                        modisSensores
+                    ),
+
+                    c.goesCercanos.length,
+
+                    formato(
+                        goesSensores
+                    ),
+
+                    c.fireScore,
+
+                    c.nivel,
+
+                    c.razones.join(" | ")
+
+                ]
+                .map(
+                    v =>
+                    `"${String(v ?? "")
                     .replaceAll('"','""')}"`
-            )
-            .join(",")
+                )
+                .join(",");
+
+            }
 
         );
-
 
     const a =
         document.createElement(
             "a"
         );
-
 
     a.href =
         URL.createObjectURL(
@@ -4915,15 +4472,12 @@ function descargarCSV(){
 
         );
 
-
     a.download =
-        `incendios_peru_${fecha()}.csv`;
-
+        `incendios_peru_sensores_${fecha()}.csv`;
 
     a.click();
 
 }
-
 
 /* =========================================================
    RELOJ
@@ -4936,12 +4490,10 @@ setInterval(
         const a =
             new Date();
 
-
         txt(
             "fechaPeru",
             fecha()
         );
-
 
         txt(
             "horaPeru",
@@ -4950,7 +4502,6 @@ setInterval(
                 "America/Lima"
             )
         );
-
 
         txt(
             "horaUTC",
@@ -4966,7 +4517,6 @@ setInterval(
 
 );
 
-
 /* =========================================================
    INICIO
 ========================================================= */
@@ -4979,25 +4529,18 @@ document.addEventListener(
 
         iniciarMapa();
 
-
         const k =
             localStorage.getItem(
                 "firms_map_key"
             );
 
-
         if(k)
             $("mapKey").value =
                 k;
 
-
         configurarTemporizador();
 
-
-        estadistica(
-            []
-        );
-
+        estadistica([]);
 
         estado(
 
@@ -5006,7 +4549,6 @@ document.addEventListener(
             : "Esperando MAP_KEY..."
 
         );
-
 
         if(k)
             actualizarIncendios();
@@ -5019,3 +4561,4 @@ document.addEventListener(
 
 </body>
 </html>
+```

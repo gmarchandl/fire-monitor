@@ -530,14 +530,6 @@ Guardar MAP_KEY
 
 <label class="capa-operativa">
 <input type="checkbox"
-       id="chkVIIRS"
-       onchange="alternarCapa('viirs')">
-<span class="capa-icono" style="color:#00e5ff">●</span>
-<span class="capa-nombre">VIIRS — todos</span>
-</label>
-
-<label class="capa-operativa">
-<input type="checkbox"
        id="chkSuomi"
        onchange="alternarCapa('suomi')">
 <span class="capa-icono" style="color:#00e5ff">●</span>
@@ -566,14 +558,6 @@ Guardar MAP_KEY
        onchange="alternarCapa('descartados')">
 <span class="capa-icono" style="color:#777">●</span>
 <span class="capa-nombre">VIIRS descartados</span>
-</label>
-
-<label class="capa-operativa">
-<input type="checkbox"
-       id="chkMODIS"
-       onchange="alternarCapa('modis')">
-<span class="capa-icono" style="color:#ffeb3b">●</span>
-<span class="capa-nombre">MODIS — todos</span>
 </label>
 
 <label class="capa-operativa">
@@ -675,12 +659,12 @@ Guardar MAP_KEY
 </div>
 
 <div class="stat">
-<span>Hora Perú</span>
+<span>Hora Perú (America/Lima)</span>
 <span id="horaPeru">---</span>
 </div>
 
 <div class="stat">
-<span>Hora UTC</span>
+<span>Hora UTC (referencia)</span>
 <span id="horaUTC">---</span>
 </div>
 
@@ -832,6 +816,21 @@ GOES-19 / ABI
 <div class="stat">
 <span>Alertas SERFOR</span>
 <span id="totalAlertasSERFOR">0</span>
+</div>
+
+<div class="stat">
+<span>Actualización SERFOR</span>
+<span id="estadoSERFOR">---</span>
+</div>
+
+<div class="stat">
+<span>Demora consulta SERFOR</span>
+<span id="demoraSERFOR">---</span>
+</div>
+
+<div class="stat">
+<span>Último dato SERFOR</span>
+<span id="ultimoSERFOR">---</span>
 </div>
 
 <div class="stat-grupo" style="border-left-color:#d50000">
@@ -1272,6 +1271,64 @@ function horaF(v){
 
 }
 
+function formatFechaHoraPeru(v){
+
+    if(v === null || v === undefined || v === "")
+        return "N/D";
+
+    let d = null;
+
+    if(typeof v === "number" || /^\d{10,13}$/.test(String(v).trim())){
+        const n = Number(v);
+        d = new Date(String(v).trim().length === 10 ? n * 1000 : n);
+    }
+    else{
+        const s = String(v).trim();
+
+        if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
+            return s;
+        }
+        else if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}[ T][0-9]{2}:[0-9]{2}/.test(s)){
+            const iso = s.replace(" ","T");
+            d = new Date(iso.endsWith("Z") ? iso : iso + "Z");
+        }
+        else if(/^\d{1,2}:\d{2}(:\d{2})?$/.test(s)){
+            return s.length === 5 ? `${s}:00` : s;
+        }
+    }
+
+    if(!d || isNaN(d.getTime()))
+        return null;
+
+    return new Intl.DateTimeFormat("es-PE",{
+        timeZone:"America/Lima",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:false
+    }).format(d).replace(",", "");
+}
+
+function esCampoFechaHora(k){
+    const s = String(k || "").toLowerCase();
+    return /(fecha|date|hora|time|timestamp|datetime|created|updated|actualiz|registro|fuego|incendio|detecc)/.test(s);
+}
+
+function valorSERFOR(k,v){
+    if(v === null || v === undefined || v === "")
+        return "N/D";
+
+    if(esCampoFechaHora(k)){
+        const f = formatFechaHoraPeru(v);
+        if(f) return `${f} (Perú)`;
+    }
+
+    return valorSensor(v);
+}
+
 function fechaD(d){
 
     if(!d.acq_date)
@@ -1613,7 +1670,7 @@ function etiquetaSensor(k){
         longitude:"Longitud",
         frp:"FRP",
         acq_date:"Fecha de adquisición",
-        acq_time:"Hora de adquisición (UTC)",
+        acq_time:"Hora de adquisición (Perú)",
         confidence:"Confianza",
         bright_ti4:"Temperatura de brillo T4",
         bright_ti5:"Temperatura de brillo T5",
@@ -1670,8 +1727,12 @@ function htmlDetalleSensor(d,titulo,icono,col){
     const filas = claves.map(k => {
         let v = d[k];
 
-        if(k === "acq_time")
-            v = horaF(v);
+        if(k === "acq_time"){
+            const base = fechaD(d);
+            v = base
+                ? hora(base,"America/Lima")
+                : horaF(v);
+        }
 
         if(k === "frp" || k === "t4" || k === "t5" || k === "deltaT"){
             const n = Number(v);
@@ -3158,6 +3219,8 @@ function dibujarClusters(cs){
 
 async function serfor(id){
 
+    const t0 = performance.now();
+
     const r =
         await fetch(
 
@@ -3180,7 +3243,10 @@ async function serfor(id){
             `SERFOR HTTP ${r.status}`
         );
 
-    return r.json();
+    const data = await r.json();
+    data._consultaMs = Math.round(performance.now() - t0);
+    data._serforId = id;
+    return data;
 
 }
 
@@ -3205,7 +3271,7 @@ function popupS(
             .slice(0,25)
             .map(
                 ([k,v]) =>
-                `<b>${k}:</b> ${v}<br>`
+                `<b>${escHtmlSensor(k)}:</b> ${escHtmlSensor(valorSERFOR(k,v))}<br>`
             )
             .join("")
         }
@@ -3282,6 +3348,40 @@ function dibujarS(
 
 }
 
+function extraerFechaSERFOR(features){
+
+    const candidatos = [];
+
+    (features || []).forEach(f => {
+        Object.entries(f.properties || {}).forEach(([k,v]) => {
+            if(!esCampoFechaHora(k) || v === null || v === undefined || v === "")
+                return;
+
+            const s = String(v).trim();
+            if(/^\d{1,2}:\d{2}(:\d{2})?$/.test(s))
+                return;
+
+            let d = null;
+
+            if(typeof v === "number" || /^\d{10,13}$/.test(s)){
+                const n = Number(v);
+                d = new Date(s.length === 10 ? n * 1000 : n);
+            }
+            else{
+                const iso = s.replace(" ","T");
+                d = new Date(iso.endsWith("Z") ? iso : iso + "Z");
+            }
+
+            if(d && !isNaN(d.getTime()))
+                candidatos.push(d);
+        });
+    });
+
+    return candidatos.length
+        ? new Date(Math.max(...candidatos.map(d => d.getTime())))
+        : null;
+}
+
 async function cargarS(
     id,
     layer,
@@ -3312,7 +3412,11 @@ async function cargarS(
             f.length
         );
 
-        return f;
+        return {
+            features:f,
+            consultaMs:g._consultaMs,
+            ultimo:extraerFechaSERFOR(f)
+        };
 
     }
     catch(e){
@@ -3321,8 +3425,111 @@ async function cargarS(
             count,
             "ERROR"
         );
+        txt("estadoSERFOR", `ERROR · ${e.message}`);
 
-        return [];
+        return {
+            features:[],
+            consultaMs:null,
+            ultimo:null
+        };
+
+    }
+
+}
+
+async function refrescarSERFOR(){
+
+    const t0 = performance.now();
+
+    try{
+
+        const resultados =
+            await Promise.all([
+                serfor(CONFIG.SERFOR.FOCOS),
+                serfor(CONFIG.SERFOR.ALERTAS)
+            ]);
+
+        const [
+            focoData,
+            alertaData
+        ] = resultados;
+
+        const focos = focoData.features || [];
+        const alertas = alertaData.features || [];
+
+        datosFocosSERFOR = focos;
+        datosAlertasSERFOR = alertas;
+
+        dibujarS(
+            {features:focos},
+            capaFocosSERFOR,
+            '<div class="icono-foco-serfor"></div>',
+            "🔥 FOCO DE CALOR SERFOR",
+            "#8B1E3F"
+        );
+
+        dibujarS(
+            {features:alertas},
+            capaAlertasSERFOR,
+            '<div class="icono-alerta-serfor"><span>🔥</span></div>',
+            "🔥 INCENDIO FORESTAL SERFOR",
+            "#d32f2f"
+        );
+
+        txt("totalFocosSERFOR", focos.length);
+        txt("totalAlertasSERFOR", alertas.length);
+
+        const ultima =
+            [
+                extraerFechaSERFOR(focos),
+                extraerFechaSERFOR(alertas)
+            ]
+            .filter(Boolean)
+            .sort((a,b)=>b-a)[0] || null;
+
+        txt(
+            "demoraSERFOR",
+            `${Math.round(performance.now() - t0)} ms`
+        );
+
+        txt(
+            "estadoSERFOR",
+            `OK · ${focos.length + alertas.length} registros`
+        );
+
+        const ultimaPeru =
+            ultima
+            ? formatFechaHoraPeru(ultima)
+            : null;
+
+        txt(
+            "ultimoSERFOR",
+            ultimaPeru
+            ? `${ultimaPeru} (Perú)`
+            : "N/D"
+        );
+
+        return true;
+
+    }
+    catch(e){
+
+        console.error(
+            "SERFOR",
+            e
+        );
+
+        txt(
+            "estadoSERFOR",
+            `ERROR · ${e.message}`
+        );
+
+        txt(
+            "demoraSERFOR",
+            `${Math.round(performance.now() - t0)} ms`
+        );
+
+        return false;
 
     }
 
@@ -3336,31 +3543,8 @@ function alternarFocosSERFOR(){
 
         capaFocosSERFOR.addTo(map);
 
-        if(
-            !datosFocosSERFOR.length
-        ){
-
-            cargarS(
-
-                CONFIG.SERFOR.FOCOS,
-
-                capaFocosSERFOR,
-
-                '<div class="icono-foco-serfor"></div>',
-
-                "🔥 FOCO DE CALOR SERFOR",
-
-                "#8B1E3F",
-
-                "totalFocosSERFOR"
-
-            )
-            .then(
-                x =>
-                datosFocosSERFOR = x
-            );
-
-        }
+        if(!datosFocosSERFOR.length)
+            refrescarSERFOR();
 
     }
     else{
@@ -3381,31 +3565,8 @@ function alternarAlertasSERFOR(){
 
         capaAlertasSERFOR.addTo(map);
 
-        if(
-            !datosAlertasSERFOR.length
-        ){
-
-            cargarS(
-
-                CONFIG.SERFOR.ALERTAS,
-
-                capaAlertasSERFOR,
-
-                '<div class="icono-alerta-serfor"><span>🔥</span></div>',
-
-                "🔥 INCENDIO FORESTAL SERFOR",
-
-                "#d32f2f",
-
-                "totalAlertasSERFOR"
-
-            )
-            .then(
-                x =>
-                datosAlertasSERFOR = x
-            );
-
-        }
+        if(!datosAlertasSERFOR.length)
+            refrescarSERFOR();
 
     }
     else{
@@ -3780,7 +3941,7 @@ async function actualizarIncendios(){
 
     mostrarCarga(
         true,
-        "Consultando FIRMS por sensor..."
+        "Consultando FIRMS y SERFOR..."
     );
 
     try{
@@ -3788,6 +3949,9 @@ async function actualizarIncendios(){
         const all = [];
 
         let err = 0;
+
+        /* SERFOR se actualiza en cada ciclo para evitar datos antiguos. */
+        const promesaSERFOR = refrescarSERFOR();
 
         /* ============================
            VIIRS POR SATÉLITE
@@ -3976,6 +4140,8 @@ async function actualizarIncendios(){
             );
 
         }
+
+        await promesaSERFOR;
 
         /* ============================
            DIBUJAR
@@ -4296,7 +4462,8 @@ function descargarCSV(){
     }
 
     const h =
-        "fecha," +
+        "fecha_peru," +
+        "hora_peru," +
         "latitud," +
         "longitud," +
         "viirs_total," +
@@ -4375,6 +4542,8 @@ function descargarCSV(){
                 return [
 
                     fecha(),
+
+                    hora(new Date(),"America/Lima"),
 
                     c.latitude,
 
@@ -4517,6 +4686,9 @@ document.addEventListener(
         configurarTemporizador();
 
         estadistica([]);
+        txt("estadoSERFOR","Esperando consulta...");
+        txt("demoraSERFOR","---");
+        txt("ultimoSERFOR","---");
 
         estado(
 

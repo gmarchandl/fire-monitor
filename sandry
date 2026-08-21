@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor GeoPeru - FEN 2026 | Plan Multisectorial 2025-2027</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header .logo {
+            font-size: 1.8em;
+        }
+        
+        .main-container {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 20px;
+            padding: 20px;
+            height: calc(100vh - 80px);
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .map-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .layer-control {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .layer-control:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .layer-control input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .layer-control label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.95em;
+            color: #34495e;
+        }
+        
+        .layer-icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        .stats-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stats-panel h4 {
+            margin-bottom: 10px;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #00f260, #0575e6);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .alert-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #856404;
+        }
+        
+        .alert-box.danger {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .alert-box.success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        
+        .alert-box.info {
+            background: #d1ecf1;
+            border-left-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: #004085;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .chart-label {
+            width: 150px;
+            font-size: 0.9em;
+            color: #34495e;
+        }
+        
+        .chart-bar-fill {
+            flex: 1;
+            height: 25px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .chart-value {
+            width: 80px;
+            text-align: right;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <span class="logo">🗺️</span>
+            Visor GeoPeru - FEN 2026
+        </h1>
+        <div>
+            <button class="btn" onclick="mostrarAyuda()" style="width: auto;">
+                <i class="fas fa-question-circle"></i> Ayuda
+            </button>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="sidebar">
+            <!-- Estadisticas Principales -->
+            <div class="section">
+                <h3><i class="fas fa-chart-bar"></i> Estadisticas FEN 2026</h3>
+                
+                <div class="stats-panel">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Distritos en Emergencia</h4>
+                    <div class="stat-item">
+                        <span>Total distritos:</span>
+                        <span class="stat-value">796</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Con presupuesto:</span>
+                        <span class="stat-value">84 (10.6%)</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Sin presupuesto:</span>
+                        <span class="stat-value">712 (89.4%)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 10.6%;"></div>
+                    </div>
+                </div>
+                
+                <div class="alert-box danger">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <strong>Atencion:</strong> 9 de cada 10 distritos en emergencia no tienen presupuesto para prevencion
+                </div>
+                
+                <div class="stats-panel" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                    <h4><i class="fas fa-tint"></i> Intervenciones en Rios</h4>
+                    <div class="stat-item">
+                        <span>Limpieza y descolmatacion:</span>
+                        <span class="stat-value">735 km</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Defensas ribereñas:</span>
+                        <span class="stat-value">113 km</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Avance financiero:</span>
+                        <span class="stat-value">66%</span>
+                    </div>
+                </div>
+                
+                <div class="stats-panel" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <h4><i class="fas fa-bridge"></i> Puentes Modulares MTC</h4>
+                    <div class="stat-item">
+                        <span>Total puentes:</span>
+                        <span class="stat-value">52</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Plan Multisectorial:</span>
+                        <span class="stat-value">20</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Atencion celera:</span>
+                        <span class="stat-value">32</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Longitud:</span>
+                        <span class="stat-value">24-60 m</span>
+                    </div>
+                </div>
+                
+                <div class="stats-panel" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <h4><i class="fas fa-hospital"></i> Infraestructura Salud</h4>
+                    <div class="stat-item">
+                        <span>Establecimientos afectados:</span>
+                        <span class="stat-value">640</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Inoperativos:</span>
+                        <span class="stat-value">4</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Brigadas activas:</span>
+                        <span class="stat-value">20 regiones</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>SAMU desplegado:</span>
+                        <span class="stat-value">Lima + 4 regiones</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Capas del Mapa -->
+            <div class="section">
+                <h3><i class="fas fa-layer-group"></i> Capas GeoPeru</h3>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaQuebradas" onchange="toggleCapa('quebradas')">
+                    <label for="capaQuebradas">
+                        <span class="layer-icon">⚠️</span>
+                        Activacion de Quebradas
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaInundaciones" onchange="toggleCapa('inundaciones')">
+                    <label for="capaInundaciones">
+                        <span class="layer-icon">🌊</span>
+                        Zonas de Inundacion
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaDistritosFEN" onchange="toggleCapa('distritosFEN')">
+                    <label for="capaDistritosFEN">
+                        <span class="layer-icon">📍</span>
+                        Distritos Priorizados FEN 2026
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaProyectos" onchange="toggleCapa('proyectos')">
+                    <label for="capaProyectos">
+                        <span class="layer-icon">🏗️</span>
+                        Proyectos Plan Multisectorial 2025-2027
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaPuentesModulares" onchange="toggleCapa('puentesModulares')">
+                    <label for="capaPuentesModulares">
+                        <span class="layer-icon">🌉</span>
+                        Puentes Modulares MTC (52 unidades)
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaSalud" onchange="toggleCapa('salud')">
+                    <label for="capaSalud">
+                        <span class="layer-icon">🏥</span>
+                        Infraestructura de Salud Minsa
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaRios" onchange="toggleCapa('rios')">
+                    <label for="capaRios">
+                        <span class="layer-icon">🏞️</span>
+                        Rios Principales
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaCentrosPoblados" onchange="toggleCapa('centrosPoblados')">
+                    <label for="capaCentrosPoblados">
+                        <span class="layer-icon">🏘️</span>
+                        Centros Poblados
+                    </label>
+                </div>
+                
+                <div class="layer-control">
+                    <input type="checkbox" id="capaAreasUrbanas" onchange="toggleCapa('areasUrbanas')">
+                    <label for="capaAreasUrbanas">
+                        <span class="layer-icon">🏙️</span>
+                        Areas Urbanas
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Riesgos Ambientales -->
+            <div class="section">
+                <h3><i class="fas fa-exclamation-triangle"></i> Riesgos Ambientales</h3>
+                
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Riesgo en Riberas:</strong> Identificacion de proyectos inconclusos que generan vulnerabilidad ante inundaciones
+                </div>
+                
+                <div class="alert-box">
+                    <i class="fas fa-chart-line"></i>
+                    <strong>Estadistica:</strong> 31 intervenciones de ANIN con 0% de ejecucion fisica
+                </div>
+                
+                <button class="btn" onclick="mostrarRiesgosAmbientales()">
+                    <i class="fas fa-search-location"></i>
+                    Ver Riesgos por Distrito
+                </button>
+            </div>
+            
+            <!-- Ejecucion Presupuestal -->
+            <div class="section">
+                <h3><i class="fas fa-coins"></i> Ejecucion por Mes</h3>
+                
+                <div class="chart-container">
+                    <div class="chart-bar">
+                        <div class="chart-label">Enero 2026</div>
+                        <div class="chart-bar-fill" style="width: 45%;"></div>
+                        <div class="chart-value">45%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">Febrero 2026</div>
+                        <div class="chart-bar-fill" style="width: 62%;"></div>
+                        <div class="chart-value">62%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">Marzo 2026</div>
+                        <div class="chart-bar-fill" style="width: 78%;"></div>
+                        <div class="chart-value">78%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">Abril 2026</div>
+                        <div class="chart-bar-fill" style="width: 55%;"></div>
+                        <div class="chart-value">55%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">Mayo 2026</div>
+                        <div class="chart-bar-fill" style="width: 66%;"></div>
+                        <div class="chart-value">66%</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline" onclick="mostrarTablaEjecucion()" style="margin-top: 15px;">
+                    <i class="fas fa-table"></i>
+                    Ver Tabla Detallada
+                </button>
+            </div>
+            
+            <!-- Leyenda -->
+            <div class="section">
+                <h3><i class="fas fa-book"></i> Leyenda</h3>
+                
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff0000;"></div>
+                    <span>Quebradas activas (riesgo muy alto)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff6600;"></div>
+                    <span>Quebradas activas (riesgo alto)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #0066ff;"></div>
+                    <span>Zonas de inundacion</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffcc00;"></div>
+                    <span>Distritos priorizados FEN 2026</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00cc66;"></div>
+                    <span>Proyectos en ejecucion</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #cc0066;"></div>
+                    <span>Proyectos inconclusos (riesgo)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff9900;"></div>
+                    <span>Puentes modulares MTC</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff0066;"></div>
+                    <span>Establecimientos de salud afectados</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00ff99;"></div>
+                    <span>Brigadas de salud / SAMU</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mapa -->
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+    
+    <!-- Modal para Tabla de Ejecucion -->
+    <div class="modal" id="modalTabla">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-table"></i> Ejecucion Presupuestal por Distrito</h2>
+                <button class="close-modal" onclick="cerrarModal('modalTabla')">&times;</button>
+            </div>
+            <div id="tablaContenido">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Distrito</th>
+                            <th>Departamento</th>
+                            <th>Presupuesto (S/)</th>
+                            <th>Ejecutado (%)</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaDistritos">
+                        <!-- Se llena dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Ayuda -->
+    <div class="modal" id="modalAyuda">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-question-circle"></i> Ayuda - Visor GeoPeru FEN 2026</h2>
+                <button class="close-modal" onclick="cerrarModal('modalAyuda')">&times;</button>
+            </div>
+            <div style="line-height: 1.8;">
+                <p><strong>Este visor integra capas de informacion georreferenciada del Plan Multisectorial ante Lluvias Intensas 2025-2027.</strong></p>
+                
+                <h4 style="margin-top: 20px; color: #667eea;">Funcionalidades:</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Activar/desactivar capas de quebradas, inundaciones y distritos priorizados</li>
+                    <li>Visualizar proyectos de entidades en el marco del Plan Multisectorial</li>
+                    <li>Identificar riesgos ambientales en riberas de rios por proyectos inconclusos</li>
+                    <li>Consultar ubicacion de 52 puentes modulares del MTC por region</li>
+                    <li>Monitorear infraestructura de salud afectada (640 establecimientos, 4 inoperativos)</li>
+                    <li>Analizar estadisticas de ejecucion presupuestal por distrito y mes</li>
+                </ul>
+                
+                <h4 style="margin-top: 20px; color: #667eea;">Fuentes de Datos:</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>GeoPeru - Plataforma Nacional de Datos Georreferenciados</li>
+                    <li>MTC - Puentes modulares (Provias Descentralizado)</li>
+                    <li>Minsa - Centro de Emergencia Sanitaria, brigadas, SAMU</li>
+                    <li>CENEPRED - Escenarios de riesgo por lluvias</li>
+                    <li>ANIN - Proyectos de defensas ribereñas</li>
+                    <li>PCM - Plan Multisectorial 2025-2027</li>
+                    <li>Indeci - Puntos criticos en cuencas</li>
+                </ul>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>Tip:</strong> Usa el control de capas en la esquina superior derecha del mapa para gestionar la visualizacion de capas base (rios, centros poblados, areas urbanas).
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Riesgos Ambientales -->
+    <div class="modal" id="modalRiesgos">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Riesgos Ambientales en Riberas</h2>
+                <button class="close-modal" onclick="cerrarModal('modalRiesgos')">&times;</button>
+            </div>
+            <div id="riesgosContenido">
+                <div class="alert-box danger">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <strong>Proyectos Inconclusos ANIN:</strong> Obras de proteccion en riberas que generan riesgos ante Fenomeno El Niño 2026-2027
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rio/Cuenca</th>
+                            <th>Distritos Afectados</th>
+                            <th>Proyecto</th>
+                            <th>Avance</th>
+                            <th>Riesgo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rio Lacramarca</td>
+                            <td>Macate, Caceres del Peru, Chimbote</td>
+                            <td>Proteccion riberas - 58 comunidades</td>
+                            <td><span class="badge badge-danger">0%</span></td>
+                            <td>Muy Alto</td>
+                        </tr>
+                        <tr>
+                            <td>Rio Casma</td>
+                            <td>Comandante Noel, Buena Vista, Casma, Yautan</td>
+                            <td>Defensas ribereñas Rio Casma, Sechin, Grande</td>
+                            <td><span class="badge badge-warning">45%</span></td>
+                            <td>Alto</td>
+                        </tr>
+                        <tr>
+                            <td>Rio Santa</td>
+                            <td>Varios distritos Ancash</td>
+                            <td>Intervencion integral cuenca</td>
+                            <td><span class="badge badge-warning">62%</span></td>
+                            <td>Medio</td>
+                        </tr>
+                        <tr>
+                            <td>Quebradas Morropon</td>
+                            <td>Morropon, Piura</td>
+                            <td>Proteccion quebradas</td>
+                            <td><span class="badge badge-danger">0%</span></td>
+                            <td>Muy Alto</td>
+                        </tr>
+                        <tr>
+                            <td>Rio Chillon, Rimac, Lurin</td>
+                            <td>Lima Metropolitana</td>
+                            <td>Intervencion 168 puntos criticos</td>
+                            <td><span class="badge badge-warning">27%</span></td>
+                            <td>Alto</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Fuente:</strong> Contraloria General de la Republica - Operativo "Descolmatacion y limpieza de rios y quebradas" (Agosto 2026)
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Puentes Modulares -->
+    <div class="modal" id="modalPuentes">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-bridge"></i> Puentes Modulares MTC - Distribucion por Region</h2>
+                <button class="close-modal" onclick="cerrarModal('modalPuentes')">&times;</button>
+            </div>
+            <div>
+                <div class="alert-box info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>52 puentes modulares:</strong> 20 del Plan Multisectorial 2025-2027 + 32 de atencion celera (DU N. 001-2025-PCM). Longitud: 24-60 metros. Instalacion rapida.
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>Nro Puentes</th>
+                            <th>Marco Legal</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ancash</strong></td>
+                            <td>7</td>
+                            <td>Plan Multisectorial + DU</td>
+                            <td><span class="badge badge-info">En instalacion</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Piura</strong></td>
+                            <td>6</td>
+                            <td>Plan Multisectorial + DU</td>
+                            <td><span class="badge badge-info">En instalacion</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ayacucho</strong></td>
+                            <td>6</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Arequipa</strong></td>
+                            <td>4</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-success">2 instalados (Uchumayo)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cusco</strong></td>
+                            <td>4</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Huancavelica</strong></td>
+                            <td>4</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>La Libertad</strong></td>
+                            <td>4</td>
+                            <td>Plan Multisectorial + DU</td>
+                            <td><span class="badge badge-info">En instalacion</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>San Martin</strong></td>
+                            <td>4</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Amazonas</strong></td>
+                            <td>3</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cajamarca</strong></td>
+                            <td>3</td>
+                            <td>Plan Multisectorial + DU</td>
+                            <td><span class="badge badge-info">En instalacion</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Huanuco</strong></td>
+                            <td>3</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Junin</strong></td>
+                            <td>3</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ucayali</strong></td>
+                            <td>1</td>
+                            <td>DU N. 001-2025-PCM</td>
+                            <td><span class="badge badge-info">Programado</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <strong>Inversion total:</strong> US$ 20 millones (compra, instalacion y supervision). Fuente: MTC - Provias Descentralizado (Mayo 2026)
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Infraestructura de Salud -->
+    <div class="modal" id="modalSalud">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-hospital"></i> Infraestructura de Salud - Estado FEN 2026</h2>
+                <button class="close-modal" onclick="cerrarModal('modalSalud')">&times;</button>
+            </div>
+            <div>
+                <div class="alert-box danger">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <strong>640 establecimientos afectados:</strong> 4 inoperativos por daños estructurales. Hospitales con filtraciones en UCI y Pediatria reportados en Pucallpa, Chiclayo.
+                </div>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" onclick="mostrarTab('tabBrigadas')">Brigadas</button>
+                        <button class="tab-btn" onclick="mostrarTab('tabSAMU')">SAMU</button>
+                        <button class="tab-btn" onclick="mostrarTab('tabEstablecimientos')">Establecimientos</button>
+                    </div>
+                    
+                    <div id="tabBrigadas" class="tab-content active">
+                        <h4>Brigadas de Salud Activas (20 regiones)</h4>
+                        <p style="margin-bottom: 15px;">Minsa - Digerd activó brigadas en todas las regiones con alerta amarilla/naranja</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Region</th>
+                                    <th>Brigadas</th>
+                                    <th>Alerta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Amazonas</td><td>12</td><td><span class="badge badge-warning">Amarilla</span></td></tr>
+                                <tr><td>Ancash</td><td>18</td><td><span class="badge badge-danger">Naranja</span></td></tr>
+                                <tr><td>Cajamarca</td><td>15</td><td><span class="badge badge-danger">Naranja</span></td></tr>
+                                <tr><td>Lambayeque</td><td>14</td><td><span class="badge badge-danger">Naranja</span></td></tr>
+                                <tr><td>La Libertad</td><td>16</td><td><span class="badge badge-warning">Amarilla</span></td></tr>
+                                <tr><td>Piura</td><td>20</td><td><span class="badge badge-danger">Naranja</span></td></tr>
+                                <tr><td>Tumbes</td><td>10</td><td><span class="badge badge-danger">Naranja</span></td></tr>
+                                <tr><td>Lima</td><td>25</td><td><span class="badge badge-warning">Amarilla</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="tabSAMU" class="tab-content">
+                        <h4>SAMU Desplegado - Atencion Prehospitalaria</h4>
+                        <p style="margin-bottom: 15px;">Servicio de Atencion Movil de Urgencias en zonas de alto riesgo</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ubicacion</th>
+                                    <th>Ambulancias</th>
+                                    <th>Cobertura</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Lima Metropolitana</td><td>15</td><td>Chaclacayo, Lurin, Punta Hermosa</td></tr>
+                                <tr><td>Piura</td><td>8</td><td>Distritos urbanos y rurales</td></tr>
+                                <tr><td>Tumbes</td><td>5</td><td>Provincia de Tumbes</td></tr>
+                                <tr><td>Lambayeque</td><td>7</td><td>Chongoyape, Motupe, Jayanca</td></tr>
+                                <tr><td>Cajamarca</td><td>6</td><td>Provincias altoandinas</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="tabEstablecimientos" class="tab-content">
+                        <h4>Establecimientos de Salud Afectados</h4>
+                        <p style="margin-bottom: 15px;">Reporte COE Salud - Marzo 2026</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Region</th>
+                                    <th>Afectados</th>
+                                    <th>Inoperativos</th>
+                                    <th>Daños</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Ancash</td><td>85</td><td>1</td><td>Filtraciones, techos</td></tr>
+                                <tr><td>Piura</td><td>120</td><td>1</td><td>Inundacion, equipos</td></tr>
+                                <tr><td>Lambayeque</td><td>78</td><td>1</td><td>Techos colapsados</td></tr>
+                                <tr><td>Cajamarca</td><td>65</td><td>0</td><td>Filtraciones</td></tr>
+                                <tr><td>La Libertad</td><td>52</td><td>0</td><td>Inundacion parcial</td></tr>
+                                <tr><td>Lima</td><td>95</td><td>1</td><td>Activacion quebradas</td></tr>
+                                <tr><td>Ucayali</td><td>45</td><td>0</td><td>Filtraciones UCI</td></tr>
+                                <tr><td>Otros</td><td>100</td><td>0</td><td>Variables</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Fuente:</strong> Minsa - Centro de Emergencia Sanitaria ante lluvias (Marzo 2026). Plataforma: minsa.gob.pe
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Inicializar mapa centrado en Peru
+        const map = L.map('map').setView([-9.19, -75.0152], 6);
+        
+        // Capas base
+        const capaOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'OpenStreetMap contributors'
+        });
+        
+        const capaSatelital = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'ESRI World Imagery'
+        });
+        
+        const capaTerreno = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'ESRI World Topo'
+        });
+        
+        // Capa base activa por defecto
+        capaOSM.addTo(map);
+        
+        // Control de capas base
+        const baseMaps = {
+            "OpenStreetMap": capaOSM,
+            "Satelital": capaSatelital,
+            "Terreno": capaTerreno
+        };
+        
+        // Capas de overlay (se activan con checkboxes)
+        const overlayMaps = {};
+        
+        // Capa de Rios (simulada con marcadores)
+        const capaRios = L.layerGroup();
+        const rios = [
+            {nombre: "Rio Rimac", coords: [-12.0464, -77.0428]},
+            {nombre: "Rio Chillan", coords: [-11.7894, -77.1567]},
+            {nombre: "Rio Lurin", coords: [-12.2681, -76.8686]},
+            {nombre: "Rio Santa", coords: [-9.1394, -78.5769]},
+            {nombre: "Rio Casma", coords: [-9.4569, -78.3256]},
+            {nombre: "Rio Lacramarca", coords: [-9.2156, -78.4892]},
+            {nombre: "Rio Piura", coords: [-5.1289, -80.6344]},
+            {nombre: "Rio Tumbes", coords: [-3.5669, -80.4517]}
+        ];
+        
+        rios.forEach(rio => {
+            L.marker(rio.coords)
+                .bindPopup(`<strong>${rio.nombre}</strong><br>Rio principal`)
+                .addTo(capaRios);
+        });
+        overlayMaps['Rios'] = capaRios;
+        
+        // Capa de Centros Poblados (simulada)
+        const capaCentrosPoblados = L.layerGroup();
+        const centros = [
+            {nombre: "Chimbote", coords: [-9.0853, -78.5783], poblacion: "364,000"},
+            {nombre: "Casma", coords: [-9.4569, -78.3256], poblacion: "45,000"},
+            {nombre: "Piura", coords: [-5.1289, -80.6344], poblacion: "484,000"},
+            {nombre: "Chiclayo", coords: [-6.7714, -79.8411], poblacion: "552,000"},
+            {nombre: "Trujillo", coords: [-8.1116, -79.0289], poblacion: "919,000"}
+        ];
+        
+        centros.forEach(centro => {
+            L.circleMarker(centro.coords, {
+                radius: 8,
+                fillColor: '#ff6600',
+                color: '#fff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            })
+            .bindPopup(`<strong>${centro.nombre}</strong><br>Poblacion: ${centro.poblacion}`)
+            .addTo(capaCentrosPoblados);
+        });
+        overlayMaps['Centros Poblados'] = capaCentrosPoblados;
+        
+        // Capa de Areas Urbanas (simulada con poligonos)
+        const capaAreasUrbanas = L.layerGroup();
+        const areasUrbanas = [
+            {nombre: "Lima Metropolitana", coords: [[-12.2, -77.15], [-12.2, -76.85], [-11.9, -76.85], [-11.9, -77.15]]},
+            {nombre: "Trujillo", coords: [[-8.2, -79.1], [-8.2, -78.95], [-8.0, -78.95], [-8.0, -79.1]]},
+            {nombre: "Chiclayo", coords: [[-6.85, -79.9], [-6.85, -79.75], [-6.7, -79.75], [-6.7, -79.9]]},
+            {nombre: "Piura", coords: [[-5.2, -80.7], [-5.2, -80.55], [-5.05, -80.55], [-5.05, -80.7]]}
+        ];
+        
+        areasUrbanas.forEach(area => {
+            L.polygon(area.coords, {
+                color: '#ff0000',
+                fillColor: '#ff0000',
+                fillOpacity: 0.2,
+                weight: 2
+            })
+            .bindPopup(`<strong>${area.nombre}</strong><br>Area urbana`)
+            .addTo(capaAreasUrbanas);
+        });
+        overlayMaps['Areas Urbanas'] = capaAreasUrbanas;
+        
+        // Capa de Quebradas (simulada)
+        const capaQuebradas = L.layerGroup();
+        const quebradas = [
+            {nombre: "Quebrada Canto Grande", coords: [-12.0156, -76.9892], riesgo: "Muy Alto"},
+            {nombre: "Quebrada Pariapunco", coords: [-12.0789, -76.9456], riesgo: "Alto"},
+            {nombre: "Quebrada Los Jazmines", coords: [-12.0923, -77.0123], riesgo: "Muy Alto"},
+            {nombre: "Quebrada Santa Rosa", coords: [-11.9856, -77.0567], riesgo: "Alto"},
+            {nombre: "Quebrada Paraiso", coords: [-12.1234, -76.9678], riesgo: "Medio"}
+        ];
+        
+        quebradas.forEach(quebrada => {
+            const color = quebrada.riesgo === "Muy Alto"

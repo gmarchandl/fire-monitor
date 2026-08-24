@@ -519,11 +519,12 @@ html,body{
   #mobileQuickBar .quick-title{pointer-events:auto;background:rgba(15,23,32,.90);color:#fff;border-radius:18px;padding:7px 11px;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.35)}
   #mobileRefresh{pointer-events:auto;border:0;border-radius:50%;width:38px;height:38px;background:#1976d2;color:#fff;font-size:22px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 
-  #mobileCoords{display:flex;position:fixed;left:8px;bottom:62px;z-index:2050;gap:4px;align-items:center;background:rgba(15,23,32,.94);padding:5px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
-  #mobileCoords input{width:92px;height:30px;border:1px solid #52616d;border-radius:6px;background:#fff;color:#111;padding:3px 5px;font-size:11px;box-sizing:border-box}
-  #mobileCoords button{height:30px;border:0;border-radius:6px;background:#1976d2;color:#fff;font-size:12px;padding:0 8px}
+  #mobileCoords{display:flex;position:fixed;left:50%;bottom:66px;transform:translateX(-50%);z-index:4050;gap:5px;align-items:center;background:rgba(15,23,32,.96);padding:6px;border-radius:11px;box-shadow:0 2px 10px rgba(0,0,0,.38);max-width:calc(100vw - 16px);box-sizing:border-box}
+  #mobileCoords input{width:88px;height:30px;border:1px solid #52616d;border-radius:6px;background:#fff;color:#111;padding:3px 5px;font-size:11px;box-sizing:border-box}
+  #mobileCoords input.lugar{width:150px}
+  #mobileCoords button{height:30px;border:0;border-radius:6px;background:#1976d2;color:#fff;font-size:11px;padding:0 8px;white-space:nowrap}
   #mobileCoordsToggle{display:none}
-  @media(max-width:700px){#mobileCoords{display:none}#mobileCoords.open{display:flex}#mobileCoordsToggle{display:block;position:fixed;left:8px;bottom:108px;z-index:2051;border:0;border-radius:50%;width:38px;height:38px;background:#1976d2;color:#fff;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.35)}}
+  @media(max-width:700px){#mobileCoords{display:none;bottom:64px;flex-wrap:wrap;justify-content:center}#mobileCoords.open{display:flex}#mobileCoordsToggle{display:block;position:fixed;left:50%;transform:translateX(-50%);bottom:66px;z-index:4051;border:0;border-radius:18px;width:46px;height:34px;background:#1976d2;color:#fff;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.35)}#mobileCoords.open + #mobileQuickBar{display:none}}
   #mobileTabs{display:flex;position:fixed;bottom:0;left:0;right:0;height:58px;background:rgba(12,20,28,.98);z-index:4000;box-shadow:0 -2px 10px rgba(0,0,0,.35);padding:4px 5px env(safe-area-inset-bottom,4px);gap:4px}
   .mobile-tab{flex:1;border:0;background:transparent;color:#b9c5ce;border-radius:8px;font-size:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
   .mobile-tab span{font-size:10px;font-weight:700}
@@ -575,10 +576,12 @@ html,body{
 
 
 <button id="mobileCoordsToggle" type="button" title="Localizar por coordenadas" aria-label="Localizar por coordenadas">📍</button>
-<div id="mobileCoords" aria-label="Localizar por coordenadas">
+<div id="mobileCoords" aria-label="Localizar por coordenadas o localidad">
   <input id="mobileCoordLat" type="number" step="0.000001" placeholder="Latitud">
   <input id="mobileCoordLon" type="number" step="0.000001" placeholder="Longitud">
-  <button type="button" onclick="irACoordenadaMovil()">Ir</button>
+  <button type="button" onclick="irACoordenadaMovil()">📍 Ir</button>
+  <input id="mobileLugar" class="lugar" type="search" placeholder="Localidad, distrito o provincia" autocomplete="off">
+  <button type="button" onclick="buscarLugarMovil()">🔎 Buscar</button>
 </div>
 <div id="mobileQuickBar">
   <div class="quick-title">🔥 Monitor de Incendios Perú</div>
@@ -4146,6 +4149,40 @@ function irACoordenadaMovil(){
   if(box) box.classList.remove("open");
 }
 
+async function buscarLugarMovil(){
+  const input=document.getElementById("mobileLugar");
+  const q=(input?.value||"").trim();
+  if(!q){ alert("Ingrese una localidad, distrito o provincia."); return; }
+  const btn=input.parentElement.querySelector('button[onclick*="buscarLugarMovil"]');
+  if(btn){btn.disabled=true; btn.textContent="…";}
+  try{
+    const url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=pe&accept-language=es&q='+encodeURIComponent(q);
+    const r=await fetch(url,{headers:{'Accept':'application/json'}});
+    if(!r.ok) throw new Error('No fue posible consultar el servicio de localización.');
+    const data=await r.json();
+    if(!data.length) throw new Error('No se encontró la localidad indicada.');
+    const lat=parseFloat(data[0].lat), lon=parseFloat(data[0].lon);
+    document.getElementById("mobileCoordLat").value=lat.toFixed(6);
+    document.getElementById("mobileCoordLon").value=lon.toFixed(6);
+    document.getElementById("coordLat").value=lat;
+    document.getElementById("coordLon").value=lon;
+    if(typeof map!=='undefined' && map){
+      map.setView([lat,lon],13,{animate:true});
+      if(typeof capaCoordenada!=='undefined'){
+        capaCoordenada.clearLayers();
+        const m=L.marker([lat,lon],{icon: typeof iconoCoordenada!=='undefined'?iconoCoordenada:undefined}).addTo(capaCoordenada);
+        m.bindPopup('<b>📍 Localización</b><br>'+escapeHtmlMovil(data[0].display_name||q)+'<br><b>Coordenadas:</b> '+lat.toFixed(6)+', '+lon.toFixed(6)).openPopup();
+      }
+    }
+    document.getElementById("mobileCoords").classList.remove("open");
+  }catch(e){ alert(e.message||"No se pudo localizar el lugar."); }
+  finally{ if(btn){btn.disabled=false; btn.textContent="🔎 Buscar";} }
+}
+
+function escapeHtmlMovil(v){
+  return String(v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+}
+
 function agregarCoordenada(){
 
     irACoordenada();
@@ -4449,6 +4486,9 @@ document.addEventListener("DOMContentLoaded", () => {
     var box=document.getElementById('mobileCoords');
     if(box) { box.classList.toggle('open'); if(box.classList.contains('open')) { var i=document.getElementById('mobileCoordLat'); if(i) i.focus(); } }
   });
+  ['mobileCoordLat','mobileCoordLon'].forEach(function(id){ var el=document.getElementById(id); if(el) el.addEventListener('keydown',function(e){ if(e.key==='Enter') irACoordenadaMovil(); }); });
+  var ml=document.getElementById('mobileLugar');
+  if(ml) ml.addEventListener('keydown',function(e){ if(e.key==='Enter') buscarLugarMovil(); });
   var r=document.getElementById('mobileRefresh');
   if(r) r.addEventListener('click',function(){
     if(typeof actualizarIncendios==='function') actualizarIncendios(true);

@@ -366,6 +366,61 @@ html,body{
     }
 }
 
+/* =========================================================
+   EDAD DE ALERTAS SERFOR
+   ≤12 h = rojo
+   >12–24 h = naranja
+   >24–48 h = gris
+   >48 h = verde
+========================================================= */
+.icono-alerta-serfor.edad-12{
+    background:rgba(211,47,47,.22);
+    border-color:#ff1744;
+    box-shadow:0 0 0 5px rgba(255,23,68,.22),0 0 22px rgba(255,23,68,.95);
+}
+.icono-alerta-serfor.edad-24{
+    background:#f57c00;
+    border-color:#ff9800;
+    box-shadow:0 0 0 3px rgba(158,158,158,.12),0 0 10px rgba(158,158,158,.30);
+    animation:none;
+}
+.icono-alerta-serfor.edad-48{
+    background:#808080;
+    border-color:#616161;
+    box-shadow:0 0 0 3px rgba(158,158,158,.12),0 0 10px rgba(158,158,158,.30);
+    animation:none;
+}
+.icono-alerta-serfor.edad-mas48{
+    background:#2e7d32;
+    border-color:#2e7d32;
+    box-shadow:0 0 0 3px rgba(46,125,50,.14),0 0 12px rgba(46,125,50,.45);
+    animation:none;
+}
+.badge-edad-12{background:#d50000}
+.badge-edad-24{background:#ef6c00}
+.badge-edad-48{background:#808080;color:#fff}
+.badge-edad-mas48{background:#2e7d32}
+
+.serfor-edad-leyenda{
+    margin-top:6px;
+    padding-top:6px;
+    border-top:1px solid #455a64;
+    font-size:10px;
+    line-height:18px;
+}
+.serfor-edad-leyenda div{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+.serfor-edad-punto{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    display:inline-block;
+    border:2px solid rgba(255,255,255,.7);
+}
+
 .icono-coordenada{
     font-size:30px;
     filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))
@@ -841,6 +896,22 @@ GOES-19 / ABI
 <span>Alertas SERFOR</span>
 <span id="totalAlertasSERFOR">0</span>
 </div>
+                <div class="stat">
+                    <span>Alertas ≤ 12 h</span>
+                    <span id="totalAlertasSERFOR12">0</span>
+                </div>
+                <div class="stat">
+                    <span>Alertas 12–24 h</span>
+                    <span id="totalAlertasSERFOR24">0</span>
+                </div>
+                <div class="stat">
+                    <span>Alertas 24–48 h</span>
+                    <span id="totalAlertasSERFOR48">0</span>
+                </div>
+                <div class="stat">
+                    <span>Alertas &gt; 48 h</span>
+                    <span id="totalAlertasSERFORMas48">0</span>
+                </div>
 
 <div class="stat">
 <span>Actualización SERFOR</span>
@@ -1103,6 +1174,12 @@ const CONFIG = {
         0,
         ALERTAS:
         2
+    },
+
+    SERFOR_ALERTAS_EDAD: {
+        H12: 12,
+        H24: 24,
+        H48: 48
     },
 
     CORROBORACION: {
@@ -1385,9 +1462,60 @@ function esCampoFechaHora(k){
     return /(fecha|date|hora|time|timestamp|datetime|created|updated|actualiz|registro|fuego|incendio|detecc)/.test(s);
 }
 
-function valorSERFOR(k,v){
+function valorSERFOR(k,v,feature){
     if(v === null || v === undefined || v === "")
         return "N/D";
+
+    const props = feature?.properties || {};
+    const {fechaKey, horaKey} = clavesFechaHoraSERFOR(props);
+
+    // En SERFOR: FECHA se muestra únicamente como fecha; HORA se calcula
+    // combinando FECHA + HORA y se expresa en hora de Perú.
+    if(fechaKey && k === fechaKey){
+        const d = fechaHoraSERFOR(feature) || convertirFechaHoraSERFOR(v);
+        if(d){
+            return new Intl.DateTimeFormat("es-PE",{
+                timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit"
+            }).format(d);
+        }
+        return String(v);
+    }
+
+    if(horaKey && k === horaKey){
+        // Mantener exactamente la HORA original entregada por la base SERFOR.
+        // La combinación FECHA + HORA se utiliza únicamente para calcular
+        // la antigüedad y la leyenda de colores.
+        return String(v);
+    }
+
+    // FECREG: mostrar explícitamente la fecha y hora de registro
+    // convertidas a la hora oficial de Perú (America/Lima).
+    // Este campo NO se usa para reemplazar la Fecha/Hora de detección.
+    if(/^FECREG$/i.test(String(k).trim())){
+        const d = convertirFechaHoraSERFOR(v);
+        if(d){
+            return new Intl.DateTimeFormat("es-PE",{
+                timeZone:"America/Lima",
+                year:"numeric", month:"2-digit", day:"2-digit",
+                hour:"2-digit", minute:"2-digit", second:"2-digit",
+                hour12:false
+            }).format(d).replace(",", "") + " (Perú)";
+        }
+        return String(v);
+    }
+
+    // Otros campos de REGISTRO/DETECCIÓN que contienen fecha y hora.
+    if(/registro|detecc|fecha.?hora|datetime|timestamp/i.test(String(k))){
+        const d = convertirFechaHoraSERFOR(v);
+        if(d){
+            return new Intl.DateTimeFormat("es-PE",{
+                timeZone:"America/Lima",
+                year:"numeric", month:"2-digit", day:"2-digit",
+                hour:"2-digit", minute:"2-digit", second:"2-digit",
+                hour12:false
+            }).format(d).replace(",", "") + " (Perú)";
+        }
+    }
 
     if(esCampoFechaHora(k)){
         const f = formatFechaHoraPeru(v);
@@ -2721,7 +2849,14 @@ function leyenda(){
                 <hr>
 
                 <div>🌲 Focos SERFOR</div>
-                <div>🔥 Alertas SERFOR</div>
+                <div>🔥 Alertas SERFOR — antigüedad</div>
+                <div class="serfor-edad-leyenda">
+                    <div><span class="serfor-edad-punto" style="background:#d50000"></span> ≤ 12 horas — reciente</div>
+                    <div><span class="serfor-edad-punto" style="background:#ef6c00"></span> &gt; 12 horas y ≤ 24 horas</div>
+                    <div><span class="serfor-edad-punto" style="background:#808080"></span> &gt; 24 horas y ≤ 48 horas</div>
+                    <div><span class="serfor-edad-punto" style="background:#2e7d32"></span> &gt; 48 horas — antigua</div>
+                    <div style="font-size:9px;opacity:.85;margin-top:3px">Antigüedad calculada desde la Fecha + Hora de detección SERFOR (hora Perú)</div>
+                </div>
 
             `;
 
@@ -3375,6 +3510,274 @@ async function serfor(id){
 
 }
 
+
+/* =========================================================
+   ANTIGÜEDAD DE ALERTAS SERFOR
+========================================================= */
+
+function clavesFechaHoraSERFOR(props){
+    const entries = Object.entries(props || {});
+    const valid = ([k,v]) => v !== null && v !== undefined && v !== "";
+
+    // PARA LA LEYENDA DE HORAS SE USAN EXCLUSIVAMENTE los campos
+    // FECHA y HORA de detección de la base de datos SERFOR.
+    // No se utiliza FECREG ni otros campos de fecha/hora.
+    const normalizarNombre = k => String(k ?? "")
+        .replace(/[\u00A0\u2007\u202F]/g, " ")
+        .trim()
+        .toUpperCase();
+
+    const fechaKey = entries.find(([k,v]) =>
+        valid([k,v]) && normalizarNombre(k) === "FECHA"
+    )?.[0] || null;
+
+    const horaKey = entries.find(([k,v]) =>
+        valid([k,v]) && normalizarNombre(k) === "HORA"
+    )?.[0] || null;
+
+    return {fechaKey, horaKey};
+}
+
+function extraerFechaSERFOR(v){
+    if(v === null || v === undefined || v === "") return null;
+
+    // La base SERFOR puede entregar FECHA como texto o como fecha/hora
+    // serializada. Siempre devolvemos YYYY-MM-DD, sin hora.
+    const s = String(v).trim();
+
+    // YYYY-MM-DD o YYYY-MM-DDTHH:mm:ss...
+    let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+    if(m){
+        const yyyy = Number(m[1]);
+        const mm = Number(m[2]);
+        const dd = Number(m[3]);
+        if(mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31)
+            return `${yyyy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
+    }
+
+    // DD/MM/YYYY o DD-MM-YYYY
+    m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
+    if(m){
+        const dd = Number(m[1]);
+        const mm = Number(m[2]);
+        const yyyy = Number(m[3]);
+        if(mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31)
+            return `${yyyy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
+    }
+
+    // Epoch en milisegundos/segundos, por si FECHA llega como número.
+    if(typeof v === "number" || /^\d{10,13}$/.test(s)){
+        const n = Number(v);
+        const d = new Date(s.length === 10 ? n * 1000 : n);
+        if(!isNaN(d.getTime())){
+            return new Intl.DateTimeFormat("en-CA",{
+                timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit"
+            }).format(d);
+        }
+    }
+
+    return null;
+}
+
+function convertirFechaHoraSERFOR(v){
+    if(v === null || v === undefined || v === "") return null;
+    const s = String(v).trim();
+    if(/^\d{1,2}:\d{2}(:\d{2})?$/.test(s)) return null;
+
+    let d = null;
+    if(typeof v === "number" || /^\d{10,13}$/.test(s)){
+        const n = Number(v);
+        d = new Date(s.length === 10 ? n * 1000 : n);
+    } else {
+        const fecha = extraerFechaSERFOR(s);
+        if(fecha){
+            const hora = s.match(/[ T](\d{1,2}:\d{2}(?::\d{2})?)/);
+            if(hora){
+                d = new Date(`${fecha}T${hora[1]}-05:00`);
+            } else {
+                d = new Date(`${fecha}T00:00:00-05:00`);
+            }
+        } else {
+            const iso = s.replace(" ","T");
+            d = new Date(iso.endsWith("Z") || /[+-]\d{2}:?\d{2}$/.test(iso) ? iso : iso + "-05:00");
+        }
+    }
+    return d && !isNaN(d.getTime()) ? d : null;
+}
+
+function horaTextoSERFOR(v){
+    if(v === null || v === undefined || v === "") return null;
+
+    const s = String(v).trim();
+
+    // HH:MM / HH:MM:SS
+    let m = s.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
+    if(m){
+        const hh = Number(m[1]);
+        const mm = Number(m[2]);
+        const ss = Number(m[3] || 0);
+        if(hh <= 23 && mm <= 59 && ss <= 59)
+            return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+    }
+
+    // HHMM / HHMMSS. Esto cubre valores SERFOR como 0142, 142 o 014200.
+    const dig = s.replace(/\D/g, "");
+    if(/^\d{3,6}$/.test(dig)){
+        const z = dig.padStart(4,"0");
+        const hh = Number(z.slice(0,2));
+        const mm = Number(z.slice(2,4));
+        const ss = z.length >= 6 ? Number(z.slice(4,6)) : 0;
+        if(hh <= 23 && mm <= 59 && ss <= 59)
+            return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+    }
+
+    // Si HORA viniera incluida dentro de un valor fecha-hora, extraerla.
+    const hm = s.match(/[ T](\d{1,2}):(\d{2})(?::(\d{2}))?/);
+    if(hm){
+        const hh = Number(hm[1]), mm = Number(hm[2]), ss = Number(hm[3] || 0);
+        if(hh <= 23 && mm <= 59 && ss <= 59)
+            return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+    }
+
+    return null;
+}
+
+function fechaHoraSERFOR(feature){
+    const props = feature?.properties || {};
+    const {fechaKey, horaKey} = clavesFechaHoraSERFOR(props);
+
+    if(fechaKey){
+        const fecha = extraerFechaSERFOR(props[fechaKey]);
+        const hora = horaKey ? horaTextoSERFOR(props[horaKey]) : null;
+
+        // La antigüedad SIEMPRE se calcula con FECHA + HORA del mismo registro SERFOR.
+        if(fecha && hora){
+            const d = new Date(`${fecha}T${hora}-05:00`);
+            if(!isNaN(d.getTime())) return d;
+        }
+
+        // Respaldo si la base entrega fecha y hora en un único campo.
+        const d = convertirFechaHoraSERFOR(props[fechaKey]);
+        if(d) return d;
+    }
+
+    return null;
+}
+
+function fechaRegistroSERFOR(feature){
+    const combinada = fechaHoraSERFOR(feature);
+    if(combinada) return combinada;
+
+    // Fallback para registros cuya fecha ya contiene fecha y hora en un solo campo.
+    const props = feature?.properties || {};
+    const candidatos = Object.entries(props)
+        .filter(([k,v]) =>
+            v !== null && v !== undefined && v !== "" &&
+            esCampoFechaHora(k) &&
+            !/(hora|time|updated|actualiz)/i.test(k)
+        )
+        .map(([k,v]) => convertirFechaHoraSERFOR(v))
+        .filter(Boolean)
+        .sort((a,b) => b-a);
+
+    return candidatos[0] || null;
+}
+
+function calcularEdadAlerta(fechaAlertaStr, horaAlertaStr) {
+    // ANTIGÜEDAD = FECHA + HORA de detección SERFOR, siempre hora Perú.
+    // FECREG y cualquier otro campo quedan fuera del cálculo.
+    const fecha = extraerFechaSERFOR(fechaAlertaStr);
+    const hora = horaTextoSERFOR(horaAlertaStr);
+    if(!fecha || !hora) return null;
+
+    const [yyyy, mm, dd] = fecha.split("-").map(Number);
+    const [hh, mi, ss] = hora.split(":").map(Number);
+
+    if(!yyyy || mm < 1 || mm > 12 || dd < 1 || dd > 31 ||
+       hh < 0 || hh > 23 || mi < 0 || mi > 59 || ss < 0 || ss > 59)
+        return null;
+
+    // Reloj de pared de Perú: ambos instantes se comparan en la misma escala.
+    const deteccion = Date.UTC(yyyy, mm - 1, dd, hh, mi, ss);
+
+    const ahora = new Date();
+    const p = {};
+    new Intl.DateTimeFormat("en-CA",{
+        timeZone:"America/Lima",
+        year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit", second:"2-digit",
+        hourCycle:"h23"
+    }).formatToParts(ahora).forEach(x => {
+        if(x.type !== "literal") p[x.type] = Number(x.value);
+    });
+
+    if(!p.year || !p.month || !p.day) return null;
+
+    const actual = Date.UTC(
+        p.year, p.month - 1, p.day, p.hour || 0, p.minute || 0, p.second || 0
+    );
+
+    return Number(Math.max(0, (actual - deteccion) / 3600000).toFixed(1));
+}
+
+function antiguedadAlertaSERFOR(feature){
+    const props = feature?.properties || {};
+    const {fechaKey, horaKey} = clavesFechaHoraSERFOR(props);
+
+    // REGLA ÚNICA PARA LA LEYENDA:
+    // usar FECHA + HORA de detección. FECREG NO participa.
+    const horas = (fechaKey && horaKey)
+        ? calcularEdadAlerta(props[fechaKey], props[horaKey])
+        : null;
+
+    if (horas === null) {
+        return {
+            horas: null,
+            clase: "edad-mas48",
+            etiqueta: "Fecha/Hora no disponible"
+        };
+    }
+
+    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H12) {
+        return {
+            horas,
+            clase: "edad-12",
+            etiqueta: "≤ 12 horas",
+            badge: "badge-edad-12"
+        };
+    }
+
+    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H24) {
+        return {
+            horas,
+            clase: "edad-24",
+            etiqueta: "> 12 horas y ≤ 24 horas",
+            badge: "badge-edad-24"
+        };
+    }
+
+    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H48) {
+        return {
+            horas,
+            clase: "edad-48",
+            etiqueta: "> 24 horas y ≤ 48 horas",
+            badge: "badge-edad-48"
+        };
+    }
+
+    return {
+        horas,
+        clase: "edad-mas48",
+        etiqueta: "> 48 horas",
+        badge: "badge-edad-mas48"
+    };
+}
+
+function iconoAlertaSERFOR(feature){
+    const edad = antiguedadAlertaSERFOR(feature);
+    return `<div class="icono-alerta-serfor ${edad.clase}"><span>🔥</span></div>`;
+}
+
 function popupS(
     f,
     title,
@@ -3382,17 +3785,20 @@ function popupS(
 ){
 
     const props=f.properties || {};
+    const esAlertaSERFOR = title.includes("INCENDIO FORESTAL SERFOR");
+    const edadSERFOR = esAlertaSERFOR ? antiguedadAlertaSERFOR(f) : null;
     const vals=Object.entries(props).filter(([k,v])=>v!==null&&v!==undefined&&v!=="");
     const resumenVals=vals.slice(0,6);
     const detalleVals=vals.slice(6,40);
     return `
         <div class="popup-incendio">
             <h3 style="color:${color}">${title}</h3>
+            ${edadSERFOR ? `<div style="margin:5px 0 8px"><span class="badge ${edadSERFOR.badge || "badge-descartado"}">${edadSERFOR.etiqueta}</span>${edadSERFOR.horas !== null ? ` <span style="font-size:11px;color:#555">(${edadSERFOR.horas.toFixed(1)} h de antigüedad)</span>` : ""}</div>` : ""}
             <div class="popup-resumen" style="border-left-color:${color}">
                 <div class="popup-resumen-titulo">📋 RESUMEN</div>
-                ${resumenVals.map(([k,v])=>`<div><b>${escHtmlSensor(k)}:</b> ${escHtmlSensor(valorSERFOR(k,v))}</div>`).join("")}
+                ${resumenVals.map(([k,v])=>`<div><b>${escHtmlSensor(k)}:</b> ${escHtmlSensor(valorSERFOR(k,v,f))}</div>`).join("")}
             </div>
-            ${detalleVals.length ? `<button type="button" class="popup-tab" onclick="togglePopupTech(this)"><span>🔎 Ver información técnica completa</span><span class="flecha">▶</span></button><div class="popup-tecnico">${detalleVals.map(([k,v])=>`<div><b>${escHtmlSensor(k)}:</b> ${escHtmlSensor(valorSERFOR(k,v))}</div>`).join("")}</div>` : ""}
+            ${detalleVals.length ? `<button type="button" class="popup-tab" onclick="togglePopupTech(this)"><span>🔎 Ver información técnica completa</span><span class="flecha">▶</span></button><div class="popup-tecnico">${detalleVals.map(([k,v])=>`<div><b>${escHtmlSensor(k)}:</b> ${escHtmlSensor(valorSERFOR(k,v,f))}</div>`).join("")}</div>` : ""}
         </div>`;
 
 }
@@ -3435,7 +3841,9 @@ function dibujarS(
                             {
 
                                 className:"",
-                                html:icon,
+                                html: title.includes("INCENDIO FORESTAL SERFOR")
+                                    ? iconoAlertaSERFOR(f)
+                                    : icon,
 
                                 iconSize:
                                     [32,32],
@@ -3463,11 +3871,16 @@ function dibujarS(
 
 }
 
-function extraerFechaSERFOR(features){
+function extraerUltimaFechaSERFOR(features){
 
     const candidatos = [];
 
-    (features || []).forEach(f => {
+    // Aceptar tanto un arreglo de Features como un FeatureCollection GeoJSON.
+    const lista = Array.isArray(features)
+        ? features
+        : (features && Array.isArray(features.features) ? features.features : []);
+
+    lista.forEach(f => {
         Object.entries(f.properties || {}).forEach(([k,v]) => {
             if(!esCampoFechaHora(k) || v === null || v === undefined || v === "")
                 return;
@@ -3530,7 +3943,7 @@ async function cargarS(
         return {
             features:f,
             consultaMs:g._consultaMs,
-            ultimo:extraerFechaSERFOR(f)
+            ultimo:extraerUltimaFechaSERFOR(f)
         };
 
     }
@@ -3550,6 +3963,19 @@ async function cargarS(
 
     }
 
+}
+
+
+function contarAlertasPorEdadSERFOR(alertas){
+    const r = {h12:0, h24:0, h48:0, mas48:0};
+    (alertas || []).forEach(f => {
+        const e = antiguedadAlertaSERFOR(f);
+        if(e.clase === "edad-12") r.h12++;
+        else if(e.clase === "edad-24") r.h24++;
+        else if(e.clase === "edad-48") r.h48++;
+        else r.mas48++;
+    });
+    return r;
 }
 
 async function refrescarSERFOR(){
@@ -3593,6 +4019,12 @@ async function refrescarSERFOR(){
 
         txt("totalFocosSERFOR", focos.length);
         txt("totalAlertasSERFOR", alertas.length);
+
+        const edades = contarAlertasPorEdadSERFOR(alertas);
+        txt("totalAlertasSERFOR12", edades.h12);
+        txt("totalAlertasSERFOR24", edades.h24);
+        txt("totalAlertasSERFOR48", edades.h48);
+        txt("totalAlertasSERFORMas48", edades.mas48);
 
         const ultima =
             [
@@ -3994,6 +4426,12 @@ function estadistica(cs){
         "totalAlertasSERFOR",
         datosAlertasSERFOR.length
     );
+
+    const edadesSERFOR = contarAlertasPorEdadSERFOR(datosAlertasSERFOR);
+    txt("totalAlertasSERFOR12", edadesSERFOR.h12);
+    txt("totalAlertasSERFOR24", edadesSERFOR.h24);
+    txt("totalAlertasSERFOR48", edadesSERFOR.h48);
+    txt("totalAlertasSERFORMas48", edadesSERFOR.mas48);
 
     /* CLUSTERS */
 
@@ -4733,6 +5171,10 @@ document.addEventListener("DOMContentLoaded", () => {
     txt("estadoSERFOR", "Cargando datos SERFOR...");
     txt("demoraSERFOR", "---");
     txt("ultimoSERFOR", "---");
+    txt("totalAlertasSERFOR12", "0");
+    txt("totalAlertasSERFOR24", "0");
+    txt("totalAlertasSERFOR48", "0");
+    txt("totalAlertasSERFORMas48", "0");
 
     // SERFOR se consulta aunque todavía no exista MAP_KEY de FIRMS.
     refrescarSERFOR().catch(e=>console.error("SERFOR",e));

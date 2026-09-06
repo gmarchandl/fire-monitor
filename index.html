@@ -11,7 +11,7 @@
 <link rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-<script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=9zWMFLUxkfmHidOjmms4HodU1VoVxoqif9icPg9dMakcZOMS6m_p20fmxeq2p7MCNFO5N3DayNiEeJiQBwdYkxQMp0tkOfZgNBPmX9s35CiYFp2w1gI5T2TC1iz4zTuleUeV4E1xciM402LQ_PKLH6xzWrwPkWHwp3i1oDhP7Rs9SXs2ErGKSwxmKkqzB5IiwPt6ZtIGp86oKFGNbnCYoCSBRMcKmh_XUt1N16ctXu5VTPHfqm-lIbQN7q4UyLZuajxSDiuDdmPrPP1b5uSnwQ0Xj5DrHdeC7iRg80U9iLNh7jyLxGTHdzUcslVJVNJ_B-Iz2O5iL5t38zQV_bkZk4O9LRGqr8I1aFjSh62ygfXxOgHJtReu-KmJVzCW1ztD" charset="UTF-8"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=81ojkbqkhM7K99Cjhn5x5s_SfgDxWRMNkGvaahL7PzftYsPccCYmQ9mVX7T4ND9mbp9n1uN035ZukgldaXAx8mS6uYnIHJ_AY03FNMZgS76GVsc0ximgk3uWFmo_yEWuRqvfOa3IKF-RbJInqC5fABFLKHdBJXN8OBolNtxsSPdbzoCsY1JhI8g_CBgEaFme6m9CR-Vp6A7oCMDXtlq2GTLObymqoDIBCgaD1SRyRH8LgYSetsWfM0_iKyBnHvAeIvoGAFhErqEWpekVBVOnsaj0LtqC4Ru9njNnJ-Qy3JP4nb-k2zv0FooaLngJMOwAZLAwrrmskWSB8CzJWcUzn16AU70GQXskj_gZtJ74LEdFP0XVJUrBrUxkYOCGj_Pz" charset="UTF-8"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 
@@ -617,6 +617,7 @@ Guardar MAP_KEY
 <label class="capa-operativa">
 <input type="checkbox"
        id="chkSuomi"
+       checked
        onchange="alternarCapa('suomi')">
 <span class="capa-icono" style="color:#00e5ff">●</span>
 <span class="capa-nombre">Suomi-NPP / VIIRS</span>
@@ -1013,16 +1014,6 @@ Los umbrales VIIRS son criterios operativos iniciales del monitor.
 <button class="btn btn-azul"
         onclick="descargarKML()">
 🌐 Descargar KML
-</button>
-
-<button class="btn btn-verde"
-        onclick="descargarAlertasSERFORMas48SHP()">
-🟢 Descargar alertas SERFOR > 48 h (SHP)
-</button>
-
-<button class="btn btn-azul"
-        onclick="descargarAlertasSERFORMas48KML()">
-🟢 Descargar alertas SERFOR > 48 h (KML)
 </button>
 
 <button class="btn btn-gris"
@@ -1669,39 +1660,62 @@ function csv(t){
 
 async function firms(s){
 
-    const r =
-        await fetch(
-            `${CONFIG.FIRMS.BASE}/api/area/csv/` +
-            `${encodeURIComponent(mapKey())}/` +
-            `${s}/` +
-            `${CONFIG.FIRMS.BBOX}/` +
-            `${CONFIG.FIRMS.DAYS}`,
-            {
-                cache:"no-store"
+    const key = mapKey();
+
+    if(!key)
+        throw Error("FIRMS: falta MAP_KEY");
+
+    const url =
+        `${CONFIG.FIRMS.BASE}/api/area/csv/` +
+        `${encodeURIComponent(key)}/` +
+        `${encodeURIComponent(s)}/` +
+        `${CONFIG.FIRMS.BBOX}/` +
+        `${CONFIG.FIRMS.DAYS}`;
+
+    console.info("[FIRMS] Consultando", s, url.replace(key,"***"));
+
+    let r;
+
+    try{
+        r = await fetch(url,{
+            method:"GET",
+            cache:"no-store",
+            headers:{
+                "Accept":"text/csv,text/plain,*/*"
             }
-        );
-
-    if(!r.ok)
+        });
+    }
+    catch(e){
         throw Error(
-            `FIRMS HTTP ${r.status}`
+            `FIRMS ${s}: no se pudo conectar (${e.message || e})`
         );
+    }
 
-    const t =
-        await r.text();
+    const t = await r.text();
 
-    if(
-        t
-        .toLowerCase()
-        .includes(
-            "invalid map key"
-        )
-    )
+    if(!r.ok){
+        const detalle = String(t || "").replace(/\s+/g," ").slice(0,240);
         throw Error(
-            "MAP_KEY inválida"
+            `FIRMS ${s}: HTTP ${r.status}` +
+            (detalle ? ` — ${detalle}` : "")
         );
+    }
 
-    return filtrarRegistrosPeru(csv(t));
+    if(/invalid map key|map.?key.*invalid|unauthorized|forbidden/i.test(t)){
+        throw Error(`FIRMS ${s}: MAP_KEY inválida o no autorizada`);
+    }
 
+    const registros = csv(t);
+
+    console.info(`[FIRMS] ${s}: ${registros.length} registros recibidos`);
+
+    if(!registros.length){
+        throw Error(
+            `FIRMS ${s}: respuesta vacía o CSV sin registros`
+        );
+    }
+
+    return registros;
 }
 
 /* =========================================================
@@ -1712,106 +1726,81 @@ function normalizarSensor(d,tipo){
 
     let satellite =
         String(
-            d.satellite ?? ""
+            d.satellite ?? d.SATELLITE ?? ""
         )
         .trim()
         .toUpperCase();
 
     let instrument =
         String(
-            d.instrument ?? ""
+            d.instrument ?? d.INSTRUMENT ?? ""
         )
         .trim()
         .toUpperCase();
 
     if(tipo === "VIIRS"){
 
+        const fuente =
+            String(d.source ?? "")
+            .toUpperCase();
+
+        /*
+         * FIRMS puede entregar SATELLITE vacío o con una denominación
+         * distinta. La fuente del producto es inequívoca:
+         * VIIRS_SNPP_NRT     -> Suomi-NPP
+         * VIIRS_NOAA20_NRT   -> NOAA-20
+         * VIIRS_NOAA21_NRT   -> NOAA-21
+         */
         if(
+            fuente.includes("VIIRS_SNPP_NRT") ||
             satellite.includes("SNPP") ||
-            satellite.includes("NPP") ||
-            satellite.includes("SUOMI")
+            satellite.includes("SUOMI") ||
+            satellite === "NPP"
         ){
-
             satellite = "Suomi-NPP";
-
         }
         else if(
+            fuente.includes("VIIRS_NOAA20_NRT") ||
             satellite.includes("NOAA-20") ||
             satellite.includes("NOAA20") ||
             satellite.includes("N20")
         ){
-
             satellite = "NOAA-20";
-
         }
         else if(
+            fuente.includes("VIIRS_NOAA21_NRT") ||
             satellite.includes("NOAA-21") ||
             satellite.includes("NOAA21") ||
             satellite.includes("N21")
         ){
-
             satellite = "NOAA-21";
-
         }
 
         instrument = "VIIRS";
-
     }
 
     if(tipo === "MODIS"){
 
-        if(
-            satellite.includes("TERRA")
-        ){
-
+        if(satellite.includes("TERRA"))
             satellite = "Terra";
-
-        }
-        else if(
-            satellite.includes("AQUA")
-        ){
-
+        else if(satellite.includes("AQUA"))
             satellite = "Aqua";
 
-        }
-
         instrument = "MODIS";
-
     }
 
     if(tipo === "GOES"){
 
-        if(
-            satellite.includes("19")
-        ){
-
+        if(satellite.includes("19"))
             satellite = "GOES-19";
-
-        }
-        else if(
-            satellite.includes("18")
-        ){
-
+        else if(satellite.includes("18"))
             satellite = "GOES-18";
-
-        }
-        else if(
-            satellite.includes("17")
-        ){
-
+        else if(satellite.includes("17"))
             satellite = "GOES-17";
-
-        }
-        else if(
-            satellite.includes("16")
-        ){
-
+        else if(satellite.includes("16"))
             satellite = "GOES-16";
 
-        }
-
         instrument = "ABI";
-
     }
 
     if(!satellite)
@@ -1821,18 +1810,12 @@ function normalizarSensor(d,tipo){
         instrument = tipo || "N/D";
 
     return {
-
         ...d,
-
         satellite,
-
         instrument,
-
         sensorLabel:
             `${satellite} / ${instrument}`
-
     };
-
 }
 
 /* =========================================================
@@ -1989,40 +1972,22 @@ function htmlDetalleSensor(d,titulo,icono,col){
 
 function viirs(d,s){
 
-    const t4 =
-        Number(
-            d.bright_ti4
-        );
-
-    const t5 =
-        Number(
-            d.bright_ti5
-        );
+    const t4 = Number(d.bright_ti4);
+    const t5 = Number(d.bright_ti5);
 
     const x = {
-
         ...d,
 
-        latitude:
-            Number(
-                d.latitude
-            ),
-
-        longitude:
-            Number(
-                d.longitude
-            ),
-
-        frp:
-            Number(
-                d.frp
-            ),
+        latitude:Number(d.latitude),
+        longitude:Number(d.longitude),
+        frp:Number(d.frp),
 
         t4,
         t5,
-
         deltaT:
-            t4 - t5,
+            Number.isFinite(t4) && Number.isFinite(t5)
+            ? t4 - t5
+            : NaN,
 
         confidenceNormalizada:
             String(
@@ -2031,16 +1996,15 @@ function viirs(d,s){
             .toLowerCase()
             .trim(),
 
-        source:
-            s.id
+        source:s.id,
 
+        /* Identificación inequívoca por producto FIRMS. */
+        satellite:s.nombre,
+
+        instrument:"VIIRS"
     };
 
-    return normalizarSensor(
-        x,
-        "VIIRS"
-    );
-
+    return normalizarSensor(x,"VIIRS");
 }
 
 /* =========================================================
@@ -3170,6 +3134,16 @@ function dibujarVIIRS(ds){
 
         }
     );
+
+    /* Mostrar automáticamente Suomi-NPP si su checkbox está activo. */
+    if($("chkSuomi")?.checked)
+        capaSuomi.addTo(map);
+
+    if($("chkNOAA20")?.checked)
+        capaNOAA20.addTo(map);
+
+    if($("chkNOAA21")?.checked)
+        capaNOAA21.addTo(map);
 
 }
 
@@ -4489,7 +4463,17 @@ async function actualizarIncendios(){
 
     if(!mapKey()){
 
-        estado("⚠️ Falta MAP_KEY de FIRMS — mostrando datos SERFOR");
+        datosVIIRS = [];
+        datosVIIRSOriginales = [];
+        datosVIIRSDescartados = [];
+        datosSuomi = [];
+        datosNOAA20 = [];
+        datosNOAA21 = [];
+        datosVIIRSOtros = [];
+        estadistica([]);
+        sensorEstado("estadoVIIRS","FALTA MAP_KEY","error");
+
+        estado("⚠️ Falta MAP_KEY de FIRMS — no se pueden consultar VIIRS/MODIS/GOES");
         mostrarCarga(true,"Consultando datos SERFOR...");
         try { await refrescarSERFOR(); }
         catch(e) { console.error("SERFOR",e); }
@@ -4510,6 +4494,8 @@ async function actualizarIncendios(){
 
     try{
 
+        window.__FIRMS_ERRORES = [];
+
         const all = [];
 
         let err = 0;
@@ -4521,30 +4507,64 @@ async function actualizarIncendios(){
            VIIRS POR SATÉLITE
         ============================ */
 
-        /* Las 3 consultas VIIRS se hacen en paralelo. */
+        /*
+         * IMPORTANTE:
+         * No se filtra por "fecha de hoy" aquí.
+         * FIRMS entrega una ventana NRT y la hora acq_date/acq_time
+         * está referida a UTC. Filtrar antes por fecha Perú podía
+         * eliminar todas las detecciones de Suomi-NPP.
+         */
         const viirsResultados = await Promise.all(
             CONFIG.FIRMS.SOURCES.map(async s => {
+
                 try{
+
                     const raw = await firms(s.id);
-                    return raw.map(d => viirs(d,s)).filter(d => {
-                        const x = fechaD(d);
-                        return x && new Intl.DateTimeFormat("en-CA", {
-                            timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit"
-                        }).format(x) === fecha();
-                    });
+
+                    const normalizados =
+                        raw
+                        .map(d => viirs(d,s));
+
+                    console.info(
+                        `[VIIRS] ${s.nombre}: ${normalizados.length} recibidos`
+                    );
+
+                    return normalizados;
+
                 }
                 catch(e){
-                    console.error(`Error ${s.id}`,e);
+
+                    console.error(
+                        `Error ${s.id}:`,
+                        e
+                    );
+
                     err++;
+
+                    /* Guardar diagnóstico para mostrarlo al usuario. */
+                    window.__FIRMS_ERRORES =
+                        window.__FIRMS_ERRORES || [];
+
+                    window.__FIRMS_ERRORES.push(
+                        `${s.nombre}: ${e.message || e}`
+                    );
+
                     return [];
                 }
+
             })
         );
 
-        for(const grupo of viirsResultados) all.push(...grupo);
+        for(const grupo of viirsResultados)
+            all.push(...grupo);
 
-        /* COUNTRY = PERU: filtro final antes de estadísticas, validación y clusters. */
-        const allPeru = filtrarRegistrosPeru(all);
+        /*
+         * COUNTRY = PERU.
+         * El filtro territorial se realiza después de recibir los datos,
+         * no antes de clasificar el satélite.
+         */
+        const allPeru =
+            filtrarRegistrosPeru(all);
 
         datosVIIRSOriginales =
             allPeru;
@@ -4559,6 +4579,7 @@ async function actualizarIncendios(){
             q.x;
 
         /* VIIRS POR SENSOR */
+
 
         datosSuomi =
             datosVIIRS.filter(
@@ -4789,15 +4810,39 @@ async function actualizarIncendios(){
         ============================ */
 
         estadistica(cs);
+        const erroresFirms =
+            Array.isArray(window.__FIRMS_ERRORES)
+            ? window.__FIRMS_ERRORES
+            : [];
 
-        estado(
+        if(erroresFirms.length){
 
-            `✓ VIIRS ${datosVIIRS.length}` +
-            ` | MODIS ${datosMODIS.length}` +
-            ` | GOES ${datosGOES.length}` +
-            ` | Clusters ${cs.length}`
+            const resumenErrores =
+                erroresFirms.join(" | ");
 
-        );
+            estado(
+                `⚠️ FIRMS con errores: ${resumenErrores}`
+            );
+
+            txt(
+                "estadoVIIRS",
+                `ERROR — ${erroresFirms.length} fuente(s)`
+            );
+
+        }
+        else{
+
+            estado(
+                `✓ VIIRS ${datosVIIRS.length}` +
+                ` (Suomi-NPP ${datosSuomi.length}` +
+                ` / NOAA-20 ${datosNOAA20.length}` +
+                ` / NOAA-21 ${datosNOAA21.length})` +
+                ` | MODIS ${datosMODIS.length}` +
+                ` | GOES ${datosGOES.length}` +
+                ` | Clusters ${cs.length}`
+            );
+
+        }
 
     }
     catch(e){
@@ -5056,151 +5101,6 @@ function datosExportacionGIS(){
             }
         };
     }).filter(Boolean);
-}
-
-/* =========================================================
-   EXPORTACIÓN — ALERTAS SERFOR CON ANTIGÜEDAD > 48 HORAS
-   Usa exclusivamente FECHA + HORA de detección SERFOR.
-   FECREG no participa en la clasificación.
-   ========================================================= */
-function datosExportacionAlertasSERFORMas48(){
-    if(!Array.isArray(datosAlertasSERFOR) || !datosAlertasSERFOR.length) return [];
-
-    return datosAlertasSERFOR
-        .map((f,i)=>{
-            const edad = antiguedadAlertaSERFOR(f);
-            if(edad.horas === null || edad.horas <= CONFIG.SERFOR_ALERTAS_EDAD.H48) return null;
-
-            const c = f.geometry?.coordinates || [];
-            const lon = Number(c[0]);
-            const lat = Number(c[1]);
-            if(!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
-
-            const props = f.properties || {};
-            const salida = {
-                ID: i + 1,
-                ANT_HORAS: Number(edad.horas.toFixed(1)),
-                CLAS_EDAD: "> 48 horas",
-                LATITUD: Number(lat.toFixed(6)),
-                LONGITUD: Number(lon.toFixed(6))
-            };
-
-            Object.entries(props).forEach(([k,v])=>{
-                const key = String(k || "CAMPO")
-                    .toUpperCase()
-                    .replace(/[^A-Z0-9_]/g,"_")
-                    .slice(0,10) || "CAMPO";
-                if(!(key in salida)) salida[key] = valorSensor(v);
-            });
-
-            return {
-                type:"Feature",
-                geometry:{type:"Point",coordinates:[lon,lat]},
-                properties:salida
-            };
-        })
-        .filter(Boolean);
-}
-
-function descargarAlertasSERFORMas48SHP(){
-    const features = datosExportacionAlertasSERFORMas48();
-
-    if(!features.length){
-        alert("No existen alertas SERFOR con antigüedad mayor a 48 horas para descargar.");
-        return;
-    }
-
-    if(typeof shpwrite === "undefined"){
-        alert("No se pudo cargar el módulo Shapefile. Revise la conexión a Internet.");
-        return;
-    }
-
-    const geojson = {type:"FeatureCollection",features};
-
-    try{
-        const result = shpwrite.zip(geojson,{
-            folder:"Alertas_SERFOR_mas_48_horas",
-            types:{point:"alertas_SERFOR_48h"},
-            outputType:"blob",
-            compression:"DEFLATE",
-            prj:'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]'
-        });
-
-        Promise.resolve(result).then(blob=>{
-            const nombre = `Alertas_SERFOR_mas_48_horas_${fecha()}.zip`;
-            if(typeof saveAs === "function"){
-                saveAs(blob,nombre);
-            }else{
-                const url=URL.createObjectURL(blob);
-                const a=document.createElement("a");
-                a.href=url;
-                a.download=nombre;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                setTimeout(()=>URL.revokeObjectURL(url),1500);
-            }
-        }).catch(err=>{
-            console.error(err);
-            alert("Error generando Shapefile de alertas > 48 h: " + (err.message || err));
-        });
-    }catch(err){
-        console.error(err);
-        alert("Error generando Shapefile de alertas > 48 h: " + (err.message || err));
-    }
-}
-
-function descargarAlertasSERFORMas48KML(){
-    const features = datosExportacionAlertasSERFORMas48();
-
-    if(!features.length){
-        alert("No existen alertas SERFOR con antigüedad mayor a 48 horas para descargar.");
-        return;
-    }
-
-    const placemarks = features.map(f=>{
-        const p=f.properties || {};
-        const c=f.geometry.coordinates || [];
-        const desc=Object.entries(p)
-            .map(([k,v])=>`<b>${kmlSafe(k)}</b>: ${kmlSafe(v)}`)
-            .join("<br/>");
-
-        return `<Placemark>
-            <name>Alerta SERFOR — &gt; 48 horas — ${kmlSafe(p.ID)}</name>
-            <description><![CDATA[${desc}]]></description>
-            <Style>
-                <IconStyle>
-                    <color>ff32802e</color>
-                    <scale>1.25</scale>
-                    <Icon><href>http://maps.google.com/mapfiles/kml/shapes/firedept.png</href></Icon>
-                </IconStyle>
-            </Style>
-            <Point><coordinates>${Number(c[0])},${Number(c[1])},0</coordinates></Point>
-        </Placemark>`;
-    }).join("");
-
-    const kml=`<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Document>
-<name>Alertas SERFOR — mayor a 48 horas — ${fecha()}</name>
-${placemarks}
-</Document>
-</kml>`;
-
-    try{
-        const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml;charset=UTF-8"});
-        const url=URL.createObjectURL(blob);
-        const a=document.createElement("a");
-        a.href=url;
-        a.download=`Alertas_SERFOR_mas_48_horas_${fecha()}.kml`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(()=>URL.revokeObjectURL(url),1500);
-    }catch(err){
-        console.error("KML alertas SERFOR >48",err);
-        alert("Error al generar el KML de alertas > 48 h: " + (err.message || err));
-    }
 }
 
 function descargarSHP(){

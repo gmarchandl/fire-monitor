@@ -1016,6 +1016,16 @@ Los umbrales VIIRS son criterios operativos iniciales del monitor.
 🌐 Descargar KML
 </button>
 
+<button class="btn btn-verde"
+        onclick="descargarAlertasSERFORMas48SHP()">
+🌲 Descargar alertas SERFOR &gt; 48 h (SHP)
+</button>
+
+<button class="btn btn-azul"
+        onclick="descargarAlertasSERFORMas48KML()">
+🌲 Descargar alertas SERFOR &gt; 48 h (KML)
+</button>
+
 <button class="btn btn-gris"
         onclick="centrarPeru()">
 🇵🇪 Centrar Perú
@@ -5202,6 +5212,151 @@ ${folder('SIN NIVEL','otros',grupos.OTROS)}
     }catch(err){
         console.error('KML',err);
         alert('Error al generar el KML: '+(err.message||err));
+    }
+}
+
+/* =========================================================
+   EXPORTACIÓN SERFOR — ALERTAS > 48 HORAS
+   Exporta únicamente las alertas de incendios forestales SERFOR
+   cuya antigüedad, calculada con FECHA + HORA de detección,
+   sea estrictamente mayor a 48 horas.
+========================================================= */
+function datosAlertasSERFORMas48Exportacion(){
+    return (datosAlertasSERFOR || []).map((f,i)=>{
+        const coords = f?.geometry?.coordinates || [];
+        const lon = Number(coords[0]);
+        const lat = Number(coords[1]);
+        if(!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+
+        const edad = antiguedadAlertaSERFOR(f);
+        if(edad.horas === null || edad.horas <= CONFIG.SERFOR_ALERTAS_EDAD.H48)
+            return null;
+
+        const props = f.properties || {};
+        const {fechaKey, horaKey} = clavesFechaHoraSERFOR(props);
+
+        const exportProps = {};
+        Object.entries(props).forEach(([k,v])=>{
+            const safeKey = String(k || '').slice(0,10);
+            if(safeKey) exportProps[safeKey] = valorSensor(v);
+        });
+
+        // Campos operativos normalizados para facilitar el uso en GIS.
+        exportProps.ID_EXPORT = i + 1;
+        exportProps.FECHA_DET = fechaKey ? String(props[fechaKey] ?? '') : '';
+        exportProps.HORA_DET = horaKey ? String(props[horaKey] ?? '') : '';
+        exportProps.EDAD_H = Number(edad.horas.toFixed(1));
+        exportProps.EDAD_CLAS = '> 48 h';
+
+        return {
+            type:'Feature',
+            geometry:{
+                type:'Point',
+                coordinates:[lon,lat]
+            },
+            properties:exportProps
+        };
+    }).filter(Boolean);
+}
+
+function descargarAlertasSERFORMas48SHP(){
+    const features = datosAlertasSERFORMas48Exportacion();
+
+    if(!features.length){
+        alert('No existen alertas SERFOR con antigüedad mayor a 48 horas para exportar. Primero actualice los datos.');
+        return;
+    }
+
+    if(typeof shpwrite === 'undefined'){
+        alert('No se pudo cargar el módulo Shapefile. Revise la conexión a Internet.');
+        return;
+    }
+
+    const geojson = {
+        type:'FeatureCollection',
+        features
+    };
+
+    try{
+        const result = shpwrite.zip(geojson,{
+            folder:'Alertas_SERFOR_Mas48h',
+            types:{point:'alertas_serfor_mas48h'},
+            outputType:'blob',
+            compression:'DEFLATE',
+            prj:'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]'
+        });
+
+        Promise.resolve(result).then(blob=>{
+            if(typeof saveAs === 'function'){
+                saveAs(blob,'Alertas_SERFOR_mayor_48_horas_Shapefile.zip');
+            }else{
+                const a=document.createElement('a');
+                a.href=URL.createObjectURL(blob);
+                a.download='Alertas_SERFOR_mayor_48_horas_Shapefile.zip';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+            }
+        }).catch(err=>{
+            console.error('SHP SERFOR >48h',err);
+            alert('Error generando Shapefile SERFOR >48 h: '+(err.message || err));
+        });
+    }catch(err){
+        console.error('SHP SERFOR >48h',err);
+        alert('Error generando Shapefile SERFOR >48 h: '+(err.message || err));
+    }
+}
+
+function descargarAlertasSERFORMas48KML(){
+    const features = datosAlertasSERFORMas48Exportacion();
+
+    if(!features.length){
+        alert('No existen alertas SERFOR con antigüedad mayor a 48 horas para exportar. Primero actualice los datos.');
+        return;
+    }
+
+    const fireIcon='http://maps.google.com/mapfiles/kml/shapes/firedept.png';
+
+    const placemarks = features.map((f,i)=>{
+        const p=f.properties || {};
+        const c=f.geometry.coordinates || [];
+        const desc=Object.entries(p)
+            .map(([k,v])=>`<b>${kmlSafe(k)}</b>: ${kmlSafe(v)}`)
+            .join('<br/>');
+
+        return `<Placemark>
+<name>Alerta SERFOR > 48 h — ${i+1}</name>
+<Style><IconStyle><scale>1.35</scale><Icon><href>${fireIcon}</href></Icon></IconStyle></Style>
+<description><![CDATA[${desc}]]></description>
+<Point><coordinates>${Number(c[0])},${Number(c[1])},0</coordinates></Point>
+</Placemark>`;
+    }).join('');
+
+    const kml=`<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+<name>Alertas SERFOR — mayor a 48 horas</name>
+<description>Alertas SERFOR con antigüedad estrictamente mayor a 48 horas, calculada desde FECHA + HORA de detección.</description>
+${placemarks}
+</Document>
+</kml>`;
+
+    try{
+        const blob=new Blob([kml],{
+            type:'application/vnd.google-earth.kml+xml;charset=UTF-8'
+        });
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url;
+        a.download='Alertas_SERFOR_mayor_48_horas.kml';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+    }catch(err){
+        console.error('KML SERFOR >48h',err);
+        alert('Error generando KML SERFOR >48 h: '+(err.message || err));
     }
 }
 

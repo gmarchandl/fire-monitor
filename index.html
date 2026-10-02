@@ -8,10 +8,8 @@
 <meta name="author" content="Monitor de Incendios Perú">
 <title>Monitor de Incendios Perú — SERFOR / VIIRS / MODIS / GOES</title>
 
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-<script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=81ojkbqkhM7K99Cjhn5x5s_SfgDxWRMNkGvaahL7PzftYsPccCYmQ9mVX7T4ND9mbp9n1uN035ZukgldaXAx8mS6uYnIHJ_AY03FNMZgS76GVsc0ximgk3uWFmo_yEWuRqvfOa3IKF-RbJInqC5fABFLKHdBJXN8OBolNtxsSPdbzoCsY1JhI8g_CBgEaFme6m9CR-Vp6A7oCMDXtlq2GTLObymqoDIBCgaD1SRyRH8LgYSetsWfM0_iKyBnHvAeIvoGAFhErqEWpekVBVOnsaj0LtqC4Ru9njNnJ-Qy3JP4nb-k2zv0FooaLngJMOwAZLAwrrmskWSB8CzJWcUzn16AU70GQXskj_gZtJ74LEdFP0XVJUrBrUxkYOCGj_Pz" charset="UTF-8"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=Kh__PXuGvdkH0mivhwZJOOPRyO6kW9bAIE_8K19lESOrIXn-vUeKAIh5CMeQv3ONOaTXYva8Vc8ifWk3SidLYH2A4fPiOyz_Gv3j09AB-VjhI1IQNpUCcglqfHsYiN_NojBYwr3VTzXS2oKAXcpFv2Btd6vgHEFrtwxVHqfZj_7ugC-CvabvyUoFuo0rqT2LNkoGmEW4dU8G6h9gN6mdXLzi1o6e29_3pq2DYVFMJ0QDgoWMedr-1wYlIe24VS8OP2bRRRYFBDwdOSc54_CbnObhx2sQO_8m49Zc8tlTvXj_QRHLlo0CNBrvDAlcRj1RzPPdrzSwHzplILh5yAcPydOeH0mZ9g91B7EJkoJWAr8" charset="UTF-8"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 
@@ -235,8 +233,56 @@ html,body{
 
 #map{
     flex:1;
-    width:100%
+    width:100%;
+    min-height:0;
 }
+
+/* Lectura de coordenadas del cursor en el lado derecho */
+#coordenadasMapa{
+    position:absolute;
+    right:12px;
+    bottom:12px;
+    z-index:1000;
+    background:rgba(10,18,25,.94);
+    color:#fff;
+    border:1px solid #455a64;
+    border-radius:6px;
+    padding:7px 10px;
+    font-size:11px;
+    line-height:1.45;
+    box-shadow:0 2px 8px rgba(0,0,0,.35);
+    pointer-events:none;
+    white-space:nowrap;
+}
+#coordenadasMapa b{color:#90caf9}
+
+.popup-coordenadas{
+    margin:8px 0;
+    padding:8px 10px;
+    background:#eef6ff;
+    border:1px solid #b9d7f5;
+    border-left:4px solid #1565c0;
+    border-radius:6px;
+    line-height:1.6;
+}
+.coord-valor{
+    user-select:text;
+    cursor:text;
+    font-family:Consolas,Monaco,monospace;
+    font-weight:700;
+}
+.popup-copiar{
+    width:100%;
+    margin-top:7px;
+    padding:7px 9px;
+    border:1px solid #b7c7d6;
+    border-radius:6px;
+    background:#f8fafc;
+    color:#17324d;
+    cursor:pointer;
+    font-weight:700;
+}
+.popup-copiar:hover{background:#eaf2f8;}
 
 .popup-resumen{
     margin:8px 0 10px;
@@ -300,14 +346,11 @@ html,body{
 .badge-medio{background:#ef6c00}
 .badge-bajo{background:#1565c0}
 .badge-descartado{background:#616161}
-/* =========================================================
-   POPUPS MOVIBLES
-========================================================= */
-.leaflet-popup-content-wrapper{cursor:grab;user-select:none;}
+
+.leaflet-popup-content-wrapper{cursor:default;user-select:text;}
 .leaflet-popup-content-wrapper.popup-dragging{cursor:grabbing;}
 .popup-drag-handle{cursor:grab;touch-action:none;}
 .popup-drag-handle:active{cursor:grabbing;}
-
 
 .icono-foco-serfor{
     width:18px;
@@ -366,13 +409,6 @@ html,body{
     }
 }
 
-/* =========================================================
-   EDAD DE ALERTAS SERFOR
-   ≤12 h = rojo
-   >12–24 h = naranja
-   >24–48 h = gris
-   >48 h = verde
-========================================================= */
 .icono-alerta-serfor.edad-12{
     background:rgba(211,47,47,.22);
     border-color:#ff1744;
@@ -490,20 +526,47 @@ html,body{
 }
 
 @media(max-width:700px){
-
     #header h1{font-size:14px}
-
     #estado{display:none}
-
     #panel{
         width:calc(100vw - 24px);
         max-height:52vh
     }
 }
 
-</style>
-
-<style>
+.popup-coordenadas{
+    margin:8px 0 10px;
+    padding:9px 10px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    background:#f8fafc;
+    color:#111827;
+    line-height:1.65;
+    user-select:text;
+}
+.popup-coordenadas .coord-valor{
+    font-family:Consolas,Monaco,monospace;
+    font-weight:700;
+    cursor:text;
+    user-select:text;
+}
+.popup-copiar{
+    width:100%;
+    margin:7px 0 9px;
+    padding:7px 9px;
+    border:1px solid #94a3b8;
+    border-radius:7px;
+    background:#e2e8f0;
+    color:#0f172a;
+    font-weight:700;
+    cursor:pointer;
+    font-size:12px;
+}
+.popup-copiar:hover{background:#cbd5e1;}
+.popup-copiado{
+    background:#dcfce7 !important;
+    border-color:#86efac !important;
+}
 .popup-sensor-detalle{
     min-width:320px;
     max-width:430px;
@@ -542,536 +605,206 @@ html,body{
 <div id="app">
 
 <header id="header">
-
 <h1>🔥 MONITOR DE INCENDIOS — PERÚ</h1>
-
 <span id="estado">Inicializando...</span>
-
-<button id="btnActualizar"
-        onclick="actualizarIncendios(true)">
-Actualizar
-</button>
-
+<button id="btnActualizar" onclick="actualizarIncendios(true)">Actualizar</button>
 </header>
 
 <div id="panel">
-
 <h2>Configuración y resultados</h2>
 
 <div class="grupo">
-
 <label>FIRMS MAP KEY</label>
-
-<input
-    id="mapKey"
-    type="password"
-    placeholder="Ingrese su MAP_KEY"
-    autocomplete="off">
-
-<button
-    class="btn btn-azul"
-    onclick="guardarMapKey()">
-Guardar MAP_KEY
-</button>
-
+<input id="mapKey" type="password" placeholder="Ingrese su MAP_KEY" autocomplete="off">
+<button class="btn btn-azul" onclick="guardarMapKey()">Guardar MAP_KEY</button>
 </div>
 
 <div class="grupo">
-
 <label>📍 Ir a coordenadas</label>
-
-<input
-    id="coordLat"
-    type="number"
-    step="0.000001"
-    placeholder="Latitud, ej. -9.190000">
-
-<input
-    id="coordLon"
-    type="number"
-    step="0.000001"
-    placeholder="Longitud, ej. -75.015200"
-    style="margin-top:5px">
-
-<button class="btn btn-azul"
-        onclick="irACoordenada()">
-📍 Ir a coordenada
-</button>
-
-<button class="btn btn-verde"
-        onclick="agregarCoordenada()">
-➕ Agregar punto
-</button>
-
-<button class="btn btn-gris"
-        onclick="limpiarCoordenada()">
-🧹 Limpiar punto
-</button>
-
+<input id="coordLat" type="number" step="0.000001" placeholder="Latitud, ej. -9.190000">
+<input id="coordLon" type="number" step="0.000001" placeholder="Longitud, ej. -75.015200" style="margin-top:5px">
+<button class="btn btn-azul" onclick="irACoordenada()">📍 Ir a coordenada</button>
+<button class="btn btn-verde" onclick="agregarCoordenada()">➕ Agregar punto</button>
+<button class="btn btn-gris" onclick="limpiarCoordenada()">🧹 Limpiar punto</button>
 </div>
 
 <div class="grupo">
-
 <h2>🛰️ Capas operativas</h2>
-
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkSuomi"
-       checked
-       onchange="alternarCapa('suomi')">
+<input type="checkbox" id="chkSuomi" checked onchange="alternarCapa('suomi')">
 <span class="capa-icono" style="color:#00e5ff">●</span>
 <span class="capa-nombre">Suomi-NPP / VIIRS</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkNOAA20"
-       onchange="alternarCapa('noaa20')">
+<input type="checkbox" id="chkNOAA20" onchange="alternarCapa('noaa20')">
 <span class="capa-icono" style="color:#ff1744">●</span>
 <span class="capa-nombre">NOAA-20 / VIIRS</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkNOAA21"
-       onchange="alternarCapa('noaa21')">
+<input type="checkbox" id="chkNOAA21" onchange="alternarCapa('noaa21')">
 <span class="capa-icono" style="color:#ff6d00">●</span>
 <span class="capa-nombre">NOAA-21 / VIIRS</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkVIIRSDescartados"
-       onchange="alternarCapa('descartados')">
+<input type="checkbox" id="chkVIIRSDescartados" onchange="alternarCapa('descartados')">
 <span class="capa-icono" style="color:#777">●</span>
 <span class="capa-nombre">VIIRS descartados</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkTerra"
-       onchange="alternarCapa('terra')">
+<input type="checkbox" id="chkTerra" onchange="alternarCapa('terra')">
 <span class="capa-icono" style="color:#ffeb3b">●</span>
 <span class="capa-nombre">Terra / MODIS</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkAqua"
-       onchange="alternarCapa('aqua')">
+<input type="checkbox" id="chkAqua" onchange="alternarCapa('aqua')">
 <span class="capa-icono" style="color:#00e676">●</span>
 <span class="capa-nombre">Aqua / MODIS</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkGOES"
-       onchange="alternarCapa('goes')">
+<input type="checkbox" id="chkGOES" onchange="alternarCapa('goes')">
 <span class="capa-icono" style="color:#ff9800">●</span>
 <span class="capa-nombre">GOES — todos</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkGOES18"
-       onchange="alternarCapa('goes18')">
+<input type="checkbox" id="chkGOES18" onchange="alternarCapa('goes18')">
 <span class="capa-icono" style="color:#ff9800">●</span>
 <span class="capa-nombre">GOES-18 / ABI</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkGOES19"
-       onchange="alternarCapa('goes19')">
+<input type="checkbox" id="chkGOES19" onchange="alternarCapa('goes19')">
 <span class="capa-icono" style="color:#e040fb">●</span>
 <span class="capa-nombre">GOES-19 / ABI</span>
 </label>
 
-
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkClusters"
-       onchange="alternarCapa('clusters')">
+<input type="checkbox" id="chkClusters" onchange="alternarCapa('clusters')">
 <span class="capa-icono" style="color:#d50000">🔥</span>
 <span class="capa-nombre">Clusters / incendios clasificados</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkFocosSERFOR"
-       onchange="alternarFocosSERFOR()">
+<input type="checkbox" id="chkFocosSERFOR" onchange="alternarFocosSERFOR()">
 <span class="capa-icono" style="color:#8B1E3F">●</span>
 <span class="capa-nombre">Focos de calor SERFOR</span>
 </label>
 
 <label class="capa-operativa">
-<input type="checkbox"
-       id="chkAlertasSERFOR"
-       onchange="alternarAlertasSERFOR()">
+<input type="checkbox" id="chkAlertasSERFOR" onchange="alternarAlertasSERFOR()">
 <span class="capa-icono" style="color:#d50000">🔥</span>
 <span class="capa-nombre">Incendios Forestales SERFOR</span>
 </label>
-
 </div>
 
 <div class="grupo">
-
 <label>Intervalo automático</label>
-
-<select id="intervaloSelect"
-        onchange="configurarTemporizador()">
-
+<select id="intervaloSelect" onchange="configurarTemporizador()">
 <option value="900000" selected>15 minutos</option>
 <option value="1800000">30 minutos</option>
 <option value="3600000">60 minutos</option>
-
 </select>
-
 </div>
 
 <h2>📊 Estadística</h2>
 
 <div id="estadisticas">
+<div class="stat"><span>Fecha Perú</span><span id="fechaPeru">---</span></div>
+<div class="stat"><span>Hora Perú (America/Lima)</span><span id="horaPeru">---</span></div>
+<div class="stat"><span>Hora UTC (referencia)</span><span id="horaUTC">---</span></div>
+<hr>
 
-<div class="stat">
-<span>Fecha Perú</span>
-<span id="fechaPeru">---</span>
-</div>
+<div class="stat-grupo">🔥 VIIRS — SENSOR</div>
+<div class="stat"><span class="stat-satelite"><span class="sensor-punto" style="background:#00e5ff"></span>Suomi-NPP / VIIRS</span><span id="totalSuomi">0</span></div>
+<div class="stat"><span class="stat-satelite"><span class="sensor-punto" style="background:#ff1744"></span>NOAA-20 / VIIRS</span><span id="totalNOAA20">0</span></div>
+<div class="stat"><span class="stat-satelite"><span class="sensor-punto" style="background:#ff6d00"></span>NOAA-21 / VIIRS</span><span id="totalNOAA21">0</span></div>
+<div class="stat"><span>Otros / VIIRS</span><span id="totalVIIRSOtros">0</span></div>
+<div class="stat stat-total"><span><b>Total VIIRS válidos</b></span><span id="totalVIIRSValidos">0</span></div>
+<div class="stat"><span>VIIRS originales</span><span id="totalVIIRSOriginales">0</span></div>
+<div class="stat"><span>VIIRS descartados</span><span id="totalVIIRSDescartados">0</span></div>
+<div class="stat"><span>Estado VIIRS</span><span id="estadoVIIRS">---</span></div>
 
-<div class="stat">
-<span>Hora Perú (America/Lima)</span>
-<span id="horaPeru">---</span>
-</div>
+<div class="stat-grupo" style="border-left-color:#ffeb3b">🔥 MODIS — SENSOR</div>
+<div class="stat"><span class="stat-satelite"><span class="sensor-punto" style="background:#ffeb3b"></span>Terra / MODIS</span><span id="totalMODISTerra">0</span></div>
+<div class="stat"><span class="stat-satelite"><span class="sensor-punto" style="background:#00e676"></span>Aqua / MODIS</span><span id="totalMODISAqua">0</span></div>
+<div class="stat"><span>Otros / MODIS</span><span id="totalMODISOtros">0</span></div>
+<div class="stat stat-total"><span><b>Total MODIS</b></span><span id="totalMODIS">0</span></div>
+<div class="stat"><span>Estado MODIS</span><span id="estadoMODIS">---</span></div>
 
-<div class="stat">
-<span>Hora UTC (referencia)</span>
-<span id="horaUTC">---</span>
+<div class="stat-grupo" style="border-left-color:#ff9800">🔥 GOES — SENSOR</div>
+<div class="stat"><span class="stat-satelite"><span class="sensor-punto" style="background:#ff9800"></span>GOES-18 / ABI</span><span id="totalGOES18">0</span></div>
+<div class="stat"><span class="stat-satelite"><span class="sensor-punto" style="background:#e040fb"></span>GOES-19 / ABI</span><span id="totalGOES19">0</span></div>
+<div class="stat"><span>Otros / ABI</span><span id="totalGOESOtros">0</span></div>
+<div class="stat stat-total"><span><b>Total GOES</b></span><span id="totalGOES">0</span></div>
+<div class="stat"><span>Estado GOES</span><span id="estadoGOES">---</span></div>
+
+<div class="stat-grupo" style="border-left-color:#00bcd4">📡 DETALLE GENERAL POR SENSOR</div>
+<div id="estadisticaSensores"><div class="stat"><span>Sin datos</span><span>0</span></div></div>
+
+<div class="stat-grupo" style="border-left-color:#8B1E3F">🌲 SERFOR</div>
+<div class="stat"><span>Focos SERFOR</span><span id="totalFocosSERFOR">0</span></div>
+<div class="stat"><span>Alertas SERFOR</span><span id="totalAlertasSERFOR">0</span></div>
+<div class="stat"><span>Alertas ≤ 12 h</span><span id="totalAlertasSERFOR12">0</span></div>
+<div class="stat"><span>Alertas 12–24 h</span><span id="totalAlertasSERFOR24">0</span></div>
+<div class="stat"><span>Alertas 24–48 h</span><span id="totalAlertasSERFOR48">0</span></div>
+<div class="stat"><span>Alertas &gt; 48 h</span><span id="totalAlertasSERFORMas48">0</span></div>
+<div class="stat"><span>Actualización SERFOR</span><span id="estadoSERFOR">---</span></div>
+<div class="stat"><span>Demora consulta SERFOR</span><span id="demoraSERFOR">---</span></div>
+<div class="stat"><span>Último dato SERFOR</span><span id="ultimoSERFOR">---</span></div>
+
+<div class="stat-grupo" style="border-left-color:#d50000">🔥 CLUSTERS VIIRS</div>
+<div class="stat"><span>Clusters VIIRS</span><span id="totalClusters">0</span></div>
+<div class="stat"><span>Incendios ALTO</span><span id="totalAlto">0</span></div>
+<div class="stat"><span>Incendios MEDIO</span><span id="totalMedio">0</span></div>
+<div class="stat"><span>Incendios BAJO</span><span id="totalBajo">0</span></div>
 </div>
 
 <hr>
-
-<div class="stat-grupo">
-🔥 VIIRS — SENSOR
-</div>
-
-<div class="stat">
-<span class="stat-satelite">
-<span class="sensor-punto" style="background:#00e5ff"></span>
-Suomi-NPP / VIIRS
-</span>
-<span id="totalSuomi">0</span>
-</div>
-
-<div class="stat">
-<span class="stat-satelite">
-<span class="sensor-punto" style="background:#ff1744"></span>
-NOAA-20 / VIIRS
-</span>
-<span id="totalNOAA20">0</span>
-</div>
-
-<div class="stat">
-<span class="stat-satelite">
-<span class="sensor-punto" style="background:#ff6d00"></span>
-NOAA-21 / VIIRS
-</span>
-<span id="totalNOAA21">0</span>
-</div>
-
-<div class="stat">
-<span>Otros / VIIRS</span>
-<span id="totalVIIRSOtros">0</span>
-</div>
-
-<div class="stat stat-total">
-<span><b>Total VIIRS válidos</b></span>
-<span id="totalVIIRSValidos">0</span>
-</div>
-
-<div class="stat">
-<span>VIIRS originales</span>
-<span id="totalVIIRSOriginales">0</span>
-</div>
-
-<div class="stat">
-<span>VIIRS descartados</span>
-<span id="totalVIIRSDescartados">0</span>
-</div>
-
-<div class="stat">
-<span>Estado VIIRS</span>
-<span id="estadoVIIRS">---</span>
-</div>
-
-<div class="stat-grupo" style="border-left-color:#ffeb3b">
-🔥 MODIS — SENSOR
-</div>
-
-<div class="stat">
-<span class="stat-satelite">
-<span class="sensor-punto" style="background:#ffeb3b"></span>
-Terra / MODIS
-</span>
-<span id="totalMODISTerra">0</span>
-</div>
-
-<div class="stat">
-<span class="stat-satelite">
-<span class="sensor-punto" style="background:#00e676"></span>
-Aqua / MODIS
-</span>
-<span id="totalMODISAqua">0</span>
-</div>
-
-<div class="stat">
-<span>Otros / MODIS</span>
-<span id="totalMODISOtros">0</span>
-</div>
-
-<div class="stat stat-total">
-<span><b>Total MODIS</b></span>
-<span id="totalMODIS">0</span>
-</div>
-
-<div class="stat">
-<span>Estado MODIS</span>
-<span id="estadoMODIS">---</span>
-</div>
-
-<div class="stat-grupo" style="border-left-color:#ff9800">
-🔥 GOES — SENSOR
-</div>
-
-<div class="stat">
-<span class="stat-satelite">
-<span class="sensor-punto" style="background:#ff9800"></span>
-GOES-18 / ABI
-</span>
-<span id="totalGOES18">0</span>
-</div>
-
-<div class="stat">
-<span class="stat-satelite">
-<span class="sensor-punto" style="background:#e040fb"></span>
-GOES-19 / ABI
-</span>
-<span id="totalGOES19">0</span>
-</div>
-
-<div class="stat">
-<span>Otros / ABI</span>
-<span id="totalGOESOtros">0</span>
-</div>
-
-<div class="stat stat-total">
-<span><b>Total GOES</b></span>
-<span id="totalGOES">0</span>
-</div>
-
-<div class="stat">
-<span>Estado GOES</span>
-<span id="estadoGOES">---</span>
-</div>
-
-<div class="stat-grupo" style="border-left-color:#00bcd4">
-📡 DETALLE GENERAL POR SENSOR
-</div>
-
-<div id="estadisticaSensores">
-<div class="stat">
-<span>Sin datos</span>
-<span>0</span>
-</div>
-</div>
-
-<div class="stat-grupo" style="border-left-color:#8B1E3F">
-🌲 SERFOR
-</div>
-
-<div class="stat">
-<span>Focos SERFOR</span>
-<span id="totalFocosSERFOR">0</span>
-</div>
-
-<div class="stat">
-<span>Alertas SERFOR</span>
-<span id="totalAlertasSERFOR">0</span>
-</div>
-                <div class="stat">
-                    <span>Alertas ≤ 12 h</span>
-                    <span id="totalAlertasSERFOR12">0</span>
-                </div>
-                <div class="stat">
-                    <span>Alertas 12–24 h</span>
-                    <span id="totalAlertasSERFOR24">0</span>
-                </div>
-                <div class="stat">
-                    <span>Alertas 24–48 h</span>
-                    <span id="totalAlertasSERFOR48">0</span>
-                </div>
-                <div class="stat">
-                    <span>Alertas &gt; 48 h</span>
-                    <span id="totalAlertasSERFORMas48">0</span>
-                </div>
-
-<div class="stat">
-<span>Actualización SERFOR</span>
-<span id="estadoSERFOR">---</span>
-</div>
-
-<div class="stat">
-<span>Demora consulta SERFOR</span>
-<span id="demoraSERFOR">---</span>
-</div>
-
-<div class="stat">
-<span>Último dato SERFOR</span>
-<span id="ultimoSERFOR">---</span>
-</div>
-
-<div class="stat-grupo" style="border-left-color:#d50000">
-🔥 CLUSTERS VIIRS
-</div>
-
-<div class="stat">
-<span>Clusters VIIRS</span>
-<span id="totalClusters">0</span>
-</div>
-
-<div class="stat">
-<span>Incendios ALTO</span>
-<span id="totalAlto">0</span>
-</div>
-
-<div class="stat">
-<span>Incendios MEDIO</span>
-<span id="totalMedio">0</span>
-</div>
-
-<div class="stat">
-<span>Incendios BAJO</span>
-<span id="totalBajo">0</span>
-</div>
-
-</div>
-
-<hr>
-
 <h2>Criterios VIIRS iniciales</h2>
-
-<div class="criterio">
-<b>Coordenadas:</b> latitud y longitud válidas.
-</div>
-
-<div class="criterio">
-<b>FRP:</b> FRP ≥ 1 MW.
-</div>
-
-<div class="criterio">
-<b>Confianza:</b> se descarta confianza baja.
-</div>
-
-<div class="criterio">
-<b>Cluster:</b> ≥ 3 detecciones VIIRS dentro de ≤ 1000 m.
-</div>
-
-<div class="criterio">
-<b>Tiempo:</b> ventana de 6 horas.
-</div>
-
-<div class="criterio">
-<b>Corroboración:</b> MODIS ≤ 3 km y GOES ≤ 10 km.
-</div>
-
-<p class="nota">
-Los umbrales VIIRS son criterios operativos iniciales del monitor.
-</p>
+<div class="criterio"><b>Coordenadas:</b> latitud y longitud válidas.</div>
+<div class="criterio"><b>FRP:</b> FRP ≥ 1 MW.</div>
+<div class="criterio"><b>Confianza:</b> se descarta confianza baja.</div>
+<div class="criterio"><b>Cluster:</b> ≥ 3 detecciones VIIRS dentro de ≤ 1000 m.</div>
+<div class="criterio"><b>Tiempo:</b> ventana de 6 horas.</div>
+<div class="criterio"><b>Corroboración:</b> MODIS ≤ 3 km y GOES ≤ 10 km.</div>
+<p class="nota">Los umbrales VIIRS son criterios operativos iniciales del monitor.</p>
 
 <hr>
-
 <h2>Clasificación</h2>
+<div class="stat"><span>ALTO</span><span>Score ≥ 12</span></div>
+<div class="stat"><span>MEDIO</span><span>Score 7–11</span></div>
+<div class="stat"><span>BAJO</span><span>Score &lt; 7</span></div>
 
-<div class="stat">
-<span>ALTO</span>
-<span>Score ≥ 12</span>
-</div>
-
-<div class="stat">
-<span>MEDIO</span>
-<span>Score 7–11</span>
-</div>
-
-<div class="stat">
-<span>BAJO</span>
-<span>Score &lt; 7</span>
-</div>
-
-<button class="btn btn-verde"
-        onclick="descargarSHP()">
-📦 Descargar Shapefile (ZIP)
-</button>
-
-<button class="btn btn-azul"
-        onclick="descargarKML()">
-🌐 Descargar KML
-</button>
-
-<button class="btn btn-verde"
-        onclick="descargarAlertasSERFORMas48SHP()">
-🌲 Descargar alertas SERFOR &gt; 48 h (SHP)
-</button>
-
-<button class="btn btn-azul"
-        onclick="descargarAlertasSERFORMas48KML()">
-🌲 Descargar alertas SERFOR &gt; 48 h (KML)
-</button>
-
-<button class="btn btn-gris"
-        onclick="centrarPeru()">
-🇵🇪 Centrar Perú
-</button>
-
-<button class="btn btn-naranja"
-        onclick="limpiarDatos()">
-🧹 Limpiar detecciones
-</button>
-
+<button class="btn btn-verde" onclick="descargarSHP()">📦 Descargar Shapefile (ZIP)</button>
+<button class="btn btn-azul" onclick="descargarKML()">🌐 Descargar KML</button>
+<button class="btn btn-verde" onclick="descargarAlertasSERFORMas48SHP()">🌲 Descargar alertas SERFOR &gt; 48 h (SHP)</button>
+<button class="btn btn-azul" onclick="descargarAlertasSERFORMas48KML()">🌲 Descargar alertas SERFOR &gt; 48 h (KML)</button>
+<button class="btn btn-gris" onclick="centrarPeru()">🇵🇪 Centrar Perú</button>
+<button class="btn btn-naranja" onclick="limpiarDatos()">🧹 Limpiar detecciones</button>
 </div>
 
 <div id="map"></div>
+<div id="coordenadasMapa">📍 <b>Cursor:</b> —</div>
 
 </div>
 
 <div id="cargando">
-
 <div class="spinner-box">
-
 <div class="spinner"></div>
-
 <b>🔥 Procesando detecciones</b>
-
 <br><br>
-
-<span id="textoCarga">
-Consultando FIRMS por sensor...
-</span>
-
+<span id="textoCarga">Consultando FIRMS por sensor...</span>
 </div>
-
 </div>
 
 <script>
-
 "use strict";
-
-/* =========================================================
-   CONFIGURACIÓN
-========================================================= */
-
-/* =========================================================
-   FILTRO TERRITORIAL — COUNTRY: PERU 🇵🇪
-   Todas las fuentes se restringen al polígono nacional.
-========================================================= */
 
 const PERU_COUNTRY_POLYGON = [
 [-69.590424,-17.580012],[-69.858444,-18.092694],[-70.372572,-18.347975],[-71.37525,-17.773799],[-71.462041,-17.363488],[-73.44453,-16.359363],[-75.237883,-15.265683],[-76.009205,-14.649286],[-76.423469,-13.823187],[-76.259242,-13.535039],[-77.106192,-12.222716],[-78.092153,-10.377712],[-79.036953,-8.386568],[-79.44592,-7.930833],[-79.760578,-7.194341],[-80.537482,-6.541668],[-81.249996,-6.136834],[-80.926347,-5.690557],[-81.410943,-4.736765],[-81.09967,-4.036394],[-80.302561,-3.404856],[-80.184015,-3.821162],[-80.469295,-4.059287],[-80.442242,-4.425724],[-80.028908,-4.346091],[-79.624979,-4.454198],[-79.205289,-4.959129],[-78.639897,-4.547784],[-78.450684,-3.873097],[-77.837905,-3.003021],[-76.635394,-2.608678],[-75.544996,-1.56161],[-75.233723,-0.911417],[-75.373223,-0.152032],[-75.106625,-0.057205],[-74.441601,-0.53082],[-74.122395,-1.002833],[-73.659504,-1.260491],[-73.070392,-2.308954],[-72.325787,-2.434218],[-71.774761,-2.16979],[-71.413646,-2.342802],[-70.813476,-2.256865],[-70.047709,-2.725156],[-70.692682,-3.742872],[-70.394044,-3.766591],[-69.893635,-4.298187],[-70.794769,-4.251265],[-70.928843,-4.401591],[-71.748406,-4.593983],[-72.891928,-5.274561],[-72.964507,-5.741251],[-73.219711,-6.089189],[-73.120027,-6.629931],[-73.724487,-6.918595],[-73.723401,-7.340999],[-73.987235,-7.52383],[-73.571059,-8.424447],[-73.015383,-9.032833],[-73.226713,-9.462213],[-72.563033,-9.520194],[-72.184891,-10.053598],[-71.302412,-10.079436],[-70.481894,-9.490118],[-70.548686,-11.009147],[-70.093752,-11.123972],[-69.529678,-10.951734],[-68.66508,-12.5613],[-68.88008,-12.899729],[-68.929224,-13.602684],[-68.948887,-14.453639],[-69.339535,-14.953195],[-69.160347,-15.323974],[-69.389764,-15.660129],[-68.959635,-16.500698],[-69.590424,-17.580012]
@@ -1111,360 +844,141 @@ function filtrarGeoJSONPeru(geojson){
 }
 
 const CONFIG = {
-
     FIRMS: {
-
-        BASE:
-        "https://firms.modaps.eosdis.nasa.gov",
-
-        BBOX:
-        "-82,-19,-68,1",
-
-        DAYS:
-        2,
-
+        BASE: "https://firms.modaps.eosdis.nasa.gov",
+        BBOX: "-82,-19,-68,1",
+        DAYS: 2,
         SOURCES: [
-
-            {
-                id:"VIIRS_SNPP_NRT",
-                nombre:"Suomi-NPP",
-                sensor:"VIIRS",
-                color:"#00e5ff"
-            },
-
-            {
-                id:"VIIRS_NOAA20_NRT",
-                nombre:"NOAA-20",
-                sensor:"VIIRS",
-                color:"#ff1744"
-            },
-
-            {
-                id:"VIIRS_NOAA21_NRT",
-                nombre:"NOAA-21",
-                sensor:"VIIRS",
-                color:"#ff6d00"
-            }
-
+            { id:"VIIRS_SNPP_NRT", nombre:"Suomi-NPP", sensor:"VIIRS", color:"#00e5ff" },
+            { id:"VIIRS_NOAA20_NRT", nombre:"NOAA-20", sensor:"VIIRS", color:"#ff1744" },
+            { id:"VIIRS_NOAA21_NRT", nombre:"NOAA-21", sensor:"VIIRS", color:"#ff6d00" }
         ],
-
-        MODIS:
-        "MODIS_NRT",
-
-        GOES:
-        "GOES_NRT"
-
+        MODIS: "MODIS_NRT",
+        GOES: "GOES_NRT"
     },
-
     VIIRS: {
-
-        FRP_MIN_VALIDO:
-        1,
-
-        CLUSTER_MIN:
-        3,
-
-        CLUSTER_RADIO_M:
-        1000,
-
-        CLUSTER_VENTANA_H:
-        6,
-
-        FRP_MEDIO:
-        10,
-
-        FRP_ALTO:
-        30
-
+        FRP_MIN_VALIDO: 1,
+        CLUSTER_MIN: 3,
+        CLUSTER_RADIO_M: 1000,
+        CLUSTER_VENTANA_H: 6,
+        FRP_MEDIO: 10,
+        FRP_ALTO: 30
     },
-
     SERFOR: {
-        REST:
-        "https://geo.serfor.gob.pe/geoservicios/rest/services/UFMS/Incendios_SAMI/MapServer",
-        FOCOS:
-        0,
-        ALERTAS:
-        2
+        REST: "https://geo.serfor.gob.pe/geoservicios/rest/services/UFMS/Incendios_SAMI/MapServer",
+        FOCOS: 0,
+        ALERTAS: 2
     },
-
-    SERFOR_ALERTAS_EDAD: {
-        H12: 12,
-        H24: 24,
-        H48: 48
-    },
-
-    CORROBORACION: {
-
-        MODIS_M:
-        3000,
-
-        GOES_M:
-        10000
-
-    }
-
+    SERFOR_ALERTAS_EDAD: { H12: 12, H24: 24, H48: 48 },
+    CORROBORACION: { MODIS_M: 3000, GOES_M: 10000 }
 };
 
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-const PERU_CENTER =
-[
-    -9.19,
-    -75.0152
-];
+const PERU_CENTER = [-9.19, -75.0152];
 
 let map;
 let temporizador;
 let actualizando = false;
 
 let clustersGlobal = [];
-
 let datosVIIRS = [];
 let datosVIIRSOriginales = [];
 let datosVIIRSDescartados = [];
-
 let datosSuomi = [];
 let datosNOAA20 = [];
 let datosNOAA21 = [];
 let datosVIIRSOtros = [];
-
 let datosMODIS = [];
 let datosMODISTerra = [];
 let datosMODISAqua = [];
 let datosMODISOtros = [];
-
 let datosGOES = [];
 let datosGOES18 = [];
 let datosGOES19 = [];
 let datosGOESOtros = [];
-
 let datosFocosSERFOR = [];
 let datosAlertasSERFOR = [];
 
+let capaVIIRS = L.layerGroup();
+let capaVIIRSDescartados = L.layerGroup();
+let capaMODIS = L.layerGroup();
+let capaGOES = L.layerGroup();
+let capaClusters = L.layerGroup();
+let capaFocosSERFOR = L.layerGroup();
+let capaAlertasSERFOR = L.layerGroup();
+let capaCoordenada = L.layerGroup();
 
-/* =========================================================
-   CAPAS GENERALES
-========================================================= */
+let capaSuomi = L.layerGroup();
+let capaNOAA20 = L.layerGroup();
+let capaNOAA21 = L.layerGroup();
+let capaTerra = L.layerGroup();
+let capaAqua = L.layerGroup();
+let capaGOES18 = L.layerGroup();
+let capaGOES19 = L.layerGroup();
 
-let capaVIIRS =
-    L.layerGroup();
+const $ = id => document.getElementById(id);
+const txt = (id,v) => { if($(id)) $(id).textContent = v; };
 
-let capaVIIRSDescartados =
-    L.layerGroup();
-
-let capaMODIS =
-    L.layerGroup();
-
-let capaGOES =
-    L.layerGroup();
-
-let capaClusters =
-    L.layerGroup();
-
-let capaFocosSERFOR =
-    L.layerGroup();
-
-let capaAlertasSERFOR =
-    L.layerGroup();
-
-let capaCoordenada =
-    L.layerGroup();
-
-/* =========================================================
-   CAPAS POR SENSOR
-========================================================= */
-
-let capaSuomi =
-    L.layerGroup();
-
-let capaNOAA20 =
-    L.layerGroup();
-
-let capaNOAA21 =
-    L.layerGroup();
-
-let capaTerra =
-    L.layerGroup();
-
-let capaAqua =
-    L.layerGroup();
-
-let capaGOES18 =
-    L.layerGroup();
-
-let capaGOES19 =
-    L.layerGroup();
-
-/* =========================================================
-   UTILIDADES
-========================================================= */
-
-const $ =
-    id => document.getElementById(id);
-
-const txt =
-    (id,v) => {
-
-        if($(id))
-            $(id).textContent = v;
-
-    };
-
-function estado(t){
-
-    txt(
-        "estado",
-        t
-    );
-
-}
+function estado(t){ txt("estado", t); }
 
 function sensorEstado(id,t,c){
-
-    if(!$(id))
-        return;
-
-    $(id).textContent =
-        t;
-
-    $(id).className =
-        c==="ok"
-        ? "sensor-ok"
-        : c==="error"
-        ? "sensor-error"
-        : "sensor-info";
-
+    if(!$(id)) return;
+    $(id).textContent = t;
+    $(id).className = c==="ok" ? "sensor-ok" : c==="error" ? "sensor-error" : "sensor-info";
 }
 
 function fecha(){
-
-    return new Intl.DateTimeFormat(
-        "en-CA",
-        {
-            timeZone:"America/Lima",
-            year:"numeric",
-            month:"2-digit",
-            day:"2-digit"
-        }
-    ).format(
-        new Date()
-    );
-
+    return new Intl.DateTimeFormat("en-CA", {
+        timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit"
+    }).format(new Date());
 }
 
 function hora(d,tz){
-
-    return new Intl.DateTimeFormat(
-        "es-PE",
-        {
-            timeZone:tz,
-            hour:"2-digit",
-            minute:"2-digit",
-            second:"2-digit",
-            hour12:false
-        }
-    ).format(d);
-
+    return new Intl.DateTimeFormat("es-PE", {
+        timeZone:tz, hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false
+    }).format(d);
 }
 
-function mapKey(){
-
-    return $("mapKey").value.trim();
-
-}
+function mapKey(){ return $("mapKey").value.trim(); }
 
 function guardarMapKey(){
-
     if(!mapKey()){
-
-        alert(
-            "Ingrese una MAP_KEY válida."
-        );
-
+        alert("Ingrese una MAP_KEY válida.");
         return;
-
     }
-
-    localStorage.setItem(
-        "firms_map_key",
-        mapKey()
-    );
-
+    localStorage.setItem("firms_map_key", mapKey());
     actualizarIncendios(true);
-
 }
 
 function mostrarCarga(v,t){
-
-    $("cargando").style.display =
-        v
-        ? "flex"
-        : "none";
-
-    if(t)
-        txt(
-            "textoCarga",
-            t
-        );
-
+    $("cargando").style.display = v ? "flex" : "none";
+    if(t) txt("textoCarga", t);
 }
 
 function horaF(v){
-
-    const s =
-        String(
-            v ?? ""
-        )
-        .replace(/\D/g,"")
-        .padStart(4,"0")
-        .slice(-4);
-
-    return s
-        ? `${s.slice(0,2)}:${s.slice(2)}`
-        : "N/D";
-
+    const s = String(v ?? "").replace(/\D/g,"").padStart(4,"0").slice(-4);
+    return s ? `${s.slice(0,2)}:${s.slice(2)}` : "N/D";
 }
 
 function formatFechaHoraPeru(v){
-
-    if(v === null || v === undefined || v === "")
-        return "N/D";
-
+    if(v === null || v === undefined || v === "") return "N/D";
     let d = null;
-
     if(typeof v === "number" || /^\d{10,13}$/.test(String(v).trim())){
         const n = Number(v);
         d = new Date(String(v).trim().length === 10 ? n * 1000 : n);
-    }
-    else{
+    } else {
         const s = String(v).trim();
-
-        if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
-            return s;
-        }
+        if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
         else if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}[ T][0-9]{2}:[0-9]{2}/.test(s)){
             const iso = s.replace(" ","T");
             d = new Date(iso.endsWith("Z") ? iso : iso + "Z");
-        }
-        else if(/^\d{1,2}:\d{2}(:\d{2})?$/.test(s)){
+        } else if(/^\d{1,2}:\d{2}(:\d{2})?$/.test(s)){
             return s.length === 5 ? `${s}:00` : s;
         }
     }
-
-    if(!d || isNaN(d.getTime()))
-        return null;
-
+    if(!d || isNaN(d.getTime())) return null;
     return new Intl.DateTimeFormat("es-PE",{
-        timeZone:"America/Lima",
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit",
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hour12:false
+        timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false
     }).format(d).replace(",", "");
 }
 
@@ -1474,14 +988,10 @@ function esCampoFechaHora(k){
 }
 
 function valorSERFOR(k,v,feature){
-    if(v === null || v === undefined || v === "")
-        return "N/D";
-
+    if(v === null || v === undefined || v === "") return "N/D";
     const props = feature?.properties || {};
     const {fechaKey, horaKey} = clavesFechaHoraSERFOR(props);
 
-    // En SERFOR: FECHA se muestra únicamente como fecha; HORA se calcula
-    // combinando FECHA + HORA y se expresa en hora de Perú.
     if(fechaKey && k === fechaKey){
         const d = fechaHoraSERFOR(feature) || convertirFechaHoraSERFOR(v);
         if(d){
@@ -1491,39 +1001,25 @@ function valorSERFOR(k,v,feature){
         }
         return String(v);
     }
+    if(horaKey && k === horaKey) return String(v);
 
-    if(horaKey && k === horaKey){
-        // Mantener exactamente la HORA original entregada por la base SERFOR.
-        // La combinación FECHA + HORA se utiliza únicamente para calcular
-        // la antigüedad y la leyenda de colores.
-        return String(v);
-    }
-
-    // FECREG: mostrar explícitamente la fecha y hora de registro
-    // convertidas a la hora oficial de Perú (America/Lima).
-    // Este campo NO se usa para reemplazar la Fecha/Hora de detección.
     if(/^FECREG$/i.test(String(k).trim())){
         const d = convertirFechaHoraSERFOR(v);
         if(d){
             return new Intl.DateTimeFormat("es-PE",{
-                timeZone:"America/Lima",
-                year:"numeric", month:"2-digit", day:"2-digit",
-                hour:"2-digit", minute:"2-digit", second:"2-digit",
-                hour12:false
+                timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit",
+                hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false
             }).format(d).replace(",", "") + " (Perú)";
         }
         return String(v);
     }
 
-    // Otros campos de REGISTRO/DETECCIÓN que contienen fecha y hora.
     if(/registro|detecc|fecha.?hora|datetime|timestamp/i.test(String(k))){
         const d = convertirFechaHoraSERFOR(v);
         if(d){
             return new Intl.DateTimeFormat("es-PE",{
-                timeZone:"America/Lima",
-                year:"numeric", month:"2-digit", day:"2-digit",
-                hour:"2-digit", minute:"2-digit", second:"2-digit",
-                hour12:false
+                timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit",
+                hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false
             }).format(d).replace(",", "") + " (Perú)";
         }
     }
@@ -1532,391 +1028,122 @@ function valorSERFOR(k,v,feature){
         const f = formatFechaHoraPeru(v);
         if(f) return `${f} (Perú)`;
     }
-
     return valorSensor(v);
 }
 
 function fechaD(d){
-
-    if(!d.acq_date)
-        return null;
-
-    const s =
-        String(
-            d.acq_time ?? "0000"
-        )
-        .replace(/\D/g,"")
-        .padStart(4,"0")
-        .slice(-4);
-
-    const x =
-        new Date(
-            `${d.acq_date}T${s.slice(0,2)}:${s.slice(2)}:00Z`
-        );
-
-    return isNaN(x)
-        ? null
-        : x;
-
+    if(!d.acq_date) return null;
+    const s = String(d.acq_time ?? "0000").replace(/\D/g,"").padStart(4,"0").slice(-4);
+    const x = new Date(`${d.acq_date}T${s.slice(0,2)}:${s.slice(2)}:00Z`);
+    return isNaN(x) ? null : x;
 }
-
-/* =========================================================
-   CSV
-========================================================= */
 
 function csv(t){
-
-    const l =
-        t
-        .replace(/^\uFEFF/,"")
-        .trim()
-        .split(/\r?\n/);
-
-    if(l.length < 2)
-        return [];
+    const l = t.replace(/^\uFEFF/,"").trim().split(/\r?\n/);
+    if(l.length < 2) return [];
 
     function p(x){
-
-        let a = [];
-        let v = "";
-        let q = false;
-
-        for(
-            let i=0;
-            i<x.length;
-            i++
-        ){
-
-            const c =
-                x[i];
-
+        let a = [], v = "", q = false;
+        for(let i=0; i<x.length; i++){
+            const c = x[i];
             if(c === '"'){
-
-                if(
-                    q &&
-                    x[i+1] === '"'
-                ){
-
-                    v += '"';
-                    i++;
-
-                }
-                else{
-
-                    q = !q;
-
-                }
-
-            }
-            else if(
-                c === "," &&
-                !q
-            ){
-
-                a.push(
-                    v.trim()
-                );
-
-                v = "";
-
-            }
-            else{
-
-                v += c;
-
-            }
-
+                if(q && x[i+1] === '"'){ v += '"'; i++; }
+                else q = !q;
+            } else if(c === "," && !q){
+                a.push(v.trim()); v = "";
+            } else v += c;
         }
-
-        a.push(
-            v.trim()
-        );
-
+        a.push(v.trim());
         return a;
-
     }
-
-    const h =
-        p(l[0])
-        .map(
-            x =>
-            x.toLowerCase()
-        );
-
-    return l
-        .slice(1)
-        .filter(
-            x =>
-            x.trim()
-        )
-        .map(
-            x =>
-            Object.fromEntries(
-                p(x).map(
-                    (v,i) =>
-                    [
-                        h[i] ?? `c${i}`,
-                        v
-                    ]
-                )
-            )
-        );
-
+    const h = p(l[0]).map(x => x.toLowerCase());
+    return l.slice(1).filter(x => x.trim()).map(x => Object.fromEntries(p(x).map((v,i) => [h[i] ?? `c${i}`, v])));
 }
 
-/* =========================================================
-   FIRMS
-========================================================= */
-
 async function firms(s){
-
     const key = mapKey();
-
-    if(!key)
-        throw Error("FIRMS: falta MAP_KEY");
-
-    const url =
-        `${CONFIG.FIRMS.BASE}/api/area/csv/` +
-        `${encodeURIComponent(key)}/` +
-        `${encodeURIComponent(s)}/` +
-        `${CONFIG.FIRMS.BBOX}/` +
-        `${CONFIG.FIRMS.DAYS}`;
-
-    console.info("[FIRMS] Consultando", s, url.replace(key,"***"));
-
+    if(!key) throw Error("FIRMS: falta MAP_KEY");
+    const url = `${CONFIG.FIRMS.BASE}/api/area/csv/${encodeURIComponent(key)}/${encodeURIComponent(s)}/${CONFIG.FIRMS.BBOX}/${CONFIG.FIRMS.DAYS}`;
     let r;
-
     try{
-        r = await fetch(url,{
-            method:"GET",
-            cache:"no-store",
-            headers:{
-                "Accept":"text/csv,text/plain,*/*"
-            }
-        });
+        r = await fetch(url,{ method:"GET", cache:"no-store", headers:{ "Accept":"text/csv,text/plain,*/*" } });
+    }catch(e){
+        throw Error(`FIRMS ${s}: no se pudo conectar (${e.message || e})`);
     }
-    catch(e){
-        throw Error(
-            `FIRMS ${s}: no se pudo conectar (${e.message || e})`
-        );
-    }
-
     const t = await r.text();
-
     if(!r.ok){
         const detalle = String(t || "").replace(/\s+/g," ").slice(0,240);
-        throw Error(
-            `FIRMS ${s}: HTTP ${r.status}` +
-            (detalle ? ` — ${detalle}` : "")
-        );
+        throw Error(`FIRMS ${s}: HTTP ${r.status}` + (detalle ? ` — ${detalle}` : ""));
     }
-
     if(/invalid map key|map.?key.*invalid|unauthorized|forbidden/i.test(t)){
         throw Error(`FIRMS ${s}: MAP_KEY inválida o no autorizada`);
     }
-
     const registros = csv(t);
-
-    console.info(`[FIRMS] ${s}: ${registros.length} registros recibidos`);
-
-    if(!registros.length){
-        throw Error(
-            `FIRMS ${s}: respuesta vacía o CSV sin registros`
-        );
-    }
-
+    if(!registros.length) throw Error(`FIRMS ${s}: respuesta vacía o CSV sin registros`);
     return registros;
 }
 
-/* =========================================================
-   NORMALIZACIÓN SENSOR
-========================================================= */
-
 function normalizarSensor(d,tipo){
-
-    let satellite =
-        String(
-            d.satellite ?? d.SATELLITE ?? ""
-        )
-        .trim()
-        .toUpperCase();
-
-    let instrument =
-        String(
-            d.instrument ?? d.INSTRUMENT ?? ""
-        )
-        .trim()
-        .toUpperCase();
+    let satellite = String(d.satellite ?? d.SATELLITE ?? "").trim().toUpperCase();
+    let instrument = String(d.instrument ?? d.INSTRUMENT ?? "").trim().toUpperCase();
 
     if(tipo === "VIIRS"){
-
-        const fuente =
-            String(d.source ?? "")
-            .toUpperCase();
-
-        /*
-         * FIRMS puede entregar SATELLITE vacío o con una denominación
-         * distinta. La fuente del producto es inequívoca:
-         * VIIRS_SNPP_NRT     -> Suomi-NPP
-         * VIIRS_NOAA20_NRT   -> NOAA-20
-         * VIIRS_NOAA21_NRT   -> NOAA-21
-         */
-        if(
-            fuente.includes("VIIRS_SNPP_NRT") ||
-            satellite.includes("SNPP") ||
-            satellite.includes("SUOMI") ||
-            satellite === "NPP"
-        ){
-            satellite = "Suomi-NPP";
-        }
-        else if(
-            fuente.includes("VIIRS_NOAA20_NRT") ||
-            satellite.includes("NOAA-20") ||
-            satellite.includes("NOAA20") ||
-            satellite.includes("N20")
-        ){
-            satellite = "NOAA-20";
-        }
-        else if(
-            fuente.includes("VIIRS_NOAA21_NRT") ||
-            satellite.includes("NOAA-21") ||
-            satellite.includes("NOAA21") ||
-            satellite.includes("N21")
-        ){
-            satellite = "NOAA-21";
-        }
-
+        const fuente = String(d.source ?? "").toUpperCase();
+        if(fuente.includes("VIIRS_SNPP_NRT") || satellite.includes("SNPP") || satellite.includes("SUOMI") || satellite === "NPP") satellite = "Suomi-NPP";
+        else if(fuente.includes("VIIRS_NOAA20_NRT") || satellite.includes("NOAA-20") || satellite.includes("NOAA20") || satellite.includes("N20")) satellite = "NOAA-20";
+        else if(fuente.includes("VIIRS_NOAA21_NRT") || satellite.includes("NOAA-21") || satellite.includes("NOAA21") || satellite.includes("N21")) satellite = "NOAA-21";
         instrument = "VIIRS";
     }
-
     if(tipo === "MODIS"){
-
-        if(satellite.includes("TERRA"))
-            satellite = "Terra";
-        else if(satellite.includes("AQUA"))
-            satellite = "Aqua";
-
+        if(satellite.includes("TERRA")) satellite = "Terra";
+        else if(satellite.includes("AQUA")) satellite = "Aqua";
         instrument = "MODIS";
     }
-
     if(tipo === "GOES"){
-
-        if(satellite.includes("19"))
-            satellite = "GOES-19";
-        else if(satellite.includes("18"))
-            satellite = "GOES-18";
-        else if(satellite.includes("17"))
-            satellite = "GOES-17";
-        else if(satellite.includes("16"))
-            satellite = "GOES-16";
-
+        if(satellite.includes("19")) satellite = "GOES-19";
+        else if(satellite.includes("18")) satellite = "GOES-18";
+        else if(satellite.includes("17")) satellite = "GOES-17";
+        else if(satellite.includes("16")) satellite = "GOES-16";
         instrument = "ABI";
     }
-
-    if(!satellite)
-        satellite = "N/D";
-
-    if(!instrument)
-        instrument = tipo || "N/D";
-
-    return {
-        ...d,
-        satellite,
-        instrument,
-        sensorLabel:
-            `${satellite} / ${instrument}`
-    };
+    if(!satellite) satellite = "N/D";
+    if(!instrument) instrument = tipo || "N/D";
+    return { ...d, satellite, instrument, sensorLabel: `${satellite} / ${instrument}` };
 }
 
-/* =========================================================
-   DETALLE COMPLETO DEL SENSOR / REGISTRO FIRMS
-========================================================= */
-
 function escHtmlSensor(v){
-
-    return String(v ?? "N/D")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
+    return String(v ?? "N/D").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
 function valorSensor(v){
-
-    if(v === null || v === undefined || v === "")
-        return "N/D";
-
-    if(Array.isArray(v))
-        return v.join(", ");
-
-    if(typeof v === "object")
-        return JSON.stringify(v);
-
+    if(v === null || v === undefined || v === "") return "N/D";
+    if(Array.isArray(v)) return v.join(", ");
+    if(typeof v === "object") return JSON.stringify(v);
     return String(v);
-
 }
 
 function etiquetaSensor(k){
-
     const etiquetas = {
-        satellite:"Satélite",
-        instrument:"Sensor / instrumento",
-        sensorLabel:"Identificación del sensor",
-        source:"Producto / fuente",
-        latitude:"Latitud",
-        longitude:"Longitud",
-        frp:"FRP",
-        acq_date:"Fecha de adquisición",
-        acq_time:"Hora de adquisición (Perú)",
-        confidence:"Confianza",
-        bright_ti4:"Temperatura de brillo T4",
-        bright_ti5:"Temperatura de brillo T5",
-        t4:"Temperatura T4",
-        t5:"Temperatura T5",
-        deltaT:"ΔT (T4 - T5)",
-        version:"Versión",
-        daynight:"Día / noche",
-        scan:"Barrido",
-        track:"Pista",
-        type:"Tipo",
-        fire_type:"Tipo de fuego",
-        bright_t31:"Temperatura de brillo T31",
-        frp_uncertainty:"Incertidumbre FRP",
-        satellite_zenith:"Ángulo cenital del satélite",
-        instrument_zenith:"Ángulo cenital del instrumento"
+        satellite:"Satélite", instrument:"Sensor / instrumento", sensorLabel:"Identificación del sensor",
+        source:"Producto / fuente", latitude:"Latitud", longitude:"Longitud", frp:"FRP",
+        acq_date:"Fecha de adquisición", acq_time:"Hora de adquisición (Perú)", confidence:"Confianza",
+        bright_ti4:"Temperatura de brillo T4", bright_ti5:"Temperatura de brillo T5", t4:"Temperatura T4",
+        t5:"Temperatura T5", deltaT:"ΔT (T4 - T5)", version:"Versión", daynight:"Día / noche",
+        scan:"Barrido", track:"Pista", type:"Tipo", fire_type:"Tipo de fuego",
+        bright_t31:"Temperatura de brillo T31", frp_uncertainty:"Incertidumbre FRP",
+        satellite_zenith:"Ángulo cenital del satélite", instrument_zenith:"Ángulo cenital del instrumento"
     };
-
     return etiquetas[k] || k.replace(/_/g," ");
-
 }
 
 function htmlDetalleSensor(d,titulo,icono,col){
-
-    const prioridad = [
-        "satellite",
-        "instrument",
-        "sensorLabel",
-        "source",
-        "latitude",
-        "longitude",
-        "frp",
-        "acq_date",
-        "acq_time"
-    ];
-
-    const claves = Object.keys(d || {})
-        .filter(k =>
-            !k.startsWith("_") &&
-            d[k] !== undefined &&
-            d[k] !== null &&
-            d[k] !== ""
-        );
+    const lat = Number(d.latitude);
+    const lon = Number(d.longitude);
+    const prioridad = ["satellite","instrument","sensorLabel","source","latitude","longitude","frp","acq_date","acq_time"];
+    const claves = Object.keys(d || {}).filter(k => !k.startsWith("_") && d[k] !== undefined && d[k] !== null && d[k] !== "");
 
     claves.sort((a,b) => {
-        const ia = prioridad.indexOf(a);
-        const ib = prioridad.indexOf(b);
+        const ia = prioridad.indexOf(a), ib = prioridad.indexOf(b);
         if(ia !== -1 && ib !== -1) return ia-ib;
         if(ia !== -1) return -1;
         if(ib !== -1) return 1;
@@ -1925,31 +1152,16 @@ function htmlDetalleSensor(d,titulo,icono,col){
 
     const filas = claves.map(k => {
         let v = d[k];
-
         if(k === "acq_time"){
             const base = fechaD(d);
-            v = base
-                ? hora(base,"America/Lima")
-                : horaF(v);
+            v = base ? hora(base,"America/Lima") : horaF(v);
         }
-
         if(k === "frp" || k === "t4" || k === "t5" || k === "deltaT"){
             const n = Number(v);
-            if(Number.isFinite(n))
-                v = n.toFixed(2);
+            if(Number.isFinite(n)) v = n.toFixed(2);
         }
-
-        const unidad =
-            k === "frp" ? " MW" :
-            ["t4","t5","deltaT","bright_ti4","bright_ti5","bright_t31"].includes(k)
-            ? " K" : "";
-
-        return `
-            <div class="popup-sensor-row">
-                <span><b>${escHtmlSensor(etiquetaSensor(k))}:</b></span>
-                <span>${escHtmlSensor(valorSensor(v))}${unidad}</span>
-            </div>
-        `;
+        const unidad = k === "frp" ? " MW" : ["t4","t5","deltaT","bright_ti4","bright_ti5","bright_t31"].includes(k) ? " K" : "";
+        return `<div class="popup-sensor-row"><span><b>${escHtmlSensor(etiquetaSensor(k))}:</b></span><span>${escHtmlSensor(valorSensor(v))}${unidad}</span></div>`;
     }).join("");
 
     const resumen = `
@@ -1960,246 +1172,72 @@ function htmlDetalleSensor(d,titulo,icono,col){
             <div><b>Fecha:</b> ${escHtmlSensor(d.acq_date || "N/D")}</div>
             <div><b>Hora Perú:</b> ${escHtmlSensor(d.acq_time ? (fechaD(d) ? hora(fechaD(d),"America/Lima") : horaF(d.acq_time)) : "N/D")}</div>
             <div><b>FRP:</b> ${Number.isFinite(Number(d.frp)) ? Number(d.frp).toFixed(2)+" MW" : "N/D"}</div>
-            <div><b>Coordenadas:</b> ${Number.isFinite(Number(d.latitude)) ? Number(d.latitude).toFixed(5) : "N/D"}, ${Number.isFinite(Number(d.longitude)) ? Number(d.longitude).toFixed(5) : "N/D"}</div>
+        </div>
+        <div class="popup-coordenadas">
+            <div><b>📍 Coordenadas geográficas</b></div>
+            <div>Latitud: <span class="coord-valor">${Number.isFinite(lat) ? lat.toFixed(6) : "N/D"}</span></div>
+            <div>Longitud: <span class="coord-valor">${Number.isFinite(lon) ? lon.toFixed(6) : "N/D"}</span></div>
+            <div style="font-size:10px;color:#64748b">Sistema: WGS 84 · grados decimales</div>
         </div>`;
 
     return `
         <div class="popup-incendio popup-sensor-detalle">
             <h3 style="color:${col}">${icono} ${escHtmlSensor(titulo)}</h3>
             ${resumen}
-            <button type="button" class="popup-tab" onclick="togglePopupTech(this)">
-                <span>🔎 Ver información técnica completa</span><span class="flecha">▶</span>
-            </button>
+            <button type="button" class="popup-copiar" onclick="copiarPopup(this)">📋 Copiar toda la información</button>
+            <button type="button" class="popup-tab" onclick="togglePopupTech(this)"><span>🔎 Ver información técnica completa</span><span class="flecha">▶</span></button>
             <div class="popup-tecnico"><div class="popup-sensor-grid">${filas}</div></div>
-        </div>
-    `;
-
+        </div>`;
 }
 
-/* =========================================================
-   VIIRS
-========================================================= */
-
 function viirs(d,s){
-
-    const t4 = Number(d.bright_ti4);
-    const t5 = Number(d.bright_ti5);
-
+    const t4 = Number(d.bright_ti4), t5 = Number(d.bright_ti5);
     const x = {
         ...d,
-
-        latitude:Number(d.latitude),
-        longitude:Number(d.longitude),
-        frp:Number(d.frp),
-
-        t4,
-        t5,
-        deltaT:
-            Number.isFinite(t4) && Number.isFinite(t5)
-            ? t4 - t5
-            : NaN,
-
-        confidenceNormalizada:
-            String(
-                d.confidence ?? ""
-            )
-            .toLowerCase()
-            .trim(),
-
-        source:s.id,
-
-        /* Identificación inequívoca por producto FIRMS. */
-        satellite:s.nombre,
-
-        instrument:"VIIRS"
+        latitude:Number(d.latitude), longitude:Number(d.longitude), frp:Number(d.frp),
+        t4, t5, deltaT: Number.isFinite(t4) && Number.isFinite(t5) ? t4 - t5 : NaN,
+        confidenceNormalizada: String(d.confidence ?? "").toLowerCase().trim(),
+        source:s.id, satellite:s.nombre, instrument:"VIIRS"
     };
-
     return normalizarSensor(x,"VIIRS");
 }
 
-/* =========================================================
-   SENSOR GENÉRICO
-========================================================= */
-
 function sensorDato(d,n){
-
     return {
-
         ...d,
-
-        latitude:
-            Number(
-                d.latitude
-            ),
-
-        longitude:
-            Number(
-                d.longitude
-            ),
-
-        frp:
-            Number(
-                d.frp
-            ) || 0,
-
-        satellite:
-            d.satellite ||
-            n,
-
-        source:
-            d.source ||
-            n
-
+        latitude: Number(d.latitude), longitude: Number(d.longitude),
+        frp: Number(d.frp) || 0,
+        satellite: d.satellite || n, source: d.source || n
     };
-
 }
-
-/* =========================================================
-   VALIDACIÓN VIIRS
-========================================================= */
 
 function validar(ds){
-
-    const v = [];
-    const x = [];
-
-    ds.forEach(
-        d => {
-
-            const r = [];
-
-            if(
-                !Number.isFinite(
-                    d.latitude
-                ) ||
-                !Number.isFinite(
-                    d.longitude
-                )
-            ){
-
-                r.push(
-                    "Coordenadas inválidas"
-                );
-
-            }
-
-            if(
-                !Number.isFinite(
-                    d.frp
-                ) ||
-                d.frp < CONFIG.VIIRS.FRP_MIN_VALIDO
-            ){
-
-                r.push(
-                    "FRP menor a 1 MW o ausente"
-                );
-
-            }
-
-            if(
-                [
-                    "l",
-                    "low"
-                ]
-                .includes(
-                    d.confidenceNormalizada
-                )
-            ){
-
-                r.push(
-                    "Confianza baja"
-                );
-
-            }
-
-            d._razonesDescarte =
-                r;
-
-            (
-                r.length
-                ? x
-                : v
-            )
-            .push(d);
-
-        }
-    );
-
-    return {
-        v,
-        x
-    };
-
+    const v = [], x = [];
+    ds.forEach(d => {
+        const r = [];
+        if(!Number.isFinite(d.latitude) || !Number.isFinite(d.longitude)) r.push("Coordenadas inválidas");
+        if(!Number.isFinite(d.frp) || d.frp < CONFIG.VIIRS.FRP_MIN_VALIDO) r.push("FRP menor a 1 MW o ausente");
+        if(["l","low"].includes(d.confidenceNormalizada)) r.push("Confianza baja");
+        d._razonesDescarte = r;
+        (r.length ? x : v).push(d);
+    });
+    return { v, x };
 }
-
-/* =========================================================
-   DISTANCIA
-========================================================= */
 
 function dist(a,b,c,d){
-
     const R = 6371000;
-
-    const p =
-        a *
-        Math.PI /
-        180;
-
-    const q =
-        c *
-        Math.PI /
-        180;
-
-    const dp =
-        (c-a) *
-        Math.PI /
-        180;
-
-    const dl =
-        (d-b) *
-        Math.PI /
-        180;
-
-    const z =
-        Math.sin(dp/2)**2 +
-        Math.cos(p) *
-        Math.cos(q) *
-        Math.sin(dl/2)**2;
-
-    return 2 *
-        R *
-        Math.atan2(
-            Math.sqrt(z),
-            Math.sqrt(1-z)
-        );
-
+    const p = a * Math.PI / 180, q = c * Math.PI / 180;
+    const dp = (c-a) * Math.PI / 180, dl = (d-b) * Math.PI / 180;
+    const z = Math.sin(dp/2)**2 + Math.cos(p) * Math.cos(q) * Math.sin(dl/2)**2;
+    return 2 * R * Math.atan2(Math.sqrt(z), Math.sqrt(1-z));
 }
-
-/* =========================================================
-   DIFERENCIA HORARIA
-========================================================= */
 
 function dh(a,b){
-
-    const x =
-        fechaD(a);
-
-    const y =
-        fechaD(b);
-
-    return x && y
-        ? Math.abs(x-y) / 3600000
-        : Infinity;
-
+    const x = fechaD(a), y = fechaD(b);
+    return x && y ? Math.abs(x-y) / 3600000 : Infinity;
 }
 
-/* =========================================================
-   CLUSTERS
-========================================================= */
-
 function hacerClusters(ds){
-
-    /* Índice espacial: evita comparar cada punto contra todos los demás. */
     const radio = CONFIG.VIIRS.CLUSTER_RADIO_M;
     const latCell = radio / 111000;
     const grid = new Map();
@@ -2223,10 +1261,7 @@ function hacerClusters(ds){
     for(let i=0;i<ds.length;i++){
         if(used.has(i)) continue;
         const first = ds[i];
-        if(!Number.isFinite(first.latitude) || !Number.isFinite(first.longitude)){
-            used.add(i);
-            continue;
-        }
+        if(!Number.isFinite(first.latitude) || !Number.isFinite(first.longitude)){ used.add(i); continue; }
 
         const g = [first];
         used.add(i);
@@ -2245,724 +1280,183 @@ function hacerClusters(ds){
                     for(const j of candidates){
                         if(used.has(j)) continue;
                         const q = ds[j];
-                        if(dh(p,q) <= CONFIG.VIIRS.CLUSTER_VENTANA_H &&
-                           dist(p.latitude,p.longitude,q.latitude,q.longitude) <= radio){
-                            used.add(j);
-                            g.push(q);
-                            queue.push(j);
+                        if(dh(p,q) <= CONFIG.VIIRS.CLUSTER_VENTANA_H && dist(p.latitude,p.longitude,q.latitude,q.longitude) <= radio){
+                            used.add(j); g.push(q); queue.push(j);
                         }
                     }
                 }
             }
         }
-
         if(g.length >= CONFIG.VIIRS.CLUSTER_MIN) out.push(g);
     }
-
     return out;
 }
 
-/* =========================================================
-   RESUMEN POR SENSOR
-========================================================= */
-
 function resumenPorSensor(ds){
-
     const r = {};
-
-    ds.forEach(
-        d => {
-
-            const clave =
-                d.sensorLabel ||
-                `${d.satellite || "N/D"} / ${d.instrument || "N/D"}`;
-
-            if(!r[clave]){
-
-                r[clave] = {
-
-                    satelite:
-                        d.satellite ||
-                        "N/D",
-
-                    sensor:
-                        d.instrument ||
-                        "N/D",
-
-                    total:
-                        0,
-
-                    frpTotal:
-                        0,
-
-                    frpMax:
-                        0
-
-                };
-
-            }
-
-            r[clave].total++;
-
-            r[clave].frpTotal +=
-                Number(d.frp) || 0;
-
-            r[clave].frpMax =
-                Math.max(
-                    r[clave].frpMax,
-                    Number(d.frp) || 0
-                );
-
+    ds.forEach(d => {
+        const clave = d.sensorLabel || `${d.satellite || "N/D"} / ${d.instrument || "N/D"}`;
+        if(!r[clave]){
+            r[clave] = { satelite: d.satellite || "N/D", sensor: d.instrument || "N/D", total: 0, frpTotal: 0, frpMax: 0 };
         }
-    );
-
+        r[clave].total++;
+        r[clave].frpTotal += Number(d.frp) || 0;
+        r[clave].frpMax = Math.max(r[clave].frpMax, Number(d.frp) || 0);
+    });
     return r;
-
 }
-
-/* =========================================================
-   ESTADÍSTICA CLUSTER
-========================================================= */
 
 function stats(g){
-
-    let lat = 0;
-    let lon = 0;
-    let total = 0;
-    let max = 0;
-    let alta = 0;
-    let nom = 0;
-
-    const sats =
-        new Set();
-
+    let lat = 0, lon = 0, total = 0, max = 0, alta = 0, nom = 0;
+    const sats = new Set();
     const sensores = {};
 
-    g.forEach(
-        d => {
+    g.forEach(d => {
+        lat += d.latitude; lon += d.longitude;
+        total += d.frp || 0; max = Math.max(max, d.frp || 0);
+        if(["h","high"].includes(d.confidenceNormalizada)) alta++;
+        if(["n","nominal"].includes(d.confidenceNormalizada)) nom++;
+        sats.add(d.satellite);
 
-            lat +=
-                d.latitude;
-
-            lon +=
-                d.longitude;
-
-            total +=
-                d.frp || 0;
-
-            max =
-                Math.max(
-                    max,
-                    d.frp || 0
-                );
-
-            if(
-                [
-                    "h",
-                    "high"
-                ]
-                .includes(
-                    d.confidenceNormalizada
-                )
-            )
-                alta++;
-
-            if(
-                [
-                    "n",
-                    "nominal"
-                ]
-                .includes(
-                    d.confidenceNormalizada
-                )
-            )
-                nom++;
-
-            sats.add(
-                d.satellite
-            );
-
-            const clave =
-                d.sensorLabel ||
-                `${d.satellite} / ${d.instrument}`;
-
-            if(!sensores[clave]){
-
-                sensores[clave] = {
-
-                    satelite:
-                        d.satellite,
-
-                    sensor:
-                        d.instrument,
-
-                    total:
-                        0,
-
-                    frpTotal:
-                        0,
-
-                    frpMax:
-                        0
-
-                };
-
-            }
-
-            sensores[clave].total++;
-
-            sensores[clave].frpTotal +=
-                Number(d.frp) || 0;
-
-            sensores[clave].frpMax =
-                Math.max(
-                    sensores[clave].frpMax,
-                    Number(d.frp) || 0
-                );
-
+        const clave = d.sensorLabel || `${d.satellite} / ${d.instrument}`;
+        if(!sensores[clave]){
+            sensores[clave] = { satelite: d.satellite, sensor: d.instrument, total: 0, frpTotal: 0, frpMax: 0 };
         }
-    );
+        sensores[clave].total++;
+        sensores[clave].frpTotal += Number(d.frp) || 0;
+        sensores[clave].frpMax = Math.max(sensores[clave].frpMax, Number(d.frp) || 0);
+    });
 
-    lat /= g.length;
-    lon /= g.length;
-
+    lat /= g.length; lon /= g.length;
     return {
-
-        latitude:
-            lat,
-
-        longitude:
-            lon,
-
-        size:
-            g.length,
-
-        frpTotal:
-            total,
-
-        frpMax:
-            max,
-
-        confianzaAlta:
-            alta,
-
-        confianzaNominal:
-            nom,
-
-        satelites:
-            [...sats],
-
-        sensores:
-
-            sensores,
-
-        radioMax:
-            Math.max(
-                ...g.map(
-                    d =>
-                    dist(
-                        lat,
-                        lon,
-                        d.latitude,
-                        d.longitude
-                    )
-                )
-            )
-
+        latitude: lat, longitude: lon, size: g.length, frpTotal: total, frpMax: max,
+        confianzaAlta: alta, confianzaNominal: nom, satelites: [...sats], sensores,
+        radioMax: Math.max(...g.map(d => dist(lat, lon, d.latitude, d.longitude)))
     };
-
 }
-
-/* =========================================================
-   DETECCIONES CERCANAS
-========================================================= */
 
 function cercanos(ds,c,m){
-
-    return ds
-        .map(
-            d => ({
-
-                ...d,
-
-                distancia:
-                    dist(
-                        c.latitude,
-                        c.longitude,
-                        d.latitude,
-                        d.longitude
-                    )
-
-            })
-        )
-        .filter(
-            d =>
-            d.distancia <= m
-        );
-
+    return ds.map(d => ({ ...d, distancia: dist(c.latitude, c.longitude, d.latitude, d.longitude) })).filter(d => d.distancia <= m);
 }
-
-/* =========================================================
-   SCORE
-========================================================= */
 
 function score(c){
-
     let s = 3;
+    let r = ["≥3 VIIRS"];
+    if(c.size >= 5){ s += 2; r.push("≥5 VIIRS"); }
+    if(c.frpMax >= 10){ s += 2; r.push("FRP ≥10 MW"); }
+    if(c.frpMax >= 30){ s += 2; r.push("FRP ≥30 MW"); }
+    if(c.confianzaAlta){ s += 3; r.push("Confianza alta"); }
+    else if(c.confianzaNominal){ s++; r.push("Confianza nominal"); }
+    if(c.satelites.length >= 2){ s += 2; r.push("≥2 satélites VIIRS"); }
+    if(c.modisCercanos.length){ s += 2; r.push("MODIS ≤3 km"); }
+    if(c.goesCercanos.length){ s += 2; r.push("GOES ≤10 km"); }
 
-    let r =
-        ["≥3 VIIRS"];
-
-    if(c.size >= 5){
-
-        s += 2;
-
-        r.push("≥5 VIIRS");
-
-    }
-
-    if(c.frpMax >= 10){
-
-        s += 2;
-
-        r.push("FRP ≥10 MW");
-
-    }
-
-    if(c.frpMax >= 30){
-
-        s += 2;
-
-        r.push("FRP ≥30 MW");
-
-    }
-
-    if(c.confianzaAlta){
-
-        s += 3;
-
-        r.push("Confianza alta");
-
-    }
-    else if(c.confianzaNominal){
-
-        s++;
-
-        r.push("Confianza nominal");
-
-    }
-
-    if(c.satelites.length >= 2){
-
-        s += 2;
-
-        r.push("≥2 satélites VIIRS");
-
-    }
-
-    if(c.modisCercanos.length){
-
-        s += 2;
-
-        r.push("MODIS ≤3 km");
-
-    }
-
-    if(c.goesCercanos.length){
-
-        s += 2;
-
-        r.push("GOES ≤10 km");
-
-    }
-
-    return {
-
-        fireScore:
-            s,
-
-        nivel:
-            s >= 12
-            ? "ALTO"
-            : s >= 7
-            ? "MEDIO"
-            : "BAJO",
-
-        razones:
-            r
-
-    };
-
+    return { fireScore: s, nivel: s >= 12 ? "ALTO" : s >= 7 ? "MEDIO" : "BAJO", razones: r };
 }
-
-/* =========================================================
-   COLOR SENSOR
-========================================================= */
 
 function colorSensor(d){
-
-    if(
-        d.instrument === "VIIRS"
-    ){
-
-        if(
-            d.satellite === "Suomi-NPP"
-        )
-            return "#00e5ff";
-
-        if(
-            d.satellite === "NOAA-20"
-        )
-            return "#ff1744";
-
-        if(
-            d.satellite === "NOAA-21"
-        )
-            return "#ff6d00";
-
+    if(d.instrument === "VIIRS"){
+        if(d.satellite === "Suomi-NPP") return "#00e5ff";
+        if(d.satellite === "NOAA-20") return "#ff1744";
+        if(d.satellite === "NOAA-21") return "#ff6d00";
         return "#b388ff";
-
     }
-
-    if(
-        d.instrument === "MODIS"
-    ){
-
-        if(
-            d.satellite === "Terra"
-        )
-            return "#ffeb3b";
-
-        if(
-            d.satellite === "Aqua"
-        )
-            return "#00e676";
-
+    if(d.instrument === "MODIS"){
+        if(d.satellite === "Terra") return "#ffeb3b";
+        if(d.satellite === "Aqua") return "#00e676";
         return "#ffffff";
-
     }
-
-    if(
-        d.instrument === "ABI"
-    ){
-
-        if(
-            d.satellite === "GOES-18"
-        )
-            return "#ff9800";
-
-        if(
-            d.satellite === "GOES-19"
-        )
-            return "#e040fb";
-
+    if(d.instrument === "ABI"){
+        if(d.satellite === "GOES-18") return "#ff9800";
+        if(d.satellite === "GOES-19") return "#e040fb";
         return "#ffffff";
-
     }
-
     return "#ffffff";
-
 }
 
-/* =========================================================
-   MAPA
-========================================================= */
-
 function iniciarMapa(){
+    map = L.map("map", { center: PERU_CENTER, zoom: 5, preferCanvas: true });
+    activarPopupsMovibles();
 
-    map =
-        L.map(
-            "map",
-            {
-                center:
-                    PERU_CENTER,
-                zoom:
-                    5,
-                preferCanvas:
-                    true
-            }
-        );
+    const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+        attribution: "© Esri",
+        maxZoom:19, minZoom:2, noWrap:true, updateWhenIdle:true, keepBuffer:2, crossOrigin:true
+    });
+    sat.addTo(map);
 
-activarPopupsMovibles();
-
-    const osm =
-        L.tileLayer(
-            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            {
-                attribution:
-                    "© OpenStreetMap contributors"
-            }
-        )
-        .addTo(map);
-
-    const sat =
-        L.tileLayer(
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            {
-                attribution:
-                    "© Esri"
-            }
-        );
-
-    const et =
-        L.tileLayer(
-            "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-            {
-                opacity:.95
-            }
-        );
-
-    const hy =
-        L.layerGroup(
-            [sat,et]
-        );
+    const et = L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { opacity:.95 });
+    const hy = L.layerGroup([sat,et]);
 
     L.control.layers(
-
+        { "🛰️ Satélite":sat, "🛰️ Híbrido":hy },
         {
-            "🗺️ OpenStreetMap":osm,
-            "🛰️ Satélite":sat,
-            "🛰️ Híbrido":hy
+            "VIIRS — todos":capaVIIRS, "Suomi-NPP / VIIRS":capaSuomi, "NOAA-20 / VIIRS":capaNOAA20, "NOAA-21 / VIIRS":capaNOAA21,
+            "VIIRS descartados":capaVIIRSDescartados, "MODIS — todos":capaMODIS, "Terra / MODIS":capaTerra, "Aqua / MODIS":capaAqua,
+            "GOES — todos":capaGOES, "GOES-18 / ABI":capaGOES18, "GOES-19 / ABI":capaGOES19,
+            "Clusters":capaClusters, "Coordenada":capaCoordenada, "Focos SERFOR":capaFocosSERFOR, "Alertas SERFOR":capaAlertasSERFOR
         },
-
-        {
-
-            "VIIRS — todos":capaVIIRS,
-            "Suomi-NPP / VIIRS":capaSuomi,
-            "NOAA-20 / VIIRS":capaNOAA20,
-            "NOAA-21 / VIIRS":capaNOAA21,
-
-            "VIIRS descartados":
-                capaVIIRSDescartados,
-
-            "MODIS — todos":capaMODIS,
-            "Terra / MODIS":capaTerra,
-            "Aqua / MODIS":capaAqua,
-
-            "GOES — todos":capaGOES,
-            "GOES-18 / ABI":capaGOES18,
-            "GOES-19 / ABI":capaGOES19,
-
-            "Clusters":capaClusters,
-            "Coordenada":capaCoordenada,
-            "Focos SERFOR":capaFocosSERFOR,
-            "Alertas SERFOR":capaAlertasSERFOR
-
-        },
-
-        {
-            collapsed:false
-        }
-
+        { collapsed:false }
     ).addTo(map);
 
     leyenda();
-
+    activarExtraccionCoordenadas();
 }
-
-/* =========================================================
-   LEYENDA
-========================================================= */
 
 function leyenda(){
-
-    const l =
-        L.control(
-            {
-                position:"bottomright"
-            }
-        );
-
-    l.onAdd =
-        function(){
-
-            const d =
-                L.DomUtil.create(
-                    "div",
-                    "legend"
-                );
-
-            d.innerHTML = `
-
-                <div class="legend-title">
-                    🔥 SATÉLITE / SENSOR
-                </div>
-
-                <div class="legend-item">
-                    <span class="legend-dot"
-                          style="background:#00e5ff"></span>
-                    Suomi-NPP / VIIRS
-                </div>
-
-                <div class="legend-item">
-                    <span class="legend-dot"
-                          style="background:#ff1744"></span>
-                    NOAA-20 / VIIRS
-                </div>
-
-                <div class="legend-item">
-                    <span class="legend-dot"
-                          style="background:#ff6d00"></span>
-                    NOAA-21 / VIIRS
-                </div>
-
-                <div class="legend-item">
-                    <span class="legend-dot"
-                          style="background:#ffeb3b"></span>
-                    Terra / MODIS
-                </div>
-
-                <div class="legend-item">
-                    <span class="legend-dot"
-                          style="background:#00e676"></span>
-                    Aqua / MODIS
-                </div>
-
-                <div class="legend-item">
-                    <span class="legend-dot"
-                          style="background:#ff9800"></span>
-                    GOES-18 / ABI
-                </div>
-
-                <div class="legend-item">
-                    <span class="legend-dot"
-                          style="background:#e040fb"></span>
-                    GOES-19 / ABI
-                </div>
-
-                <hr>
-
-                <div>🌲 Focos SERFOR</div>
-                <div>🔥 Alertas SERFOR — antigüedad</div>
-                <div class="serfor-edad-leyenda">
-                    <div><span class="serfor-edad-punto" style="background:#d50000"></span> ≤ 12 horas — reciente</div>
-                    <div><span class="serfor-edad-punto" style="background:#ef6c00"></span> &gt; 12 horas y ≤ 24 horas</div>
-                    <div><span class="serfor-edad-punto" style="background:#808080"></span> &gt; 24 horas y ≤ 48 horas</div>
-                    <div><span class="serfor-edad-punto" style="background:#2e7d32"></span> &gt; 48 horas — antigua</div>
-                    <div style="font-size:9px;opacity:.85;margin-top:3px">Antigüedad calculada desde la Fecha + Hora de detección SERFOR (hora Perú)</div>
-                </div>
-
-            `;
-
-            return d;
-
-        };
-
+    const l = L.control({ position:"bottomright" });
+    l.onAdd = function(){
+        const d = L.DomUtil.create("div", "legend");
+        d.innerHTML = `
+            <div class="legend-title">🔥 SATÉLITE / SENSOR</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#00e5ff"></span> Suomi-NPP / VIIRS</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#ff1744"></span> NOAA-20 / VIIRS</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#ff6d00"></span> NOAA-21 / VIIRS</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#ffeb3b"></span> Terra / MODIS</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#00e676"></span> Aqua / MODIS</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#ff9800"></span> GOES-18 / ABI</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#e040fb"></span> GOES-19 / ABI</div>
+            <hr>
+            <div>🌲 Focos SERFOR</div>
+            <div>🔥 Alertas SERFOR — antigüedad</div>
+            <div class="serfor-edad-leyenda">
+                <div><span class="serfor-edad-punto" style="background:#d50000"></span> ≤ 12 horas — reciente</div>
+                <div><span class="serfor-edad-punto" style="background:#ef6c00"></span> &gt; 12 horas y ≤ 24 horas</div>
+                <div><span class="serfor-edad-punto" style="background:#808080"></span> &gt; 24 horas y ≤ 48 horas</div>
+                <div><span class="serfor-edad-punto" style="background:#2e7d32"></span> &gt; 48 horas — antigua</div>
+                <div style="font-size:9px;opacity:.85;margin-top:3px">Antigüedad calculada desde la Fecha + Hora de detección SERFOR (hora Perú)</div>
+            </div>`;
+        return d;
+    };
     l.addTo(map);
-
 }
-
-/* =========================================================
-   CAPA POR SENSOR
-========================================================= */
 
 function obtenerCapaSensor(d,tipo){
-
     if(tipo === "VIIRS"){
-
-        if(d.satellite === "Suomi-NPP")
-            return capaSuomi;
-
-        if(d.satellite === "NOAA-20")
-            return capaNOAA20;
-
-        if(d.satellite === "NOAA-21")
-            return capaNOAA21;
-
+        if(d.satellite === "Suomi-NPP") return capaSuomi;
+        if(d.satellite === "NOAA-20") return capaNOAA20;
+        if(d.satellite === "NOAA-21") return capaNOAA21;
         return capaVIIRS;
-
     }
-
     if(tipo === "MODIS"){
-
-        if(d.satellite === "Terra")
-            return capaTerra;
-
-        if(d.satellite === "Aqua")
-            return capaAqua;
-
+        if(d.satellite === "Terra") return capaTerra;
+        if(d.satellite === "Aqua") return capaAqua;
         return capaMODIS;
-
     }
-
     if(tipo === "GOES"){
-
-        if(d.satellite === "GOES-18")
-            return capaGOES18;
-
-        if(d.satellite === "GOES-19")
-            return capaGOES19;
-
+        if(d.satellite === "GOES-18") return capaGOES18;
+        if(d.satellite === "GOES-19") return capaGOES19;
         return capaGOES;
-
     }
-
     return null;
-
 }
-
-/* =========================================================
-   ALTERNAR CAPAS
-========================================================= */
 
 function alternarCapa(t){
-
-    const m = {
-
-        viirs:capaVIIRS,
-        suomi:capaSuomi,
-        noaa20:capaNOAA20,
-        noaa21:capaNOAA21,
-
-        descartados:capaVIIRSDescartados,
-
-        modis:capaMODIS,
-        terra:capaTerra,
-        aqua:capaAqua,
-
-        goes:capaGOES,
-        goes18:capaGOES18,
-        goes19:capaGOES19,
-
-        clusters:capaClusters
-
-    }[t];
-
-    const i = {
-
-        viirs:"chkVIIRS",
-        suomi:"chkSuomi",
-        noaa20:"chkNOAA20",
-        noaa21:"chkNOAA21",
-
-        descartados:"chkVIIRSDescartados",
-
-        modis:"chkMODIS",
-        terra:"chkTerra",
-        aqua:"chkAqua",
-
-        goes:"chkGOES",
-        goes18:"chkGOES18",
-        goes19:"chkGOES19",
-
-        clusters:"chkClusters"
-
-    }[t];
-
-    if(!m)
-        return;
-
-    if(
-        $(i).checked
-    )
-        m.addTo(map);
-    else
-        map.removeLayer(m);
-
+    const m = { viirs:capaVIIRS, suomi:capaSuomi, noaa20:capaNOAA20, noaa21:capaNOAA21, descartados:capaVIIRSDescartados, modis:capaMODIS, terra:capaTerra, aqua:capaAqua, goes:capaGOES, goes18:capaGOES18, goes19:capaGOES19, clusters:capaClusters }[t];
+    const i = { viirs:"chkVIIRS", suomi:"chkSuomi", noaa20:"chkNOAA20", noaa21:"chkNOAA21", descartados:"chkVIIRSDescartados", modis:"chkMODIS", terra:"chkTerra", aqua:"chkAqua", goes:"chkGOES", goes18:"chkGOES18", goes19:"chkGOES19", clusters:"chkClusters" }[t];
+    if(!m) return;
+    if($(i).checked) m.addTo(map);
+    else map.removeLayer(m);
 }
-
-
-
 
 function togglePopupTech(btn){
     if(!btn) return;
@@ -2972,54 +1466,86 @@ function togglePopupTech(btn){
     btn.classList.toggle("abierto",abierto);
     const flecha=btn.querySelector(".flecha");
     if(flecha) flecha.textContent=abierto?"▼":"▶";
-    if(abierto){
-        panel.scrollIntoView({block:"nearest",behavior:"smooth"});
-    }
+    if(abierto) panel.scrollIntoView({block:"nearest",behavior:"smooth"});
 }
 
-/* =========================================================
-   POPUPS LEAFLET MOVIBLES
-========================================================= */
 function hacerPopupMovible(popup){
     if(!popup || !popup._container || popup._container.dataset.movible === "1") return;
     const cont=popup._container;
     const wrapper=cont.querySelector(".leaflet-popup-content-wrapper");
     if(!wrapper) return;
+    const handle=wrapper.querySelector("h3");
+    if(!handle) return;
+
     cont.dataset.movible="1";
-    wrapper.classList.add("popup-drag-handle");
-    wrapper.style.touchAction="none";
+    handle.classList.add("popup-drag-handle");
+    handle.style.touchAction="none";
     let dragging=false,startX=0,startY=0,dx=0,dy=0;
     const point=e=>e.touches?e.touches[0]:e;
+
     const down=e=>{
-        if(e.target.closest(".leaflet-popup-close-button,button,input,select,textarea,a")) return;
+        if(e.target.closest("button,input,select,textarea,a")) return;
         const p=point(e);
         dragging=true; startX=p.clientX; startY=p.clientY;
-        wrapper.classList.add("popup-dragging");
-        if(e.pointerId!==undefined && wrapper.setPointerCapture){try{wrapper.setPointerCapture(e.pointerId);}catch(_) {}}
+        handle.classList.add("popup-dragging");
+        if(e.pointerId!==undefined && handle.setPointerCapture){ try{handle.setPointerCapture(e.pointerId);}catch(_){} }
         e.preventDefault(); e.stopPropagation();
     };
+
     const move=e=>{
-        if(!dragging)return;
+        if(!dragging) return;
         const p=point(e);
         dx += p.clientX-startX; dy += p.clientY-startY;
         startX=p.clientX; startY=p.clientY;
         wrapper.style.transform=`translate3d(${dx}px,${dy}px,0)`;
         e.preventDefault(); e.stopPropagation();
     };
+
     const up=e=>{
-        if(!dragging)return;
-        dragging=false; wrapper.classList.remove("popup-dragging");
-        if(e&&e.pointerId!==undefined&&wrapper.releasePointerCapture){try{wrapper.releasePointerCapture(e.pointerId);}catch(_) {}}
+        if(!dragging) return;
+        dragging=false;
+        handle.classList.remove("popup-dragging");
+        if(e && e.pointerId!==undefined && handle.releasePointerCapture){ try{handle.releasePointerCapture(e.pointerId);}catch(_){} }
     };
+
     if(window.PointerEvent){
-        wrapper.addEventListener("pointerdown",down,{passive:false});
-        wrapper.addEventListener("pointermove",move,{passive:false});
-        wrapper.addEventListener("pointerup",up,{passive:false});
-        wrapper.addEventListener("pointercancel",up,{passive:false});
+        handle.addEventListener("pointerdown",down,{passive:false});
+        handle.addEventListener("pointermove",move,{passive:false});
+        handle.addEventListener("pointerup",up,{passive:false});
+        handle.addEventListener("pointercancel",up,{passive:false});
     }else{
-        wrapper.addEventListener("mousedown",down); window.addEventListener("mousemove",move,{passive:false}); window.addEventListener("mouseup",up);
-        wrapper.addEventListener("touchstart",down,{passive:false}); wrapper.addEventListener("touchmove",move,{passive:false}); wrapper.addEventListener("touchend",up,{passive:false});
+        handle.addEventListener("mousedown",down);
+        window.addEventListener("mousemove",move,{passive:false});
+        window.addEventListener("mouseup",up);
+        handle.addEventListener("touchstart",down,{passive:false});
+        handle.addEventListener("touchmove",move,{passive:false});
+        handle.addEventListener("touchend",up,{passive:false});
     }
+}
+
+function copiarPopup(btn){
+    const popup = btn?.closest(".popup-incendio");
+    if(!popup) return;
+    const texto = popup.innerText.replace(/\n{3,}/g,"\n\n").trim();
+    const marcar = ()=>{
+        const original = btn.textContent;
+        btn.textContent = "✓ Información copiada";
+        btn.classList.add("popup-copiado");
+        setTimeout(()=>{ btn.textContent = original; btn.classList.remove("popup-copiado"); },1400);
+    };
+    if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(texto).then(marcar).catch(()=>copiarPopupFallback(texto,btn,marcar));
+    }else{
+        copiarPopupFallback(texto,btn,marcar);
+    }
+}
+
+function copiarPopupFallback(texto,btn,marcar){
+    const ta=document.createElement("textarea");
+    ta.value=texto; ta.style.position="fixed"; ta.style.left="-9999px"; ta.style.top="0";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{ document.execCommand("copy"); marcar(); }catch(e){ alert("No se pudo copiar automáticamente. Seleccione el texto del cuadro y use Ctrl+C."); }
+    ta.remove();
 }
 
 function activarPopupsMovibles(){
@@ -3028,379 +1554,86 @@ function activarPopupsMovibles(){
     map.on("popupopen",e=>setTimeout(()=>hacerPopupMovible(e.popup),0));
 }
 
-
-/* =========================================================
-   POPUP SENSOR
-========================================================= */
-
 function htmlSensorDetalle(sensores){
-
-    const arr =
-        Object.values(
-            sensores || {}
-        );
-
-    if(!arr.length)
-        return "N/D";
-
-    return `
-
-        <div class="popup-sensor">
-
-        ${
-            arr
-            .sort(
-                (a,b) =>
-                b.total - a.total
-            )
-            .map(
-                s => `
-
-                <div class="popup-sensor-row">
-
-                    <span>
-                        ● ${s.satelite} /
-                        ${s.sensor}
-                    </span>
-
-                    <b>
-                        ${s.total}
-                    </b>
-
-                </div>
-
-                `
-            )
-            .join("")
-        }
-
-        </div>
-
-    `;
-
+    const arr = Object.values(sensores || {});
+    if(!arr.length) return "N/D";
+    return `<div class="popup-sensor">${arr.sort((a,b) => b.total - a.total).map(s => `
+        <div class="popup-sensor-row">
+            <span>● ${s.satelite} / ${s.sensor}</span>
+            <b>${s.total}</b>
+        </div>`).join("")}</div>`;
 }
-
-/* =========================================================
-   DIBUJAR VIIRS
-========================================================= */
 
 function dibujarVIIRS(ds){
+    [capaVIIRS, capaSuomi, capaNOAA20, capaNOAA21].forEach(c => c.clearLayers());
+    ds.forEach(d => {
+        if(!Number.isFinite(d.latitude) || !Number.isFinite(d.longitude)) return;
+        const col = colorSensor(d);
+        const capa = obtenerCapaSensor(d, "VIIRS");
 
-    [
-        capaVIIRS,
-        capaSuomi,
-        capaNOAA20,
-        capaNOAA21
-    ]
-    .forEach(
-        c =>
-        c.clearLayers()
-    );
+        L.circleMarker([d.latitude, d.longitude], {
+            radius:5, color:col, fillColor:col, fillOpacity:.9
+        }).bindPopup(htmlDetalleSensor(d, "VIIRS — DETECCIÓN", "🔥", col)).addTo(capa);
+    });
 
-    ds.forEach(
-        d => {
-
-            if(
-                !Number.isFinite(d.latitude) ||
-                !Number.isFinite(d.longitude)
-            )
-                return;
-
-            const col =
-                colorSensor(d);
-
-            const capa =
-                obtenerCapaSensor(
-                    d,
-                    "VIIRS"
-                );
-
-            L.circleMarker(
-
-                [
-                    d.latitude,
-                    d.longitude
-                ],
-
-                {
-                    radius:5,
-                    color:col,
-                    fillColor:col,
-                    fillOpacity:.9
-                }
-
-            )
-            .bindPopup(
-
-                htmlDetalleSensor(
-                    d,
-                    "VIIRS — DETECCIÓN",
-                    "🔥",
-                    col
-                )
-
-            )
-            .addTo(capa);
-
-        }
-    );
-
-    /* Mostrar automáticamente Suomi-NPP si su checkbox está activo. */
-    if($("chkSuomi")?.checked)
-        capaSuomi.addTo(map);
-
-    if($("chkNOAA20")?.checked)
-        capaNOAA20.addTo(map);
-
-    if($("chkNOAA21")?.checked)
-        capaNOAA21.addTo(map);
-
+    if($("chkSuomi")?.checked) capaSuomi.addTo(map);
+    if($("chkNOAA20")?.checked) capaNOAA20.addTo(map);
+    if($("chkNOAA21")?.checked) capaNOAA21.addTo(map);
 }
-
-/* =========================================================
-   VIIRS DESCARTADOS
-========================================================= */
 
 function dibujarDesc(ds){
-
     capaVIIRSDescartados.clearLayers();
-
-    ds.forEach(
-        d => {
-
-            if(
-                !Number.isFinite(d.latitude) ||
-                !Number.isFinite(d.longitude)
-            )
-                return;
-
-            L.circleMarker(
-
-                [
-                    d.latitude,
-                    d.longitude
-                ],
-
-                {
-                    radius:4,
-                    color:"#616161",
-                    fillColor:"#9e9e9e",
-                    fillOpacity:.45,
-                    dashArray:"2 2"
-                }
-
-            )
-            .bindPopup(
-
-                htmlDetalleSensor(
-                    d,
-                    "VIIRS — DETECCIÓN DESCARTADA",
-                    "⚪",
-                    "#616161"
-                ) +
-                `<hr><b>Motivos del descarte:</b><br>${
-                    (d._razonesDescarte || []).map(escHtmlSensor).join("<br>")
-                }`
-
-            )
-            .addTo(
-                capaVIIRSDescartados
-            );
-
-        }
-    );
-
+    ds.forEach(d => {
+        if(!Number.isFinite(d.latitude) || !Number.isFinite(d.longitude)) return;
+        L.circleMarker([d.latitude, d.longitude], {
+            radius:4, color:"#616161", fillColor:"#9e9e9e", fillOpacity:.45, dashArray:"2 2"
+        }).bindPopup(htmlDetalleSensor(d, "VIIRS — DETECCIÓN DESCARTADA", "⚪", "#616161") +
+            `<hr><b>Motivos del descarte:</b><br>${(d._razonesDescarte || []).map(escHtmlSensor).join("<br>")}`
+        ).addTo(capaVIIRSDescartados);
+    });
 }
-
-/* =========================================================
-   DIBUJAR MODIS
-========================================================= */
 
 function dibujarMODIS(ds){
+    [capaMODIS, capaTerra, capaAqua].forEach(c => c.clearLayers());
+    ds.forEach(d => {
+        if(!Number.isFinite(d.latitude) || !Number.isFinite(d.longitude)) return;
+        const col = colorSensor(d);
+        const capa = obtenerCapaSensor(d, "MODIS");
 
-    [
-        capaMODIS,
-        capaTerra,
-        capaAqua
-    ]
-    .forEach(
-        c =>
-        c.clearLayers()
-    );
-
-    ds.forEach(
-        d => {
-
-            if(
-                !Number.isFinite(d.latitude) ||
-                !Number.isFinite(d.longitude)
-            )
-                return;
-
-            const col =
-                colorSensor(d);
-
-            const capa =
-                obtenerCapaSensor(
-                    d,
-                    "MODIS"
-                );
-
-            L.circleMarker(
-
-                [
-                    d.latitude,
-                    d.longitude
-                ],
-
-                {
-                    radius:5,
-                    color:col,
-                    fillColor:col,
-                    fillOpacity:.85
-                }
-
-            )
-            .bindPopup(
-
-                htmlDetalleSensor(
-                    d,
-                    "MODIS — DETECCIÓN",
-                    "🛰️",
-                    col
-                )
-
-            )
-            .addTo(capa);
-
-        }
-    );
-
+        L.circleMarker([d.latitude, d.longitude], {
+            radius:5, color:col, fillColor:col, fillOpacity:.85
+        }).bindPopup(htmlDetalleSensor(d, "MODIS — DETECCIÓN", "🛰️", col)).addTo(capa);
+    });
 }
-
-/* =========================================================
-   DIBUJAR GOES
-========================================================= */
 
 function dibujarGOES(ds){
+    [capaGOES, capaGOES18, capaGOES19].forEach(c => c.clearLayers());
+    ds.forEach(d => {
+        if(!Number.isFinite(d.latitude) || !Number.isFinite(d.longitude)) return;
+        const col = colorSensor(d);
+        const capa = obtenerCapaSensor(d, "GOES");
+        const radio = Math.max(5, Math.min(10, 5 + (d.frp||0)/50));
 
-    [
-        capaGOES,
-        capaGOES18,
-        capaGOES19
-    ]
-    .forEach(
-        c =>
-        c.clearLayers()
-    );
-
-    ds.forEach(
-        d => {
-
-            if(
-                !Number.isFinite(d.latitude) ||
-                !Number.isFinite(d.longitude)
-            )
-                return;
-
-            const col =
-                colorSensor(d);
-
-            const capa =
-                obtenerCapaSensor(
-                    d,
-                    "GOES"
-                );
-
-            const radio =
-                Math.max(
-                    5,
-                    Math.min(
-                        10,
-                        5 +
-                        (d.frp||0)/50
-                    )
-                );
-
-            L.circleMarker(
-
-                [
-                    d.latitude,
-                    d.longitude
-                ],
-
-                {
-                    radius:radio,
-                    color:col,
-                    fillColor:col,
-                    fillOpacity:.85,
-                    weight:2
-                }
-
-            )
-            .bindPopup(
-
-                htmlDetalleSensor(
-                    d,
-                    "GOES — DETECCIÓN",
-                    "🛰️",
-                    col
-                )
-
-            )
-            .addTo(capa);
-
-        }
-    );
-
+        L.circleMarker([d.latitude, d.longitude], {
+            radius:radio, color:col, fillColor:col, fillOpacity:.85, weight:2
+        }).bindPopup(htmlDetalleSensor(d, "GOES — DETECCIÓN", "🛰️", col)).addTo(capa);
+    });
 }
 
-/* =========================================================
-   DIBUJAR CLUSTERS
-========================================================= */
-
 function dibujarClusters(cs){
-
     capaClusters.clearLayers();
+    cs.forEach(c => {
+        const col = c.nivel === "ALTO" ? "#d50000" : c.nivel === "MEDIO" ? "#ef6c00" : "#1565c0";
 
-    cs.forEach(
-        c => {
-
-            const col =
-                c.nivel === "ALTO"
-                ? "#d50000"
-                : c.nivel === "MEDIO"
-                ? "#ef6c00"
-                : "#1565c0";
-
-            L.circleMarker(
-
-                [
-                    c.latitude,
-                    c.longitude
-                ],
-
-                {
-                    radius:11,
-                    color:col,
-                    fillColor:col,
-                    fillOpacity:.78,
-                    weight:3
-                }
-
-            )
-            .bindPopup(
-
-                `
-
-                <div class="popup-incendio">
-
-                <h3 style="color:${col}">
-                🔥 INCENDIO ${c.nivel}
-                </h3>
-
+        L.circleMarker([c.latitude, c.longitude], {
+            radius:11, color:col, fillColor:col, fillOpacity:.78, weight:3
+        }).bindPopup(`
+            <div class="popup-incendio">
+                <h3 style="color:${col}">🔥 INCENDIO ${c.nivel}</h3>
                 <div class="popup-resumen" style="border-left-color:${col}">
                     <div class="popup-resumen-titulo">📋 RESUMEN DEL EVENTO</div>
+                    <div><b>Latitud:</b> <span class="coord-valor">${Number(c.latitude).toFixed(6)}</span></div>
+                    <div><b>Longitud:</b> <span class="coord-valor">${Number(c.longitude).toFixed(6)}</span></div>
                     <div><b>Nivel:</b> ${c.nivel || "N/D"}</div>
                     <div><b>Prioridad:</b> ${c.prioridad || c.nivel || "N/D"}</div>
                     <div><b>Detecciones VIIRS:</b> ${c.size || 0}</div>
@@ -3409,167 +1642,64 @@ function dibujarClusters(cs){
                     <div><b>MODIS cercanos:</b> ${c.modisCercanos ? c.modisCercanos.length : 0}</div>
                     <div><b>GOES cercanos:</b> ${c.goesCercanos ? c.goesCercanos.length : 0}</div>
                 </div>
-                <button type="button" class="popup-tab" onclick="togglePopupTech(this)">
-                    <span>🔎 Ver información técnica completa</span><span class="flecha">▶</span>
-                </button>
+                <button type="button" class="popup-copiar" onclick="copiarPopup(this)">📋 Copiar toda la información</button>
+                <button type="button" class="popup-tab" onclick="togglePopupTech(this)"><span>🔎 Ver información técnica completa</span><span class="flecha">▶</span></button>
                 <div class="popup-tecnico">
-
-                <b>Fire Score:</b>
-                ${c.fireScore}
-                <br>
-
-                <b>VIIRS total:</b>
-                ${c.size}
-                <br>
-
-                <b>Satélites VIIRS:</b>
-                ${c.satelites.join(", ")}
-                <br>
-
-                <b>Detecciones por sensor:</b>
-
-                ${htmlSensorDetalle(c.sensores)}
-
-                <br>
-
-                <b>FRP máximo:</b>
-                ${c.frpMax.toFixed(2)}
-                MW
-                <br>
-
-                <b>FRP total:</b>
-                ${c.frpTotal.toFixed(2)}
-                MW
-                <br>
-
-                <b>MODIS ≤3 km:</b>
-                ${c.modisCercanos.length}
-                <br>
-
-                <b>GOES ≤10 km:</b>
-                ${c.goesCercanos.length}
-
-                <hr>
-
-                ${c.razones.join("<br>")}
+                    <b>Fire Score:</b> ${c.fireScore}<br>
+                    <b>VIIRS total:</b> ${c.size}<br>
+                    <b>Satélites VIIRS:</b> ${c.satelites.join(", ")}<br>
+                    <b>Detecciones por sensor:</b> ${htmlSensorDetalle(c.sensores)}<br>
+                    <b>FRP máximo:</b> ${c.frpMax.toFixed(2)} MW<br>
+                    <b>FRP total:</b> ${c.frpTotal.toFixed(2)} MW<br>
+                    <b>MODIS ≤3 km:</b> ${c.modisCercanos.length}<br>
+                    <b>GOES ≤10 km:</b> ${c.goesCercanos.length}<hr>
+                    ${c.razones.join("<br>")}
                 </div>
-                </div>
-
-                `
-
-            )
-            .addTo(
-                capaClusters
-            );
-
-        }
-    );
-
+            </div>`
+        ).addTo(capaClusters);
+    });
 }
 
-/* =========================================================
-   SERFOR
-========================================================= */
-
 async function serfor(id){
-
     const t0 = performance.now();
-
-    const r =
-        await fetch(
-
-            `${CONFIG.SERFOR.REST}/${id}/query` +
-            `?where=1%3D1` +
-            `&outFields=*` +
-            `&returnGeometry=true` +
-            `&outSR=4326` +
-            `&resultRecordCount=5000` +
-            `&f=geojson`,
-
-            {
-                cache:"no-store"
-            }
-
-        );
-
-    if(!r.ok)
-        throw Error(
-            `SERFOR HTTP ${r.status}`
-        );
-
+    const r = await fetch(`${CONFIG.SERFOR.REST}/${id}/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&resultRecordCount=5000&f=geojson`, { cache:"no-store" });
+    if(!r.ok) throw Error(`SERFOR HTTP ${r.status}`);
     const data = filtrarGeoJSONPeru(await r.json());
     data._consultaMs = Math.round(performance.now() - t0);
     data._serforId = id;
     return data;
-
 }
-
-
-/* =========================================================
-   ANTIGÜEDAD DE ALERTAS SERFOR
-========================================================= */
 
 function clavesFechaHoraSERFOR(props){
     const entries = Object.entries(props || {});
     const valid = ([k,v]) => v !== null && v !== undefined && v !== "";
+    const normalizarNombre = k => String(k ?? "").replace(/[\u00A0\u2007\u202F]/g, " ").trim().toUpperCase();
 
-    // PARA LA LEYENDA DE HORAS SE USAN EXCLUSIVAMENTE los campos
-    // FECHA y HORA de detección de la base de datos SERFOR.
-    // No se utiliza FECREG ni otros campos de fecha/hora.
-    const normalizarNombre = k => String(k ?? "")
-        .replace(/[\u00A0\u2007\u202F]/g, " ")
-        .trim()
-        .toUpperCase();
-
-    const fechaKey = entries.find(([k,v]) =>
-        valid([k,v]) && normalizarNombre(k) === "FECHA"
-    )?.[0] || null;
-
-    const horaKey = entries.find(([k,v]) =>
-        valid([k,v]) && normalizarNombre(k) === "HORA"
-    )?.[0] || null;
-
+    const fechaKey = entries.find(([k,v]) => valid([k,v]) && normalizarNombre(k) === "FECHA")?.[0] || null;
+    const horaKey = entries.find(([k,v]) => valid([k,v]) && normalizarNombre(k) === "HORA")?.[0] || null;
     return {fechaKey, horaKey};
 }
 
 function extraerFechaSERFOR(v){
     if(v === null || v === undefined || v === "") return null;
-
-    // La base SERFOR puede entregar FECHA como texto o como fecha/hora
-    // serializada. Siempre devolvemos YYYY-MM-DD, sin hora.
     const s = String(v).trim();
-
-    // YYYY-MM-DD o YYYY-MM-DDTHH:mm:ss...
     let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
     if(m){
-        const yyyy = Number(m[1]);
-        const mm = Number(m[2]);
-        const dd = Number(m[3]);
-        if(mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31)
-            return `${yyyy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
+        const yyyy = Number(m[1]), mm = Number(m[2]), dd = Number(m[3]);
+        if(mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31) return `${yyyy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
     }
-
-    // DD/MM/YYYY o DD-MM-YYYY
     m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
     if(m){
-        const dd = Number(m[1]);
-        const mm = Number(m[2]);
-        const yyyy = Number(m[3]);
-        if(mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31)
-            return `${yyyy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
+        const dd = Number(m[1]), mm = Number(m[2]), yyyy = Number(m[3]);
+        if(mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31) return `${yyyy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
     }
-
-    // Epoch en milisegundos/segundos, por si FECHA llega como número.
     if(typeof v === "number" || /^\d{10,13}$/.test(s)){
         const n = Number(v);
         const d = new Date(s.length === 10 ? n * 1000 : n);
         if(!isNaN(d.getTime())){
-            return new Intl.DateTimeFormat("en-CA",{
-                timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit"
-            }).format(d);
+            return new Intl.DateTimeFormat("en-CA",{ timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit" }).format(d);
         }
     }
-
     return null;
 }
 
@@ -3580,17 +1710,13 @@ function convertirFechaHoraSERFOR(v){
 
     let d = null;
     if(typeof v === "number" || /^\d{10,13}$/.test(s)){
-        const n = Number(v);
-        d = new Date(s.length === 10 ? n * 1000 : n);
+        const n = Number(v); d = new Date(s.length === 10 ? n * 1000 : n);
     } else {
         const fecha = extraerFechaSERFOR(s);
         if(fecha){
             const hora = s.match(/[ T](\d{1,2}:\d{2}(?::\d{2})?)/);
-            if(hora){
-                d = new Date(`${fecha}T${hora[1]}-05:00`);
-            } else {
-                d = new Date(`${fecha}T00:00:00-05:00`);
-            }
+            if(hora) d = new Date(`${fecha}T${hora[1]}-05:00`);
+            else d = new Date(`${fecha}T00:00:00-05:00`);
         } else {
             const iso = s.replace(" ","T");
             d = new Date(iso.endsWith("Z") || /[+-]\d{2}:?\d{2}$/.test(iso) ? iso : iso + "-05:00");
@@ -3601,38 +1727,23 @@ function convertirFechaHoraSERFOR(v){
 
 function horaTextoSERFOR(v){
     if(v === null || v === undefined || v === "") return null;
-
     const s = String(v).trim();
-
-    // HH:MM / HH:MM:SS
     let m = s.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
     if(m){
-        const hh = Number(m[1]);
-        const mm = Number(m[2]);
-        const ss = Number(m[3] || 0);
-        if(hh <= 23 && mm <= 59 && ss <= 59)
-            return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+        const hh = Number(m[1]), mm = Number(m[2]), ss = Number(m[3] || 0);
+        if(hh <= 23 && mm <= 59 && ss <= 59) return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
     }
-
-    // HHMM / HHMMSS. Esto cubre valores SERFOR como 0142, 142 o 014200.
     const dig = s.replace(/\D/g, "");
     if(/^\d{3,6}$/.test(dig)){
         const z = dig.padStart(4,"0");
-        const hh = Number(z.slice(0,2));
-        const mm = Number(z.slice(2,4));
-        const ss = z.length >= 6 ? Number(z.slice(4,6)) : 0;
-        if(hh <= 23 && mm <= 59 && ss <= 59)
-            return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+        const hh = Number(z.slice(0,2)), mm = Number(z.slice(2,4)), ss = z.length >= 6 ? Number(z.slice(4,6)) : 0;
+        if(hh <= 23 && mm <= 59 && ss <= 59) return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
     }
-
-    // Si HORA viniera incluida dentro de un valor fecha-hora, extraerla.
     const hm = s.match(/[ T](\d{1,2}):(\d{2})(?::(\d{2}))?/);
     if(hm){
         const hh = Number(hm[1]), mm = Number(hm[2]), ss = Number(hm[3] || 0);
-        if(hh <= 23 && mm <= 59 && ss <= 59)
-            return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+        if(hh <= 23 && mm <= 59 && ss <= 59) return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
     }
-
     return null;
 }
 
@@ -3643,43 +1754,17 @@ function fechaHoraSERFOR(feature){
     if(fechaKey){
         const fecha = extraerFechaSERFOR(props[fechaKey]);
         const hora = horaKey ? horaTextoSERFOR(props[horaKey]) : null;
-
-        // La antigüedad SIEMPRE se calcula con FECHA + HORA del mismo registro SERFOR.
         if(fecha && hora){
             const d = new Date(`${fecha}T${hora}-05:00`);
             if(!isNaN(d.getTime())) return d;
         }
-
-        // Respaldo si la base entrega fecha y hora en un único campo.
         const d = convertirFechaHoraSERFOR(props[fechaKey]);
         if(d) return d;
     }
-
     return null;
 }
 
-function fechaRegistroSERFOR(feature){
-    const combinada = fechaHoraSERFOR(feature);
-    if(combinada) return combinada;
-
-    // Fallback para registros cuya fecha ya contiene fecha y hora en un solo campo.
-    const props = feature?.properties || {};
-    const candidatos = Object.entries(props)
-        .filter(([k,v]) =>
-            v !== null && v !== undefined && v !== "" &&
-            esCampoFechaHora(k) &&
-            !/(hora|time|updated|actualiz)/i.test(k)
-        )
-        .map(([k,v]) => convertirFechaHoraSERFOR(v))
-        .filter(Boolean)
-        .sort((a,b) => b-a);
-
-    return candidatos[0] || null;
-}
-
 function calcularEdadAlerta(fechaAlertaStr, horaAlertaStr) {
-    // ANTIGÜEDAD = FECHA + HORA de detección SERFOR, siempre hora Perú.
-    // FECREG y cualquier otro campo quedan fuera del cálculo.
     const fecha = extraerFechaSERFOR(fechaAlertaStr);
     const hora = horaTextoSERFOR(horaAlertaStr);
     if(!fecha || !hora) return null;
@@ -3687,30 +1772,18 @@ function calcularEdadAlerta(fechaAlertaStr, horaAlertaStr) {
     const [yyyy, mm, dd] = fecha.split("-").map(Number);
     const [hh, mi, ss] = hora.split(":").map(Number);
 
-    if(!yyyy || mm < 1 || mm > 12 || dd < 1 || dd > 31 ||
-       hh < 0 || hh > 23 || mi < 0 || mi > 59 || ss < 0 || ss > 59)
-        return null;
+    if(!yyyy || mm < 1 || mm > 12 || dd < 1 || dd > 31 || hh < 0 || hh > 23 || mi < 0 || mi > 59 || ss < 0 || ss > 59) return null;
 
-    // Reloj de pared de Perú: ambos instantes se comparan en la misma escala.
     const deteccion = Date.UTC(yyyy, mm - 1, dd, hh, mi, ss);
-
     const ahora = new Date();
     const p = {};
     new Intl.DateTimeFormat("en-CA",{
-        timeZone:"America/Lima",
-        year:"numeric", month:"2-digit", day:"2-digit",
-        hour:"2-digit", minute:"2-digit", second:"2-digit",
-        hourCycle:"h23"
-    }).formatToParts(ahora).forEach(x => {
-        if(x.type !== "literal") p[x.type] = Number(x.value);
-    });
+        timeZone:"America/Lima", year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", second:"2-digit", hourCycle:"h23"
+    }).formatToParts(ahora).forEach(x => { if(x.type !== "literal") p[x.type] = Number(x.value); });
 
     if(!p.year || !p.month || !p.day) return null;
 
-    const actual = Date.UTC(
-        p.year, p.month - 1, p.day, p.hour || 0, p.minute || 0, p.second || 0
-    );
-
+    const actual = Date.UTC(p.year, p.month - 1, p.day, p.hour || 0, p.minute || 0, p.second || 0);
     return Number(Math.max(0, (actual - deteccion) / 3600000).toFixed(1));
 }
 
@@ -3718,53 +1791,13 @@ function antiguedadAlertaSERFOR(feature){
     const props = feature?.properties || {};
     const {fechaKey, horaKey} = clavesFechaHoraSERFOR(props);
 
-    // REGLA ÚNICA PARA LA LEYENDA:
-    // usar FECHA + HORA de detección. FECREG NO participa.
-    const horas = (fechaKey && horaKey)
-        ? calcularEdadAlerta(props[fechaKey], props[horaKey])
-        : null;
+    const horas = (fechaKey && horaKey) ? calcularEdadAlerta(props[fechaKey], props[horaKey]) : null;
 
-    if (horas === null) {
-        return {
-            horas: null,
-            clase: "edad-mas48",
-            etiqueta: "Fecha/Hora no disponible"
-        };
-    }
-
-    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H12) {
-        return {
-            horas,
-            clase: "edad-12",
-            etiqueta: "≤ 12 horas",
-            badge: "badge-edad-12"
-        };
-    }
-
-    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H24) {
-        return {
-            horas,
-            clase: "edad-24",
-            etiqueta: "> 12 horas y ≤ 24 horas",
-            badge: "badge-edad-24"
-        };
-    }
-
-    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H48) {
-        return {
-            horas,
-            clase: "edad-48",
-            etiqueta: "> 24 horas y ≤ 48 horas",
-            badge: "badge-edad-48"
-        };
-    }
-
-    return {
-        horas,
-        clase: "edad-mas48",
-        etiqueta: "> 48 horas",
-        badge: "badge-edad-mas48"
-    };
+    if (horas === null) return { horas: null, clase: "edad-mas48", etiqueta: "Fecha/Hora no disponible" };
+    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H12) return { horas, clase: "edad-12", etiqueta: "≤ 12 horas", badge: "badge-edad-12" };
+    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H24) return { horas, clase: "edad-24", etiqueta: "> 12 horas y ≤ 24 horas", badge: "badge-edad-24" };
+    if (horas <= CONFIG.SERFOR_ALERTAS_EDAD.H48) return { horas, clase: "edad-48", etiqueta: "> 24 horas y ≤ 48 horas", badge: "badge-edad-48" };
+    return { horas, clase: "edad-mas48", etiqueta: "> 48 horas", badge: "badge-edad-mas48" };
 }
 
 function iconoAlertaSERFOR(feature){
@@ -3772,193 +1805,68 @@ function iconoAlertaSERFOR(feature){
     return `<div class="icono-alerta-serfor ${edad.clase}"><span>🔥</span></div>`;
 }
 
-function popupS(
-    f,
-    title,
-    color
-){
-
+function popupS(f, title, color){
     const props=f.properties || {};
+    const coords=f?.geometry?.coordinates || [];
+    const lonGeo=Number(coords[0]), latGeo=Number(coords[1]);
     const esAlertaSERFOR = title.includes("INCENDIO FORESTAL SERFOR");
     const edadSERFOR = esAlertaSERFOR ? antiguedadAlertaSERFOR(f) : null;
     const vals=Object.entries(props).filter(([k,v])=>v!==null&&v!==undefined&&v!=="");
     const resumenVals=vals.slice(0,6);
     const detalleVals=vals.slice(6,40);
+
     return `
         <div class="popup-incendio">
             <h3 style="color:${color}">${title}</h3>
             ${edadSERFOR ? `<div style="margin:5px 0 8px"><span class="badge ${edadSERFOR.badge || "badge-descartado"}">${edadSERFOR.etiqueta}</span>${edadSERFOR.horas !== null ? ` <span style="font-size:11px;color:#555">(${edadSERFOR.horas.toFixed(1)} h de antigüedad)</span>` : ""}</div>` : ""}
             <div class="popup-resumen" style="border-left-color:${color}">
                 <div class="popup-resumen-titulo">📋 RESUMEN</div>
+                <div><b>Latitud:</b> <span class="coord-valor">${Number.isFinite(latGeo) ? latGeo.toFixed(6) : "N/D"}</span></div>
+                <div><b>Longitud:</b> <span class="coord-valor">${Number.isFinite(lonGeo) ? lonGeo.toFixed(6) : "N/D"}</span></div>
                 ${resumenVals.map(([k,v])=>`<div><b>${escHtmlSensor(k)}:</b> ${escHtmlSensor(valorSERFOR(k,v,f))}</div>`).join("")}
             </div>
+            <button type="button" class="popup-copiar" onclick="copiarPopup(this)">📋 Copiar toda la información</button>
             ${detalleVals.length ? `<button type="button" class="popup-tab" onclick="togglePopupTech(this)"><span>🔎 Ver información técnica completa</span><span class="flecha">▶</span></button><div class="popup-tecnico">${detalleVals.map(([k,v])=>`<div><b>${escHtmlSensor(k)}:</b> ${escHtmlSensor(valorSERFOR(k,v,f))}</div>`).join("")}</div>` : ""}
         </div>`;
-
 }
 
-function dibujarS(
-    g,
-    layer,
-    icon,
-    title,
-    color
-){
-
+function dibujarS(g, layer, icon, title, color){
     layer.clearLayers();
+    (g.features || []).forEach(f => {
+        if(f.geometry?.type !== "Point") return;
+        const [x, y] = f.geometry.coordinates;
 
-    (
-        g.features || []
-    )
-    .forEach(
-        f => {
-
-            if(
-                f.geometry?.type !== "Point"
-            )
-                return;
-
-            const [
-                x,
-                y
-            ] =
-                f.geometry.coordinates;
-
-            L.marker(
-
-                [y,x],
-
-                {
-
-                    icon:
-                        L.divIcon(
-                            {
-
-                                className:"",
-                                html: title.includes("INCENDIO FORESTAL SERFOR")
-                                    ? iconoAlertaSERFOR(f)
-                                    : icon,
-
-                                iconSize:
-                                    [32,32],
-
-                                iconAnchor:
-                                    [16,16]
-
-                            }
-                        )
-
-                }
-
-            )
-            .bindPopup(
-                popupS(
-                    f,
-                    title,
-                    color
-                )
-            )
-            .addTo(layer);
-
-        }
-    );
-
+        L.marker([y,x], {
+            icon: L.divIcon({
+                className:"",
+                html: title.includes("INCENDIO FORESTAL SERFOR") ? iconoAlertaSERFOR(f) : icon,
+                iconSize: [32,32], iconAnchor: [16,16]
+            })
+        }).bindPopup(popupS(f, title, color)).addTo(layer);
+    });
 }
 
 function extraerUltimaFechaSERFOR(features){
-
     const candidatos = [];
-
-    // Aceptar tanto un arreglo de Features como un FeatureCollection GeoJSON.
-    const lista = Array.isArray(features)
-        ? features
-        : (features && Array.isArray(features.features) ? features.features : []);
+    const lista = Array.isArray(features) ? features : (features && Array.isArray(features.features) ? features.features : []);
 
     lista.forEach(f => {
         Object.entries(f.properties || {}).forEach(([k,v]) => {
-            if(!esCampoFechaHora(k) || v === null || v === undefined || v === "")
-                return;
-
+            if(!esCampoFechaHora(k) || v === null || v === undefined || v === "") return;
             const s = String(v).trim();
-            if(/^\d{1,2}:\d{2}(:\d{2})?$/.test(s))
-                return;
+            if(/^\d{1,2}:\d{2}(:\d{2})?$/.test(s)) return;
 
             let d = null;
-
             if(typeof v === "number" || /^\d{10,13}$/.test(s)){
-                const n = Number(v);
-                d = new Date(s.length === 10 ? n * 1000 : n);
+                const n = Number(v); d = new Date(s.length === 10 ? n * 1000 : n);
+            } else {
+                const iso = s.replace(" ","T"); d = new Date(iso.endsWith("Z") ? iso : iso + "Z");
             }
-            else{
-                const iso = s.replace(" ","T");
-                d = new Date(iso.endsWith("Z") ? iso : iso + "Z");
-            }
-
-            if(d && !isNaN(d.getTime()))
-                candidatos.push(d);
+            if(d && !isNaN(d.getTime())) candidatos.push(d);
         });
     });
-
-    return candidatos.length
-        ? new Date(Math.max(...candidatos.map(d => d.getTime())))
-        : null;
+    return candidatos.length ? new Date(Math.max(...candidatos.map(d => d.getTime()))) : null;
 }
-
-async function cargarS(
-    id,
-    layer,
-    icon,
-    title,
-    color,
-    count
-){
-
-    try{
-
-        const g =
-            await serfor(id);
-
-        const f =
-            g.features || [];
-
-        dibujarS(
-            g,
-            layer,
-            icon,
-            title,
-            color
-        );
-
-        txt(
-            count,
-            f.length
-        );
-
-        return {
-            features:f,
-            consultaMs:g._consultaMs,
-            ultimo:extraerUltimaFechaSERFOR(f)
-        };
-
-    }
-    catch(e){
-
-        txt(
-            count,
-            "ERROR"
-        );
-        txt("estadoSERFOR", `ERROR · ${e.message}`);
-
-        return {
-            features:[],
-            consultaMs:null,
-            ultimo:null
-        };
-
-    }
-
-}
-
 
 function contarAlertasPorEdadSERFOR(alertas){
     const r = {h12:0, h24:0, h48:0, mas48:0};
@@ -3973,43 +1881,22 @@ function contarAlertasPorEdadSERFOR(alertas){
 }
 
 async function refrescarSERFOR(){
-
     const t0 = performance.now();
-
     try{
+        const resultados = await Promise.all([
+            serfor(CONFIG.SERFOR.FOCOS),
+            serfor(CONFIG.SERFOR.ALERTAS)
+        ]);
 
-        const resultados =
-            await Promise.all([
-                serfor(CONFIG.SERFOR.FOCOS),
-                serfor(CONFIG.SERFOR.ALERTAS)
-            ]);
-
-        const [
-            focoData,
-            alertaData
-        ] = resultados;
-
+        const [focoData, alertaData] = resultados;
         const focos = focoData.features || [];
         const alertas = alertaData.features || [];
 
         datosFocosSERFOR = focos;
         datosAlertasSERFOR = alertas;
 
-        dibujarS(
-            {features:focos},
-            capaFocosSERFOR,
-            '<div class="icono-foco-serfor"></div>',
-            "🔥 FOCO DE CALOR SERFOR",
-            "#8B1E3F"
-        );
-
-        dibujarS(
-            {features:alertas},
-            capaAlertasSERFOR,
-            '<div class="icono-alerta-serfor"><span>🔥</span></div>',
-            "🔥 INCENDIO FORESTAL SERFOR",
-            "#d32f2f"
-        );
+        dibujarS({features:focos}, capaFocosSERFOR, '<div class="icono-foco-serfor"></div>', "🔥 FOCO DE CALOR SERFOR", "#8B1E3F");
+        dibujarS({features:alertas}, capaAlertasSERFOR, '<div class="icono-alerta-serfor"><span>🔥</span></div>', "🔥 INCENDIO FORESTAL SERFOR", "#d32f2f");
 
         txt("totalFocosSERFOR", focos.length);
         txt("totalAlertasSERFOR", alertas.length);
@@ -4020,406 +1907,102 @@ async function refrescarSERFOR(){
         txt("totalAlertasSERFOR48", edades.h48);
         txt("totalAlertasSERFORMas48", edades.mas48);
 
-        const ultima =
-            [
-                extraerFechaSERFOR(focos),
-                extraerFechaSERFOR(alertas)
-            ]
-            .filter(Boolean)
-            .sort((a,b)=>b-a)[0] || null;
+        const ultima = [extraerFechaSERFOR(focos), extraerFechaSERFOR(alertas)].filter(Boolean).sort((a,b)=>b-a)[0] || null;
+        txt("demoraSERFOR", `${Math.round(performance.now() - t0)} ms`);
+        txt("estadoSERFOR", `OK · ${focos.length + alertas.length} registros`);
 
-        txt(
-            "demoraSERFOR",
-            `${Math.round(performance.now() - t0)} ms`
-        );
-
-        txt(
-            "estadoSERFOR",
-            `OK · ${focos.length + alertas.length} registros`
-        );
-
-        const ultimaPeru =
-            ultima
-            ? formatFechaHoraPeru(ultima)
-            : null;
-
-        txt(
-            "ultimoSERFOR",
-            ultimaPeru
-            ? `${ultimaPeru} (Perú)`
-            : "N/D"
-        );
+        const ultimaPeru = ultima ? formatFechaHoraPeru(ultima) : null;
+        txt("ultimoSERFOR", ultimaPeru ? `${ultimaPeru} (Perú)` : "N/D");
 
         return true;
-
-    }
-    catch(e){
-
-        console.error(
-            "SERFOR",
-            e
-        );
-
-        txt(
-            "estadoSERFOR",
-            `ERROR · ${e.message}`
-        );
-
-        txt(
-            "demoraSERFOR",
-            `${Math.round(performance.now() - t0)} ms`
-        );
-
+    }catch(e){
+        console.error("SERFOR", e);
+        txt("estadoSERFOR", `ERROR · ${e.message}`);
+        txt("demoraSERFOR", `${Math.round(performance.now() - t0)} ms`);
         return false;
-
     }
-
 }
 
 function alternarFocosSERFOR(){
-
-    if(
-        $("chkFocosSERFOR").checked
-    ){
-
+    if($("chkFocosSERFOR").checked){
         capaFocosSERFOR.addTo(map);
-
-        if(!datosFocosSERFOR.length)
-            refrescarSERFOR();
-
-    }
-    else{
-
-        map.removeLayer(
-            capaFocosSERFOR
-        );
-
-    }
-
+        if(!datosFocosSERFOR.length) refrescarSERFOR();
+    } else map.removeLayer(capaFocosSERFOR);
 }
 
 function alternarAlertasSERFOR(){
-
-    if(
-        $("chkAlertasSERFOR").checked
-    ){
-
+    if($("chkAlertasSERFOR").checked){
         capaAlertasSERFOR.addTo(map);
-
-        if(!datosAlertasSERFOR.length)
-            refrescarSERFOR();
-
-    }
-    else{
-
-        map.removeLayer(
-            capaAlertasSERFOR
-        );
-
-    }
-
+        if(!datosAlertasSERFOR.length) refrescarSERFOR();
+    } else map.removeLayer(capaAlertasSERFOR);
 }
-
-/* =========================================================
-   ESTADÍSTICA SENSOR
-========================================================= */
 
 function actualizarEstadisticaSensores(){
+    const contenedor = $("estadisticaSensores");
+    if(!contenedor) return;
 
-    const contenedor =
-        $("estadisticaSensores");
-
-    if(!contenedor)
-        return;
-
-    const todos = [
-
-        ...datosVIIRS,
-        ...datosMODIS,
-        ...datosGOES
-
-    ];
-
-    const resumen =
-        resumenPorSensor(
-            todos
-        );
-
-    const sensores =
-        Object.values(
-            resumen
-        );
+    const todos = [...datosVIIRS, ...datosMODIS, ...datosGOES];
+    const resumen = resumenPorSensor(todos);
+    const sensores = Object.values(resumen);
 
     if(!sensores.length){
-
-        contenedor.innerHTML = `
-
-            <div class="stat">
-                <span>Sin datos</span>
-                <span>0</span>
-            </div>
-
-        `;
-
+        contenedor.innerHTML = `<div class="stat"><span>Sin datos</span><span>0</span></div>`;
         return;
-
     }
 
-    contenedor.innerHTML =
-
-        sensores
-        .sort(
-            (a,b) =>
-            b.total - a.total
-        )
-        .map(
-            s => {
-
-                const color =
-                    colorSensor({
-
-                        satellite:
-                            s.satelite,
-
-                        instrument:
-                            s.sensor
-
-                    });
-
-                return `
-
-                <div class="stat">
-
-                    <span class="stat-satelite">
-
-                        <span
-                            class="sensor-punto"
-                            style="background:${color}"
-                        ></span>
-
-                        ${s.satelite} /
-                        ${s.sensor}
-
-                    </span>
-
-                    <span>
-                        ${s.total}
-                    </span>
-
-                </div>
-
-                `;
-
-            }
-        )
-        .join("");
-
+    contenedor.innerHTML = sensores.sort((a,b) => b.total - a.total).map(s => {
+        const color = colorSensor({ satellite: s.satelite, instrument: s.sensor });
+        return `
+        <div class="stat">
+            <span class="stat-satelite">
+                <span class="sensor-punto" style="background:${color}"></span>
+                ${s.satelite} / ${s.sensor}
+            </span>
+            <span>${s.total}</span>
+        </div>`;
+    }).join("");
 }
 
-/* =========================================================
-   ESTADÍSTICA COMPLETA
-========================================================= */
-
 function estadistica(cs){
+    const a = new Date();
+    txt("fechaPeru", fecha());
+    txt("horaPeru", hora(a, "America/Lima"));
+    txt("horaUTC", hora(a, "UTC"));
 
-    const a =
-        new Date();
+    txt("totalVIIRSOriginales", datosVIIRSOriginales.length);
+    txt("totalVIIRSValidos", datosVIIRS.length);
+    txt("totalVIIRSDescartados", datosVIIRSDescartados.length);
 
-    txt(
-        "fechaPeru",
-        fecha()
-    );
+    datosSuomi = datosVIIRS.filter(d => d.satellite === "Suomi-NPP");
+    datosNOAA20 = datosVIIRS.filter(d => d.satellite === "NOAA-20");
+    datosNOAA21 = datosVIIRS.filter(d => d.satellite === "NOAA-21");
+    datosVIIRSOtros = datosVIIRS.filter(d => !["Suomi-NPP", "NOAA-20", "NOAA-21"].includes(d.satellite));
 
-    txt(
-        "horaPeru",
-        hora(
-            a,
-            "America/Lima"
-        )
-    );
+    txt("totalSuomi", datosSuomi.length);
+    txt("totalNOAA20", datosNOAA20.length);
+    txt("totalNOAA21", datosNOAA21.length);
+    txt("totalVIIRSOtros", datosVIIRSOtros.length);
 
-    txt(
-        "horaUTC",
-        hora(
-            a,
-            "UTC"
-        )
-    );
+    datosMODISTerra = datosMODIS.filter(d => d.satellite === "Terra");
+    datosMODISAqua = datosMODIS.filter(d => d.satellite === "Aqua");
+    datosMODISOtros = datosMODIS.filter(d => !["Terra", "Aqua"].includes(d.satellite));
 
-    /* VIIRS */
+    txt("totalMODISTerra", datosMODISTerra.length);
+    txt("totalMODISAqua", datosMODISAqua.length);
+    txt("totalMODISOtros", datosMODISOtros.length);
+    txt("totalMODIS", datosMODIS.length);
 
-    txt(
-        "totalVIIRSOriginales",
-        datosVIIRSOriginales.length
-    );
+    datosGOES18 = datosGOES.filter(d => d.satellite === "GOES-18");
+    datosGOES19 = datosGOES.filter(d => d.satellite === "GOES-19");
+    datosGOESOtros = datosGOES.filter(d => !["GOES-18", "GOES-19"].includes(d.satellite));
 
-    txt(
-        "totalVIIRSValidos",
-        datosVIIRS.length
-    );
+    txt("totalGOES18", datosGOES18.length);
+    txt("totalGOES19", datosGOES19.length);
+    txt("totalGOESOtros", datosGOESOtros.length);
+    txt("totalGOES", datosGOES.length);
 
-    txt(
-        "totalVIIRSDescartados",
-        datosVIIRSDescartados.length
-    );
-
-    datosSuomi =
-        datosVIIRS.filter(
-            d =>
-            d.satellite ===
-            "Suomi-NPP"
-        );
-
-    datosNOAA20 =
-        datosVIIRS.filter(
-            d =>
-            d.satellite ===
-            "NOAA-20"
-        );
-
-    datosNOAA21 =
-        datosVIIRS.filter(
-            d =>
-            d.satellite ===
-            "NOAA-21"
-        );
-
-    datosVIIRSOtros =
-        datosVIIRS.filter(
-            d =>
-            ![
-                "Suomi-NPP",
-                "NOAA-20",
-                "NOAA-21"
-            ]
-            .includes(
-                d.satellite
-            )
-        );
-
-    txt(
-        "totalSuomi",
-        datosSuomi.length
-    );
-
-    txt(
-        "totalNOAA20",
-        datosNOAA20.length
-    );
-
-    txt(
-        "totalNOAA21",
-        datosNOAA21.length
-    );
-
-    txt(
-        "totalVIIRSOtros",
-        datosVIIRSOtros.length
-    );
-
-    /* MODIS */
-
-    datosMODISTerra =
-        datosMODIS.filter(
-            d =>
-            d.satellite === "Terra"
-        );
-
-    datosMODISAqua =
-        datosMODIS.filter(
-            d =>
-            d.satellite === "Aqua"
-        );
-
-    datosMODISOtros =
-        datosMODIS.filter(
-            d =>
-            ![
-                "Terra",
-                "Aqua"
-            ]
-            .includes(
-                d.satellite
-            )
-        );
-
-    txt(
-        "totalMODISTerra",
-        datosMODISTerra.length
-    );
-
-    txt(
-        "totalMODISAqua",
-        datosMODISAqua.length
-    );
-
-    txt(
-        "totalMODISOtros",
-        datosMODISOtros.length
-    );
-
-    txt(
-        "totalMODIS",
-        datosMODIS.length
-    );
-
-    /* GOES */
-
-    datosGOES18 =
-        datosGOES.filter(
-            d =>
-            d.satellite === "GOES-18"
-        );
-
-    datosGOES19 =
-        datosGOES.filter(
-            d =>
-            d.satellite === "GOES-19"
-        );
-
-    datosGOESOtros =
-        datosGOES.filter(
-            d =>
-            ![
-                "GOES-18",
-                "GOES-19"
-            ]
-            .includes(
-                d.satellite
-            )
-        );
-
-    txt(
-        "totalGOES18",
-        datosGOES18.length
-    );
-
-    txt(
-        "totalGOES19",
-        datosGOES19.length
-    );
-
-    txt(
-        "totalGOESOtros",
-        datosGOESOtros.length
-    );
-
-    txt(
-        "totalGOES",
-        datosGOES.length
-    );
-
-    /* SERFOR */
-
-    txt(
-        "totalFocosSERFOR",
-        datosFocosSERFOR.length
-    );
-
-    txt(
-        "totalAlertasSERFOR",
-        datosAlertasSERFOR.length
-    );
+    txt("totalFocosSERFOR", datosFocosSERFOR.length);
+    txt("totalAlertasSERFOR", datosAlertasSERFOR.length);
 
     const edadesSERFOR = contarAlertasPorEdadSERFOR(datosAlertasSERFOR);
     txt("totalAlertasSERFOR12", edadesSERFOR.h12);
@@ -4427,655 +2010,286 @@ function estadistica(cs){
     txt("totalAlertasSERFOR48", edadesSERFOR.h48);
     txt("totalAlertasSERFORMas48", edadesSERFOR.mas48);
 
-    /* CLUSTERS */
-
-    txt(
-        "totalClusters",
-        cs.length
-    );
-
-    txt(
-        "totalAlto",
-        cs.filter(
-            c =>
-            c.nivel === "ALTO"
-        ).length
-    );
-
-    txt(
-        "totalMedio",
-        cs.filter(
-            c =>
-            c.nivel === "MEDIO"
-        ).length
-    );
-
-    txt(
-        "totalBajo",
-        cs.filter(
-            c =>
-            c.nivel === "BAJO"
-        ).length
-    );
+    txt("totalClusters", cs.length);
+    txt("totalAlto", cs.filter(c => c.nivel === "ALTO").length);
+    txt("totalMedio", cs.filter(c => c.nivel === "MEDIO").length);
+    txt("totalBajo", cs.filter(c => c.nivel === "BAJO").length);
 
     actualizarEstadisticaSensores();
-
 }
 
-/* =========================================================
-   ACTUALIZAR INCENDIOS
-========================================================= */
-
 async function actualizarIncendios(){
-
-    if(actualizando)
-        return;
+    if(actualizando) return;
 
     if(!mapKey()){
-
-        datosVIIRS = [];
-        datosVIIRSOriginales = [];
-        datosVIIRSDescartados = [];
-        datosSuomi = [];
-        datosNOAA20 = [];
-        datosNOAA21 = [];
-        datosVIIRSOtros = [];
+        datosVIIRS = []; datosVIIRSOriginales = []; datosVIIRSDescartados = [];
+        datosSuomi = []; datosNOAA20 = []; datosNOAA21 = []; datosVIIRSOtros = [];
         estadistica([]);
         sensorEstado("estadoVIIRS","FALTA MAP_KEY","error");
-
         estado("⚠️ Falta MAP_KEY de FIRMS — no se pueden consultar VIIRS/MODIS/GOES");
         mostrarCarga(true,"Consultando datos SERFOR...");
-        try { await refrescarSERFOR(); }
-        catch(e) { console.error("SERFOR",e); }
+        try { await refrescarSERFOR(); } catch(e) { console.error("SERFOR",e); }
         finally { mostrarCarga(false); }
         return;
-
     }
 
     actualizando = true;
-
-    $("btnActualizar").disabled =
-        true;
-
-    mostrarCarga(
-        true,
-        "Consultando FIRMS y SERFOR..."
-    );
+    $("btnActualizar").disabled = true;
+    mostrarCarga(true, "Consultando FIRMS y SERFOR...");
 
     try{
-
         window.__FIRMS_ERRORES = [];
-
         const all = [];
-
         let err = 0;
 
-        /* SERFOR se actualiza en cada ciclo para evitar datos antiguos. */
         const promesaSERFOR = refrescarSERFOR();
 
-        /* ============================
-           VIIRS POR SATÉLITE
-        ============================ */
-
-        /*
-         * IMPORTANTE:
-         * No se filtra por "fecha de hoy" aquí.
-         * FIRMS entrega una ventana NRT y la hora acq_date/acq_time
-         * está referida a UTC. Filtrar antes por fecha Perú podía
-         * eliminar todas las detecciones de Suomi-NPP.
-         */
         const viirsResultados = await Promise.all(
             CONFIG.FIRMS.SOURCES.map(async s => {
-
                 try{
-
                     const raw = await firms(s.id);
-
-                    const normalizados =
-                        raw
-                        .map(d => viirs(d,s));
-
-                    console.info(
-                        `[VIIRS] ${s.nombre}: ${normalizados.length} recibidos`
-                    );
-
-                    return normalizados;
-
-                }
-                catch(e){
-
-                    console.error(
-                        `Error ${s.id}:`,
-                        e
-                    );
-
+                    return raw.map(d => viirs(d,s));
+                }catch(e){
+                    console.error(`Error ${s.id}:`, e);
                     err++;
-
-                    /* Guardar diagnóstico para mostrarlo al usuario. */
-                    window.__FIRMS_ERRORES =
-                        window.__FIRMS_ERRORES || [];
-
-                    window.__FIRMS_ERRORES.push(
-                        `${s.nombre}: ${e.message || e}`
-                    );
-
+                    window.__FIRMS_ERRORES = window.__FIRMS_ERRORES || [];
+                    window.__FIRMS_ERRORES.push(`${s.nombre}: ${e.message || e}`);
                     return [];
                 }
-
             })
         );
 
-        for(const grupo of viirsResultados)
-            all.push(...grupo);
+        for(const grupo of viirsResultados) all.push(...grupo);
 
-        /*
-         * COUNTRY = PERU.
-         * El filtro territorial se realiza después de recibir los datos,
-         * no antes de clasificar el satélite.
-         */
-        const allPeru =
-            filtrarRegistrosPeru(all);
+        const allPeru = filtrarRegistrosPeru(all);
+        datosVIIRSOriginales = allPeru;
 
-        datosVIIRSOriginales =
-            allPeru;
+        const q = validar(allPeru);
+        datosVIIRS = q.v;
+        datosVIIRSDescartados = q.x;
 
-        const q =
-            validar(allPeru);
+        datosSuomi = datosVIIRS.filter(d => d.satellite === "Suomi-NPP");
+        datosNOAA20 = datosVIIRS.filter(d => d.satellite === "NOAA-20");
+        datosNOAA21 = datosVIIRS.filter(d => d.satellite === "NOAA-21");
+        datosVIIRSOtros = datosVIIRS.filter(d => !["Suomi-NPP", "NOAA-20", "NOAA-21"].includes(d.satellite));
 
-        datosVIIRS =
-            q.v;
-
-        datosVIIRSDescartados =
-            q.x;
-
-        /* VIIRS POR SENSOR */
-
-
-        datosSuomi =
-            datosVIIRS.filter(
-                d =>
-                d.satellite ===
-                "Suomi-NPP"
-            );
-
-        datosNOAA20 =
-            datosVIIRS.filter(
-                d =>
-                d.satellite ===
-                "NOAA-20"
-            );
-
-        datosNOAA21 =
-            datosVIIRS.filter(
-                d =>
-                d.satellite ===
-                "NOAA-21"
-            );
-
-        datosVIIRSOtros =
-            datosVIIRS.filter(
-                d =>
-                ![
-                    "Suomi-NPP",
-                    "NOAA-20",
-                    "NOAA-21"
-                ]
-                .includes(
-                    d.satellite
-                )
-            );
-
-        sensorEstado(
-            "estadoVIIRS",
-            err
-            ? "PARCIAL"
-            : "OK",
-            err
-            ? "error"
-            : "ok"
-        );
-
-        /* ============================
-           MODIS
-        ============================ */
+        sensorEstado("estadoVIIRS", err ? "PARCIAL" : "OK", err ? "error" : "ok");
 
         try{
-
-            mostrarCarga(
-                true,
-                "Consultando Terra / Aqua — MODIS..."
-            );
-
-            datosMODIS =
-                (
-                    await firms(
-                        CONFIG.FIRMS.MODIS
-                    )
-                )
-                .map(
-                    d =>
-                    normalizarSensor(
-                        sensorDato(
-                            d,
-                            "MODIS"
-                        ),
-                        "MODIS"
-                    )
-                )
+            mostrarCarga(true, "Consultando Terra / Aqua — MODIS...");
+            datosMODIS = (await firms(CONFIG.FIRMS.MODIS))
+                .map(d => normalizarSensor(sensorDato(d, "MODIS"), "MODIS"))
                 .filter(esPuntoPeruRegistro);
-
-            sensorEstado(
-                "estadoMODIS",
-                "OK",
-                "ok"
-            );
-
-        }
-        catch(e){
-
-            console.error(
-                "MODIS",
-                e
-            );
-
+            sensorEstado("estadoMODIS", "OK", "ok");
+        }catch(e){
+            console.error("MODIS", e);
             datosMODIS = [];
-
-            sensorEstado(
-                "estadoMODIS",
-                "ERROR",
-                "error"
-            );
-
+            sensorEstado("estadoMODIS", "ERROR", "error");
         }
-
-        /* ============================
-           GOES
-        ============================ */
 
         try{
-
-            mostrarCarga(
-                true,
-                "Consultando GOES-18 / GOES-19 — ABI..."
-            );
-
-            datosGOES =
-                (
-                    await firms(
-                        CONFIG.FIRMS.GOES
-                    )
-                )
-                .map(
-                    d =>
-                    normalizarSensor(
-                        sensorDato(
-                            d,
-                            "GOES"
-                        ),
-                        "GOES"
-                    )
-                )
+            mostrarCarga(true, "Consultando GOES-18 / GOES-19 — ABI...");
+            datosGOES = (await firms(CONFIG.FIRMS.GOES))
+                .map(d => normalizarSensor(sensorDato(d, "GOES"), "GOES"))
                 .filter(esPuntoPeruRegistro);
-
-            sensorEstado(
-                "estadoGOES",
-                "OK",
-                "ok"
-            );
-
-        }
-        catch(e){
-
-            console.error(
-                "GOES",
-                e
-            );
-
+            sensorEstado("estadoGOES", "OK", "ok");
+        }catch(e){
+            console.error("GOES", e);
             datosGOES = [];
-
-            sensorEstado(
-                "estadoGOES",
-                "ERROR",
-                "error"
-            );
-
+            sensorEstado("estadoGOES", "ERROR", "error");
         }
 
         await promesaSERFOR;
 
-        /* ============================
-           DIBUJAR
-        ============================ */
-
-        dibujarVIIRS(
-            datosVIIRS
-        );
-
-        dibujarDesc(
-            datosVIIRSDescartados
-        );
-
-        dibujarMODIS(
-            datosMODIS
-        );
-
-        dibujarGOES(
-            datosGOES
-        );
-
-        /* ============================
-           CLUSTERS
-        ============================ */
+        dibujarVIIRS(datosVIIRS);
+        dibujarDesc(datosVIIRSDescartados);
+        dibujarMODIS(datosMODIS);
+        dibujarGOES(datosGOES);
 
         const cs = [];
-
-        for(
-            const g of
-            hacerClusters(
-                datosVIIRS
-            )
-        ){
-
-            const c = {
-
-                ...stats(g),
-
-                modisCercanos:[],
-                goesCercanos:[]
-
-            };
-
-            c.modisCercanos =
-                cercanos(
-                    datosMODIS,
-                    c,
-                    CONFIG.CORROBORACION.MODIS_M
-                );
-
-            c.goesCercanos =
-                cercanos(
-                    datosGOES,
-                    c,
-                    CONFIG.CORROBORACION.GOES_M
-                );
-
-            Object.assign(
-                c,
-                score(c)
-            );
-
+        for(const g of hacerClusters(datosVIIRS)){
+            const c = { ...stats(g), modisCercanos:[], goesCercanos:[] };
+            c.modisCercanos = cercanos(datosMODIS, c, CONFIG.CORROBORACION.MODIS_M);
+            c.goesCercanos = cercanos(datosGOES, c, CONFIG.CORROBORACION.GOES_M);
+            Object.assign(c, score(c));
             cs.push(c);
-
         }
 
-        clustersGlobal =
-            cs;
-
-        dibujarClusters(
-            cs
-        );
-
-        /* ============================
-           ESTADÍSTICA
-        ============================ */
-
+        clustersGlobal = cs;
+        dibujarClusters(cs);
         estadistica(cs);
-        const erroresFirms =
-            Array.isArray(window.__FIRMS_ERRORES)
-            ? window.__FIRMS_ERRORES
-            : [];
 
+        const erroresFirms = Array.isArray(window.__FIRMS_ERRORES) ? window.__FIRMS_ERRORES : [];
         if(erroresFirms.length){
-
-            const resumenErrores =
-                erroresFirms.join(" | ");
-
-            estado(
-                `⚠️ FIRMS con errores: ${resumenErrores}`
-            );
-
-            txt(
-                "estadoVIIRS",
-                `ERROR — ${erroresFirms.length} fuente(s)`
-            );
-
+            estado(`⚠️ FIRMS con errores: ${erroresFirms.join(" | ")}`);
+            txt("estadoVIIRS", `ERROR — ${erroresFirms.length} fuente(s)`);
+        } else {
+            estado(`✓ VIIRS ${datosVIIRS.length} (Suomi-NPP ${datosSuomi.length} / NOAA-20 ${datosNOAA20.length} / NOAA-21 ${datosNOAA21.length}) | MODIS ${datosMODIS.length} | GOES ${datosGOES.length} | Clusters ${cs.length}`);
         }
-        else{
-
-            estado(
-                `✓ VIIRS ${datosVIIRS.length}` +
-                ` (Suomi-NPP ${datosSuomi.length}` +
-                ` / NOAA-20 ${datosNOAA20.length}` +
-                ` / NOAA-21 ${datosNOAA21.length})` +
-                ` | MODIS ${datosMODIS.length}` +
-                ` | GOES ${datosGOES.length}` +
-                ` | Clusters ${cs.length}`
-            );
-
-        }
-
-    }
-    catch(e){
-
+    }catch(e){
         console.error(e);
-
-        estado(
-            "❌ " +
-            e.message
-        );
-
+        estado("❌ " + e.message);
+    }finally{
+        actualizando = false;
+        $("btnActualizar").disabled = false;
+        mostrarCarga(false);
     }
-    finally{
-
-        actualizando =
-            false;
-
-        $("btnActualizar").disabled =
-            false;
-
-        mostrarCarga(
-            false
-        );
-
-    }
-
 }
-
-/* =========================================================
-   TEMPORIZADOR
-========================================================= */
 
 function configurarTemporizador(){
-
-    clearInterval(
-        temporizador
-    );
-
-    temporizador =
-        setInterval(
-            actualizarIncendios,
-            Number(
-                $("intervaloSelect").value
-            )
-        );
-
+    clearInterval(temporizador);
+    temporizador = setInterval(actualizarIncendios, Number($("intervaloSelect").value));
 }
-
-/* =========================================================
-   CENTRAR PERÚ
-========================================================= */
 
 function centrarPeru(){
-
-    map.setView(
-        PERU_CENTER,
-        5
-    );
-
+    map.setView(PERU_CENTER, 5);
 }
 
-/* =========================================================
-   COORDENADAS
-========================================================= */
+function formatoCoordenada(lat, lon){
+    const latFix = Number(lat).toFixed(6);
+    const lonFix = Number(lon).toFixed(6);
+    return {
+        lat: latFix,
+        lon: lonFix,
+        texto: `${latFix}, ${lonFix}`
+    };
+}
+
+function actualizarCoordenadasCursor(e){
+    const box = $("coordenadasMapa");
+    if(!box || !e || !e.latlng) return;
+    const c = formatoCoordenada(e.latlng.lat, e.latlng.lng);
+    box.innerHTML = `📍 <b>Cursor:</b> Lat ${c.lat} · Lon ${c.lon}`;
+}
+
+function extraerCoordenadaMapa(e){
+    if(!e || !e.latlng) return;
+    const c = formatoCoordenada(e.latlng.lat, e.latlng.lng);
+
+    $("coordLat").value = c.lat;
+    $("coordLon").value = c.lon;
+
+    capaCoordenada.clearLayers();
+
+    const marker = L.marker([e.latlng.lat, e.latlng.lng], {
+        icon: L.divIcon({
+            className: "",
+            html: '<div class="icono-coordenada">📍</div>',
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+        })
+    });
+
+    marker.bindPopup(`
+        <div class="popup-incendio">
+            <h3>📍 Coordenada extraída</h3>
+            <div class="popup-coordenadas">
+                <div><b>Latitud:</b> <span class="coord-valor">${c.lat}</span></div>
+                <div><b>Longitud:</b> <span class="coord-valor">${c.lon}</span></div>
+                <div style="font-size:10px;color:#64748b">WGS 84 · grados decimales</div>
+            </div>
+            <button type="button" class="popup-copiar"
+                    onclick="copiarTextoCoordenadas('${c.lat}', '${c.lon}', this)">
+                📋 Copiar latitud y longitud
+            </button>
+        </div>
+    `);
+
+    marker.addTo(capaCoordenada).openPopup();
+    capaCoordenada.addTo(map);
+
+    estado(`Coordenada extraída: ${c.texto}`);
+}
+
+/* Copia en formato estandarizado: "Lat, Long" */
+function copiarTextoCoordenadas(lat, lon, btn){
+    const texto = `${lat}, ${lon}`;
+    const finalizar = () => {
+        if(btn){
+            const original = btn.innerHTML;
+            btn.innerHTML = "✅ Coordenadas copiadas";
+            setTimeout(() => btn.innerHTML = original, 1500);
+        }
+    };
+
+    if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(texto).then(finalizar).catch(() => {
+            copiarTextoCoordenadasFallback(texto, finalizar);
+        });
+    }else{
+        copiarTextoCoordenadasFallback(texto, finalizar);
+    }
+}
+
+function copiarTextoCoordenadasFallback(texto, finalizar){
+    const ta = document.createElement("textarea");
+    ta.value = texto;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch(e){}
+    document.body.removeChild(ta);
+    finalizar();
+}
+
+function activarExtraccionCoordenadas(){
+    if(!map) return;
+    map.on("mousemove", actualizarCoordenadasCursor);
+    map.on("click", extraerCoordenadaMapa);
+}
 
 function irACoordenada(){
+    const lat = Number($("coordLat").value);
+    const lon = Number($("coordLon").value);
 
-    const lat =
-        Number(
-            $("coordLat").value
-        );
-
-    const lon =
-        Number(
-            $("coordLon").value
-        );
-
-    if(
-        !Number.isFinite(lat) ||
-        !Number.isFinite(lon) ||
-        lat < -90 ||
-        lat > 90 ||
-        lon < -180 ||
-        lon > 180
-    ){
-
-        alert(
-            "Ingrese coordenadas válidas."
-        );
-
+    if(!Number.isFinite(lat) || !Number.isFinite(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180){
+        alert("Ingrese coordenadas válidas.");
         return;
-
     }
 
     capaCoordenada.clearLayers();
 
-    L.marker(
+    L.marker([lat, lon], {
+        icon: L.divIcon({
+            className: "",
+            html: "<div class='icono-coordenada'>📍</div>",
+            iconSize: [35, 35],
+            iconAnchor: [17, 33]
+        })
+    }).bindPopup(`
+        <div class="popup-incendio">
+            <h3 style="color:#1565c0">📍 PUNTO DE CONSULTA</h3>
+            <div class="popup-coordenadas">
+                <div>Latitud: <span class="coord-valor">${lat.toFixed(6)}</span></div>
+                <div>Longitud: <span class="coord-valor">${lon.toFixed(6)}</span></div>
+                <div style="font-size:10px;color:#64748b">Sistema: WGS 84 · grados decimales</div>
+            </div>
+            <button type="button" class="popup-copiar" onclick="copiarTextoCoordenadas('${lat.toFixed(6)}', '${lon.toFixed(6)}', this)">📋 Copiar coordenadas</button>
+        </div>
+    `).addTo(capaCoordenada).openPopup();
 
-        [lat,lon],
-
-        {
-
-            icon:
-                L.divIcon(
-                    {
-
-                        className:"",
-
-                        html:
-                            "<div class='icono-coordenada'>📍</div>",
-
-                        iconSize:
-                            [35,35],
-
-                        iconAnchor:
-                            [17,33]
-
-                    }
-                )
-
-        }
-
-    )
-    .bindPopup(
-        `📍 ${lat.toFixed(6)}, ${lon.toFixed(6)}`
-    )
-    .addTo(
-        capaCoordenada
-    )
-    .openPopup();
-
-    capaCoordenada.addTo(
-        map
-    );
-
-    map.setView(
-        [lat,lon],
-        14
-    );
-
+    capaCoordenada.addTo(map);
+    map.setView([lat, lon], 14);
 }
 
-function agregarCoordenada(){
-
-    irACoordenada();
-
-}
-
-function limpiarCoordenada(){
-
-    capaCoordenada.clearLayers();
-
-}
-
-/* =========================================================
-   LIMPIAR DATOS
-========================================================= */
+function agregarCoordenada(){ irACoordenada(); }
+function limpiarCoordenada(){ capaCoordenada.clearLayers(); }
 
 function limpiarDatos(){
+    [capaVIIRS, capaSuomi, capaNOAA20, capaNOAA21, capaVIIRSDescartados, capaMODIS, capaTerra, capaAqua, capaGOES, capaGOES18, capaGOES19, capaClusters].forEach(c => c.clearLayers());
 
-    [
-
-        capaVIIRS,
-        capaSuomi,
-        capaNOAA20,
-        capaNOAA21,
-
-        capaVIIRSDescartados,
-
-        capaMODIS,
-        capaTerra,
-        capaAqua,
-
-        capaGOES,
-        capaGOES18,
-        capaGOES19,
-
-        capaClusters
-
-    ]
-    .forEach(
-        c =>
-        c.clearLayers()
-    );
-
-    datosVIIRS = [];
-    datosVIIRSOriginales = [];
-    datosVIIRSDescartados = [];
-
-    datosSuomi = [];
-    datosNOAA20 = [];
-    datosNOAA21 = [];
-    datosVIIRSOtros = [];
-
-    datosMODIS = [];
-    datosMODISTerra = [];
-    datosMODISAqua = [];
-    datosMODISOtros = [];
-
-    datosGOES = [];
-    datosGOES18 = [];
-    datosGOES19 = [];
-    datosGOESOtros = [];
-
+    datosVIIRS = []; datosVIIRSOriginales = []; datosVIIRSDescartados = [];
+    datosSuomi = []; datosNOAA20 = []; datosNOAA21 = []; datosVIIRSOtros = [];
+    datosMODIS = []; datosMODISTerra = []; datosMODISAqua = []; datosMODISOtros = [];
+    datosGOES = []; datosGOES18 = []; datosGOES19 = []; datosGOESOtros = [];
     clustersGlobal = [];
 
     estadistica([]);
-
-    estado(
-        "Mapa limpiado"
-    );
-
+    estado("Mapa limpiado");
 }
 
-/* =========================================================
-   CSV
-========================================================= */
-
-/* =========================================================
-   EXPORTACIÓN GIS — SHAPEFILE Y KML
-   Sustituye la descarga CSV. Exporta los clusters VIIRS
-   actualmente calculados por el monitor.
-========================================================= */
 function datosExportacionGIS(){
     if(!Array.isArray(clustersGlobal) || !clustersGlobal.length) return [];
 
@@ -5115,14 +2329,9 @@ function datosExportacionGIS(){
 
 function descargarSHP(){
     const features = datosExportacionGIS();
-    if(!features.length){
-        alert('No existen clusters VIIRS disponibles para exportar. Primero actualice los datos.');
-        return;
-    }
-    if(typeof shpwrite === 'undefined'){
-        alert('No se pudo cargar el módulo Shapefile. Revise la conexión a Internet.');
-        return;
-    }
+    if(!features.length){ alert('No existen clusters VIIRS disponibles para exportar. Primero actualice los datos.'); return; }
+    if(typeof shpwrite === 'undefined'){ alert('No se pudo cargar el módulo Shapefile. Revise la conexión a Internet.'); return; }
+
     const geojson={type:'FeatureCollection',features};
     try{
         const result=shpwrite.zip(geojson,{
@@ -5141,34 +2350,18 @@ function descargarSHP(){
                 a.click();
                 setTimeout(()=>URL.revokeObjectURL(a.href),1000);
             }
-        }).catch(err=>{
-            console.error(err);
-            alert('Error generando Shapefile: '+(err.message || err));
-        });
-    }catch(err){
-        console.error(err);
-        alert('Error generando Shapefile: '+(err.message || err));
-    }
+        }).catch(err=>{ console.error(err); alert('Error generando Shapefile: '+(err.message || err)); });
+    }catch(err){ console.error(err); alert('Error generando Shapefile: '+(err.message || err)); }
 }
 
 function kmlSafe(v){
-    return String(v ?? '')
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;')
-      .replace(/'/g,'&apos;');
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
 }
 
 function descargarKML(){
     const features=datosExportacionGIS();
-    if(!features.length){
-        alert('No existen clusters VIIRS disponibles para exportar. Primero actualice los datos.');
-        return;
-    }
+    if(!features.length){ alert('No existen clusters VIIRS disponibles para exportar. Primero actualice los datos.'); return; }
 
-    // Icono de fuego estable de Google Earth + tintes KML en formato ABGR.
-    // Esto evita las X de iconos externos que no existen o no son compatibles.
     const fireIcon='http://maps.google.com/mapfiles/kml/shapes/firedept.png';
     const styles=`
       <Style id="alto"><IconStyle><color>ff0000ff</color><scale>1.35</scale><Icon><href>${fireIcon}</href></Icon><hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/></IconStyle><LabelStyle><scale>0.85</scale></LabelStyle></Style>
@@ -5203,45 +2396,30 @@ ${folder('SIN NIVEL','otros',grupos.OTROS)}
         const blob=new Blob([kml],{type:'application/vnd.google-earth.kml+xml;charset=UTF-8'});
         const url=URL.createObjectURL(blob);
         const a=document.createElement('a');
-        a.href=url;
-        a.download='Monitor_Incendios_Peru_KML_por_Nivel.kml';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        a.href=url; a.download='Monitor_Incendios_Peru_KML_por_Nivel.kml';
+        document.body.appendChild(a); a.click(); a.remove();
         setTimeout(()=>URL.revokeObjectURL(url),1500);
-    }catch(err){
-        console.error('KML',err);
-        alert('Error al generar el KML: '+(err.message||err));
-    }
+    }catch(err){ console.error('KML',err); alert('Error al generar el KML: '+(err.message||err)); }
 }
 
-/* =========================================================
-   EXPORTACIÓN SERFOR — ALERTAS > 48 HORAS
-   Exporta únicamente las alertas de incendios forestales SERFOR
-   cuya antigüedad, calculada con FECHA + HORA de detección,
-   sea estrictamente mayor a 48 horas.
-========================================================= */
 function datosAlertasSERFORMas48Exportacion(){
     return (datosAlertasSERFOR || []).map((f,i)=>{
         const coords = f?.geometry?.coordinates || [];
-        const lon = Number(coords[0]);
-        const lat = Number(coords[1]);
+        const lon = Number(coords[0]), lat = Number(coords[1]);
         if(!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
 
         const edad = antiguedadAlertaSERFOR(f);
-        if(edad.horas === null || edad.horas <= CONFIG.SERFOR_ALERTAS_EDAD.H48)
-            return null;
+        if(edad.horas === null || edad.horas <= CONFIG.SERFOR_ALERTAS_EDAD.H48) return null;
 
         const props = f.properties || {};
         const {fechaKey, horaKey} = clavesFechaHoraSERFOR(props);
-
         const exportProps = {};
+
         Object.entries(props).forEach(([k,v])=>{
             const safeKey = String(k || '').slice(0,10);
             if(safeKey) exportProps[safeKey] = valorSensor(v);
         });
 
-        // Campos operativos normalizados para facilitar el uso en GIS.
         exportProps.ID_EXPORT = i + 1;
         exportProps.FECHA_DET = fechaKey ? String(props[fechaKey] ?? '') : '';
         exportProps.HORA_DET = horaKey ? String(props[horaKey] ?? '') : '';
@@ -5250,10 +2428,7 @@ function datosAlertasSERFORMas48Exportacion(){
 
         return {
             type:'Feature',
-            geometry:{
-                type:'Point',
-                coordinates:[lon,lat]
-            },
+            geometry:{ type:'Point', coordinates:[lon,lat] },
             properties:exportProps
         };
     }).filter(Boolean);
@@ -5261,69 +2436,38 @@ function datosAlertasSERFORMas48Exportacion(){
 
 function descargarAlertasSERFORMas48SHP(){
     const features = datosAlertasSERFORMas48Exportacion();
+    if(!features.length){ alert('No existen alertas SERFOR con antigüedad mayor a 48 horas para exportar. Primero actualice los datos.'); return; }
+    if(typeof shpwrite === 'undefined'){ alert('No se pudo cargar el módulo Shapefile. Revise la conexión a Internet.'); return; }
 
-    if(!features.length){
-        alert('No existen alertas SERFOR con antigüedad mayor a 48 horas para exportar. Primero actualice los datos.');
-        return;
-    }
-
-    if(typeof shpwrite === 'undefined'){
-        alert('No se pudo cargar el módulo Shapefile. Revise la conexión a Internet.');
-        return;
-    }
-
-    const geojson = {
-        type:'FeatureCollection',
-        features
-    };
-
+    const geojson = { type:'FeatureCollection', features };
     try{
         const result = shpwrite.zip(geojson,{
             folder:'Alertas_SERFOR_Mas48h',
             types:{point:'alertas_serfor_mas48h'},
-            outputType:'blob',
-            compression:'DEFLATE',
+            outputType:'blob', compression:'DEFLATE',
             prj:'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]'
         });
 
         Promise.resolve(result).then(blob=>{
-            if(typeof saveAs === 'function'){
-                saveAs(blob,'Alertas_SERFOR_mayor_48_horas_Shapefile.zip');
-            }else{
-                const a=document.createElement('a');
-                a.href=URL.createObjectURL(blob);
+            if(typeof saveAs === 'function') saveAs(blob,'Alertas_SERFOR_mayor_48_horas_Shapefile.zip');
+            else{
+                const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
                 a.download='Alertas_SERFOR_mayor_48_horas_Shapefile.zip';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
+                document.body.appendChild(a); a.click(); a.remove();
                 setTimeout(()=>URL.revokeObjectURL(a.href),1500);
             }
-        }).catch(err=>{
-            console.error('SHP SERFOR >48h',err);
-            alert('Error generando Shapefile SERFOR >48 h: '+(err.message || err));
-        });
-    }catch(err){
-        console.error('SHP SERFOR >48h',err);
-        alert('Error generando Shapefile SERFOR >48 h: '+(err.message || err));
-    }
+        }).catch(err=>{ console.error('SHP SERFOR >48h',err); alert('Error generando Shapefile SERFOR >48 h: '+(err.message || err)); });
+    }catch(err){ console.error('SHP SERFOR >48h',err); alert('Error generando Shapefile SERFOR >48 h: '+(err.message || err)); }
 }
 
 function descargarAlertasSERFORMas48KML(){
     const features = datosAlertasSERFORMas48Exportacion();
-
-    if(!features.length){
-        alert('No existen alertas SERFOR con antigüedad mayor a 48 horas para exportar. Primero actualice los datos.');
-        return;
-    }
+    if(!features.length){ alert('No existen alertas SERFOR con antigüedad mayor a 48 horas para exportar. Primero actualice los datos.'); return; }
 
     const fireIcon='http://maps.google.com/mapfiles/kml/shapes/firedept.png';
-
     const placemarks = features.map((f,i)=>{
-        const p=f.properties || {};
-        const c=f.geometry.coordinates || [];
-        const desc=Object.entries(p)
-            .map(([k,v])=>`<b>${kmlSafe(k)}</b>: ${kmlSafe(v)}`)
-            .join('<br/>');
+        const p=f.properties || {}, c=f.geometry.coordinates || [];
+        const desc=Object.entries(p).map(([k,v])=>`<b>${kmlSafe(k)}</b>: ${kmlSafe(v)}`).join('<br/>');
 
         return `<Placemark>
 <name>Alerta SERFOR > 48 h — ${i+1}</name>
@@ -5337,32 +2481,19 @@ function descargarAlertasSERFORMas48KML(){
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>
 <name>Alertas SERFOR — mayor a 48 horas</name>
-<description>Alertas SERFOR con antigüedad estrictamente mayor a 48 horas, calculada desde FECHA + HORA de detección.</description>
+<description>Alertas SERFOR con antigüedad strictly mayor a 48 horas, calculada desde FECHA + HORA de detección.</description>
 ${placemarks}
 </Document>
 </kml>`;
 
     try{
-        const blob=new Blob([kml],{
-            type:'application/vnd.google-earth.kml+xml;charset=UTF-8'
-        });
+        const blob=new Blob([kml],{ type:'application/vnd.google-earth.kml+xml;charset=UTF-8' });
         const url=URL.createObjectURL(blob);
-        const a=document.createElement('a');
-        a.href=url;
-        a.download='Alertas_SERFOR_mayor_48_horas.kml';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        const a=document.createElement('a'); a.href=url; a.download='Alertas_SERFOR_mayor_48_horas.kml';
+        document.body.appendChild(a); a.click(); a.remove();
         setTimeout(()=>URL.revokeObjectURL(url),1500);
-    }catch(err){
-        console.error('KML SERFOR >48h',err);
-        alert('Error generando KML SERFOR >48 h: '+(err.message || err));
-    }
+    }catch(err){ console.error('KML SERFOR >48h',err); alert('Error generando KML SERFOR >48 h: '+(err.message || err)); }
 }
-
-/* =========================================================
-   INICIO
-========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
     try {
@@ -5386,7 +2517,6 @@ document.addEventListener("DOMContentLoaded", () => {
     txt("totalAlertasSERFOR48", "0");
     txt("totalAlertasSERFORMas48", "0");
 
-    // SERFOR se consulta aunque todavía no exista MAP_KEY de FIRMS.
     refrescarSERFOR().catch(e=>console.error("SERFOR",e));
 
     if(k) {
@@ -5395,7 +2525,6 @@ document.addEventListener("DOMContentLoaded", () => {
         estado("Esperando MAP_KEY de FIRMS. Datos SERFOR disponibles.");
     }
 });
-
 </script>
 
 </body>

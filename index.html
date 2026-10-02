@@ -9,7 +9,7 @@
 <title>Monitor de Incendios Perú — SERFOR / VIIRS / MODIS / GOES</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script type="text/javascript" src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=Kh__PXuGvdkH0mivhwZJOOPRyO6kW9bAIE_8K19lESOrIXn-vUeKAIh5CMeQv3ONOaTXYva8Vc8ifWk3SidLYH2A4fPiOyz_Gv3j09AB-VjhI1IQNpUCcglqfHsYiN_NojBYwr3VTzXS2oKAXcpFv2Btd6vgHEFrtwxVHqfZj_7ugC-CvabvyUoFuo0rqT2LNkoGmEW4dU8G6h9gN6mdXLzi1o6e29_3pq2DYVFMJ0QDgoWMedr-1wYlIe24VS8OP2bRRRYFBDwdOSc54_CbnObhx2sQO_8m49Zc8tlTvXj_QRHLlo0CNBrvDAlcRj1RzPPdrzSwHzplILh5yAcPydOeH0mZ9g91B7EJkoJWAr8" charset="UTF-8"></script><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 
@@ -1378,17 +1378,18 @@ function iniciarMapa(){
     map = L.map("map", { center: PERU_CENTER, zoom: 5, preferCanvas: true });
     activarPopupsMovibles();
 
-    const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
-        attribution: "© Esri",
+    const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
         maxZoom:19, minZoom:2, noWrap:true, updateWhenIdle:true, keepBuffer:2, crossOrigin:true
     });
-    sat.addTo(map);
+    osm.addTo(map);
 
+    const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { attribution: "© Esri" });
     const et = L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { opacity:.95 });
     const hy = L.layerGroup([sat,et]);
 
     L.control.layers(
-        { "🛰️ Satélite":sat, "🛰️ Híbrido":hy },
+        { "🗺️ OpenStreetMap":osm, "🛰️ Satélite":sat, "🛰️ Híbrido":hy },
         {
             "VIIRS — todos":capaVIIRS, "Suomi-NPP / VIIRS":capaSuomi, "NOAA-20 / VIIRS":capaNOAA20, "NOAA-21 / VIIRS":capaNOAA21,
             "VIIRS descartados":capaVIIRSDescartados, "MODIS — todos":capaMODIS, "Terra / MODIS":capaTerra, "Aqua / MODIS":capaAqua,
